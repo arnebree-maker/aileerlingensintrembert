@@ -16,7 +16,7 @@ function testLocalStorage(){
     return true;
   } catch(e) {
     localStorageAvailable = false;
-    console.warn('⚠️ localStorage niet beschikbaar — gebruik RAM fallback');
+    console.warn('localStorage niet beschikbaar — gebruik RAM fallback');
     return false;
   }
 }
@@ -67,7 +67,7 @@ function ld(){
       }
       S = Object.assign(S, parsed);
     }
-  }catch(e){ console.error('❌ Error bij laden state:', e); }
+  }catch(e){ console.error('✗ Error bij laden state:', e); }
 }
 
 function showForcedResetNotice(){
@@ -80,10 +80,10 @@ function showForcedResetNotice(){
   `;
   banner.innerHTML = `
     <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:8px;">
-      <div style="font-weight:800; color:var(--blue); font-size:14px;">🔄 De cursus is vernieuwd</div>
-      <button onclick="document.getElementById('forced-reset-banner').remove()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#999; line-height:1; padding:0;">✕</button>
+      <div style="font-weight:800; color:var(--blue); font-size:14px;">De cursus is vernieuwd</div>
+      <button onclick="document.getElementById('forced-reset-banner').remove()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#06038D; line-height:1; padding:0;">✕</button>
     </div>
-    <p style="margin:0; font-size:12px; color:#3d4f8a; line-height:1.6;">We hebben de cursus bijgewerkt. Je voortgang is gewist, zodat je opnieuw begint met de nieuwste versie. Dit gebeurde automatisch, je hoeft zelf niets te doen.</p>
+    <p style="margin:0; font-size:12px; color:#06038D; line-height:1.6;">We hebben de cursus bijgewerkt. Je voortgang is gewist, zodat je opnieuw begint met de nieuwste versie. Dit gebeurde automatisch, je hoeft zelf niets te doen.</p>
   `;
   document.body.appendChild(banner);
 }
@@ -93,16 +93,16 @@ function confirmResetProgress(){
   modal.id = 'reset-modal';
   modal.style.cssText = `
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10,31,168,0.85); display: flex; align-items: center;
+    background: rgba(6,3,141,0.85); display: flex; align-items: center;
     justify-content: center; z-index: 9500; padding: 20px;
   `;
   modal.innerHTML = `
     <div style="background: white; border-radius: 16px; padding: 32px; max-width: 420px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.35);">
-      <div style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
+      <div style="font-size: 40px; margin-bottom: 10px;"></div>
       <h2 style="font-family: 'Archivo Black', sans-serif; font-size: 19px; color: var(--red); margin-bottom: 10px; text-transform: uppercase;">Helemaal opnieuw beginnen?</h2>
       <p style="color: var(--muted); font-weight: 600; margin-bottom: 24px; line-height: 1.5; font-size: 14px;">Dit wist al je voortgang, je gekozen graad, antwoorden en je certificaatstatus — onherroepelijk, enkel op dit toestel/deze browser. Weet je het zeker?</p>
       <div style="display:flex; gap:10px;">
-        <button onclick="document.getElementById('reset-modal').remove()" style="flex:1; background:white; border:2px solid #ccc; color:#666; font-weight:700; padding:12px; border-radius:8px; cursor:pointer;">Annuleren</button>
+        <button onclick="document.getElementById('reset-modal').remove()" style="flex:1; background:white; border:2px solid #ccc; color:#06038D; font-weight:700; padding:12px; border-radius:8px; cursor:pointer;">Annuleren</button>
         <button onclick="clearCache()" style="flex:1; background:var(--red); border:none; color:white; font-weight:800; padding:12px; border-radius:8px; cursor:pointer;">Ja, wis alles</button>
       </div>
     </div>
@@ -145,12 +145,31 @@ function sn(){ S.name = document.getElementById('un').value.trim(); ss(); ua(); 
    PROGRESS / NAVIGATION
    ════════════════════════════════════════════ */
 
+/* ---- Startpagina: verder waar je was + voortgang ---- */
+function goVerder(){
+  if(!S.starttest.taken){ goStartTest(); return; }
+  for(let i=1;i<=6;i++){ if(!S['mod'+i].done){ window['rm'+i](); sv('mod'+i); return; } }
+  sv('cert');
+}
+function lhProg(){
+  try{
+    const mods=['mod1','mod2','mod3','mod4','mod5','mod6'];
+    const d=mods.filter(m=>S[m].done).length, p=Math.round(d/6*100);
+    const pct=document.getElementById('lh-pct'), bar=document.getElementById('lh-bar'), txt=document.getElementById('lh-txt'), cta=document.getElementById('lh-cta');
+    if(pct) pct.textContent=p+'%';
+    if(bar) bar.style.width=p+'%';
+    let volgende=mods.findIndex(m=>!S[m].done)+1;
+    if(txt) txt.textContent = !S.starttest.taken ? 'Begin met de startest: 10 korte vragen, gewoon om te peilen.' : (d===6 ? 'Alle modules voltooid. Je certificaat staat klaar!' : d+' van 6 modules voltooid. Volgende: module '+volgende+' · '+(MODULE_NAMEN[volgende]||''));
+    if(cta) cta.textContent = !S.starttest.taken ? 'Start de startest' : (d===0 ? 'Start module 1' : (d===6 ? 'Naar mijn certificaat' : 'Ga verder met module '+volgende));
+  }catch(e){}
+}
 function up(){
   const mods = ['mod1','mod2','mod3','mod4','mod5','mod6'];
   const d = mods.filter(m=>S[m].done).length;
   const p = Math.round(d/6*100);
   const pb = document.getElementById('pb'); if(pb) pb.style.width = p+'%';
   const pct = document.getElementById('pct'); if(pct) pct.textContent = p+'%';
+  lhProg();
 
   const stEl = document.getElementById('st-status');
   if(stEl){
@@ -162,10 +181,10 @@ function up(){
   if(!S.starttest.taken){
     for(let i=1;i<=6;i++){
       const nav = document.getElementById('nav-mod'+i); if(nav) nav.className='ni locked';
-      const l = document.getElementById('l'+i); if(l) l.textContent='🔒';
+      const l = document.getElementById('l'+i); if(l) l.textContent='';
     }
     const nav7 = document.getElementById('nav-mod7'); if(nav7) nav7.className='ni locked';
-    const l7 = document.getElementById('l7'); if(l7) l7.textContent='🔒';
+    const l7 = document.getElementById('l7'); if(l7) l7.textContent='';
     return;
   }
 
@@ -190,7 +209,7 @@ function setModuleNavState(i, unlocked){
   const l = document.getElementById('l'+i);
   const done = S['mod'+i].done;
   if(nav) nav.className = done ? 'ni done' : (unlocked ? 'ni available' : 'ni locked');
-  if(l) l.innerHTML = done ? '<span style="color:var(--green)">✓</span>' : (unlocked ? '›' : '🔒');
+  if(l) l.innerHTML = done ? '<span style="color:var(--green)">✓</span>' : (unlocked ? '›' : '');
 }
 
 function rmc(){
@@ -211,7 +230,7 @@ function rmc(){
       ps.className='mc-stat'; ps.textContent='Beschikbaar';
     } else {
       cm.classList.add('locked');
-      bm.disabled=true; bm.textContent='🔒 Vergrendeld';
+      bm.disabled=true; bm.textContent='Vergrendeld';
       ps.textContent='Voltooi Module '+(i-1)+' eerst';
     }
   }
@@ -268,12 +287,12 @@ function showGraadGate(){
   modal.id = 'graad-modal';
   modal.style.cssText = `
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10,31,168,0.92); display: flex; align-items: center;
+    background: rgba(6,3,141,0.92); display: flex; align-items: center;
     justify-content: center; z-index: 9000; padding: 20px; overflow-y: auto;
   `;
   modal.innerHTML = `
     <div style="background: white; border-radius: 16px; padding: 36px; max-width: 620px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.35); margin: auto;">
-      <div style="font-size: 44px; margin-bottom: 12px;">🎯</div>
+      <div style="font-size: 44px; margin-bottom: 12px;"></div>
       <h2 style="font-family: 'Archivo Black', sans-serif; font-size: 22px; color: var(--blue); margin-bottom: 8px; text-transform: uppercase;">In welk leerjaar/welke graad zit je?</h2>
       <p style="color: var(--muted); font-weight: 600; margin-bottom: 24px; line-height: 1.5;">De inhoud past zich hierop aan. Zit je nog in het lager onderwijs, dan volg je een ander, speciaal voor jou gemaakt programma.</p>
 
@@ -320,9 +339,9 @@ function kiesLeerjaar(lj){
     linktekst: 'Open de Zombiepandemie e-learning →',
     uitleg: `In deze workshop maak je op een speelse manier kennis met artificiële intelligentie. Via een fictief scenario rond een zombiepandemie ontdek je hoe een AI-model leert uit data, voorspellingen maakt, en waarom je AI-resultaten altijd kritisch moet bekijken. Je bouwt en test zelf een eenvoudig AI-model.`,
     praktisch: [
-      '⏱️ Duurt ongeveer 2 lesuren',
-      '💻 Nodig: een computer/laptop, een headset, de zombie-/menskaarten en de werkbundel van je leerkracht',
-      '🧑‍🏫 Je doorloopt dit met je klas, onder begeleiding van je leerkracht',
+      'Duurt ongeveer 2 lesuren',
+      'Nodig: een computer/laptop, een headset, de zombie-/menskaarten en de werkbundel van je leerkracht',
+      'Je doorloopt dit met je klas, onder begeleiding van je leerkracht',
     ],
   } : {
     titel: 'AI-programma 5e leerjaar',
@@ -330,16 +349,16 @@ function kiesLeerjaar(lj){
     linktekst: 'Open het programma →',
     uitleg: `Voor het 5e leerjaar volg je een programma op Brainbugs, speciaal gemaakt om op een speelse manier kennis te maken met artificiële intelligentie.`,
     praktisch: [
-      '🧑‍🏫 Je doorloopt dit met je klas, onder begeleiding van je leerkracht',
+      'Je doorloopt dit met je klas, onder begeleiding van je leerkracht',
     ],
   };
 
   modal.querySelector('div').innerHTML = `
-    <div style="font-size: 44px; margin-bottom: 12px;">🧟</div>
+    <div style="font-size: 44px; margin-bottom: 12px;"></div>
     <h2 style="font-family: 'Archivo Black', sans-serif; font-size: 20px; color: var(--blue); margin-bottom: 8px; text-transform: uppercase;">${inhoud.titel}</h2>
     <p style="color: var(--muted); font-weight: 600; margin-bottom: 16px; line-height: 1.6; text-align:left;">${inhoud.uitleg}</p>
-    <div style="background:#f5f6fb; border-radius:10px; padding:14px 16px; margin-bottom:20px; text-align:left;">
-      ${inhoud.praktisch.map(p => `<p style="font-size:12px; color:#3d4f8a; font-weight:700; margin:6px 0;">${p}</p>`).join('')}
+    <div style="background:#FFFFFF; border-radius:10px; padding:14px 16px; margin-bottom:20px; text-align:left;">
+      ${inhoud.praktisch.map(p => `<p style="font-size:12px; color:#06038D; font-weight:700; margin:6px 0;">${p}</p>`).join('')}
     </div>
     <a href="${inhoud.link}" target="_blank" style="display:block; background: var(--green); color: var(--blue); font-weight: 800; padding: 14px; border-radius: 8px; text-decoration: none; margin-bottom: 12px;">
       ${inhoud.linktekst}
@@ -434,7 +453,7 @@ function renderKernkaderGraadkeuze(){
   ${[1,2,3].map(g => `
     <button onclick="renderKernkaderLijst(${g})" style="background:white; border:2px solid var(--blue); border-radius:12px; padding:20px 14px; cursor:pointer; text-align:center; transition:all 0.2s;">
       <div style="font-family:'Archivo Black',sans-serif; font-size:22px; color:var(--blue); margin-bottom:6px;">${GRAAD_LABEL[g]}</div>
-      <div style="font-size:11px; color:#666; font-weight:700;">${GRAAD_SUB[g]}</div>
+      <div style="font-size:11px; color:#06038D; font-weight:700;">${GRAAD_SUB[g]}</div>
     </button>
   `).join('')}
 </div>
@@ -457,7 +476,7 @@ function renderKernkaderLijst(graad){
     html += `
 <div style="background:white; border:1px solid #e0e4f5; border-radius:12px; padding:20px; margin:18px 0;">
   <h3 class="ch3" style="margin-top:0;">${sectie.titel}</h3>
-  <p style="font-size:12px; color:#999; font-style:italic; margin-bottom:14px;">💡 ${sectie.kernidee}</p>
+  <p style="font-size:12px; color:#06038D; font-style:italic; margin-bottom:14px;">${sectie.kernidee}</p>
 `;
     for(let g=1; g<=graad; g++){
       html += `<div style="margin-bottom:${g<graad?'14px':'0'};">
@@ -465,7 +484,7 @@ function renderKernkaderLijst(graad){
       sectie.graden[g].forEach((item, idx) => {
         const checkId = `kk_${sectie.id}_${g}_${idx}`;
         html += `
-        <label style="display:flex; align-items:flex-start; gap:8px; padding:6px 0; font-size:13px; color:#3d4f8a; cursor:pointer;">
+        <label style="display:flex; align-items:flex-start; gap:8px; padding:6px 0; font-size:13px; color:#06038D; cursor:pointer;">
           <input type="checkbox" id="${checkId}" onchange="localStorage.setItem('sr_l_${checkId}', this.checked)" style="margin-top:3px; flex-shrink:0;">
           <span>${item}</span>
         </label>`;
@@ -477,7 +496,7 @@ function renderKernkaderLijst(graad){
 
   html += `
 <div style="text-align:center; margin:24px 0;">
-  <button class="sr-btn g" onclick="goHome()">🏠 Terug naar de cursus →</button>
+  <button class="sr-btn g" onclick="goHome()">Terug naar de cursus →</button>
 </div>`;
 
   c.innerHTML = html;
@@ -507,16 +526,16 @@ function playPodcastL1(){
   overlay.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;`;
 
   const card = document.createElement('div');
-  card.style.cssText = `background:linear-gradient(135deg,#9C27B0 0%,#7B1FA2 100%);border-radius:12px;padding:32px;color:white;text-align:center;max-width:500px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);`;
+  card.style.cssText = `background:#06038D;border-radius:12px;padding:32px;color:white;text-align:center;max-width:500px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);`;
 
   card.innerHTML = `
-    <h3 style="color: white; margin-top: 0; margin-bottom: 8px;">🎧 AI-Skills Podcast</h3>
+    <h3 style="color: white; margin-top: 0; margin-bottom: 8px;">AI-Skills Podcast</h3>
     <p style="font-size: 13px; color: rgba(255,255,255,0.95); margin-bottom: 20px; font-weight: 600;">Een audio-introductie bij deze cursus</p>
-    <a href="https://drive.google.com/file/d/1FD8iLx6313brXRIo2uQXNgtTMKplO6kq/view" target="_blank" style="display:flex; align-items:center; justify-content:center; gap:10px; background: white; color: #9C27B0; border-radius: 10px; padding: 16px; margin-bottom: 16px; font-weight: 800; font-size: 15px; text-decoration: none;">
+    <a href="https://drive.google.com/file/d/1FD8iLx6313brXRIo2uQXNgtTMKplO6kq/view" target="_blank" style="display:flex; align-items:center; justify-content:center; gap:10px; background: white; color: #06038D; border-radius: 10px; padding: 16px; margin-bottom: 16px; font-weight: 800; font-size: 15px; text-decoration: none;">
       ▶ Beluister de podcast
     </a>
-    <p style="font-size: 11px; color: rgba(255,255,255,0.9); margin-bottom: 16px; line-height: 1.4;">💡 Opent in een nieuw tabblad. Luister gerust meerdere keren — je kan op elk moment terugkeren en zelf verderlezen.</p>
-    <button onclick="closeModal('podcast-overlay-l1');" style="background: rgba(255,255,255,0.9); color: #9C27B0; border: none; border-radius: 8px; padding: 12px 24px; font-weight: 700; cursor: pointer;">✓ Sluiten</button>
+    <p style="font-size: 11px; color: rgba(255,255,255,0.9); margin-bottom: 16px; line-height: 1.4;">Opent in een nieuw tabblad. Luister gerust meerdere keren — je kan op elk moment terugkeren en zelf verderlezen.</p>
+    <button onclick="closeModal('podcast-overlay-l1');" style="background: rgba(255,255,255,0.9); color: #06038D; border: none; border-radius: 8px; padding: 12px 24px; font-weight: 700; cursor: pointer;">✓ Sluiten</button>
   `;
 
   overlay.appendChild(card);
@@ -541,6 +560,7 @@ function fixStepBadge(container, filteredIndex, filteredLength){
   const badge = container.querySelector('.s-badge');
   if(!badge) return;
   badge.innerHTML = badge.innerHTML.replace(/Stap \d+ van \d+/, `Stap ${filteredIndex+1} van ${filteredLength}`);
+  container.querySelectorAll('.nh').forEach(n=>{ n.textContent = n.textContent.replace(/Stap\s*\d+\s*\/\s*\d+/, `Stap ${filteredIndex+1}/${filteredLength}`); });
 }
 
 function lockNextButtons(container){
@@ -567,7 +587,7 @@ function rc(){
   const btn = document.getElementById('print-cert-btn');
   const info = document.getElementById('cert-dl-info');
   btn.disabled=false;
-  btn.textContent='🖨️ Download certificaat (PDF)';
+  btn.textContent='Download certificaat (PDF)';
   info.textContent = '';
 }
 
@@ -616,8 +636,8 @@ function buildAnswersReport(){
   const name = S.name || 'Leerling';
   let html = `
     <div style="page-break-before: always; padding: 20px 0;">
-      <h1 style="font-family:'Archivo Black',sans-serif; color: var(--blue); font-size: 22px; border-bottom: 3px solid var(--blue); padding-bottom: 10px; margin-bottom: 4px;">📋 Volledig Antwoordenoverzicht</h1>
-      <p style="font-size: 12px; color: #666; margin-bottom: 24px;">${esc(name)} — gegenereerd op ${new Date().toLocaleDateString('nl-BE',{day:'numeric',month:'long',year:'numeric'})}</p>
+      <h1 style="font-family:'Archivo Black',sans-serif; color: var(--blue); font-size: 22px; border-bottom: 3px solid var(--blue); padding-bottom: 10px; margin-bottom: 4px;">Volledig Antwoordenoverzicht</h1>
+      <p style="font-size: 12px; color:#06038D; margin-bottom: 24px;">${esc(name)} — gegenereerd op ${new Date().toLocaleDateString('nl-BE',{day:'numeric',month:'long',year:'numeric'})}</p>
   `;
 
   for(let i=1;i<=6;i++){
@@ -625,8 +645,8 @@ function buildAnswersReport(){
     const quizScore = (S['mod'+i] && S['mod'+i].quizScore !== undefined) ? S['mod'+i].quizScore + '%' : '—';
 
     html += `<div style="margin-bottom: 28px; page-break-inside: avoid;">
-      <h2 style="font-size: 16px; color: var(--blue); background: #f0f2f5; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px;">Module ${i} — ${MODULE_NAMEN[i]} ${modDone ? '✅' : ''}</h2>
-      <p style="font-size: 12px; color: #666; margin: 4px 0 12px 0;"><strong>Kennischeck-score:</strong> ${quizScore}</p>`;
+      <h2 style="font-size: 16px; color: var(--blue); background: #FFFFFF; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px;">Module ${i} — ${MODULE_NAMEN[i]} ${modDone ? '✓' : ''}</h2>
+      <p style="font-size: 12px; color:#06038D; margin: 4px 0 12px 0;"><strong>Kennischeck-score:</strong> ${quizScore}</p>`;
 
     // Stellingen (modules 1-5)
     if(i <= 5){
@@ -636,10 +656,10 @@ function buildAnswersReport(){
           const parsed = JSON.parse(raw);
           const keys = Object.keys(parsed);
           if(keys.length){
-            html += `<p style="font-size:12px; font-weight:700; color:#3d4f8a; margin:10px 0 4px 0;">Stellingen:</p>`;
+            html += `<p style="font-size:12px; font-weight:700; color:#06038D; margin:10px 0 4px 0;">Stellingen:</p>`;
             keys.forEach(idx=>{
               const val = STELLING_LABELS[parsed[idx]] || '—';
-              html += `<p style="font-size:12px; color:#333; margin:2px 0 2px 12px;">Stelling ${parseInt(idx)+1}: <strong>${esc(val)}</strong></p>`;
+              html += `<p style="font-size:12px; color:#06038D; margin:2px 0 2px 12px;">Stelling ${parseInt(idx)+1}: <strong>${esc(val)}</strong></p>`;
             });
           }
         }
@@ -652,34 +672,34 @@ function buildAnswersReport(){
       const pResult = localStorage.getItem('sr_l_prompt_result_m2');
       const pSat = localStorage.getItem('sr_l_prompt_satisfied_m2');
       if(pUsed || pResult || pSat){
-        html += `<p style="font-size:12px; font-weight:700; color:#3d4f8a; margin:10px 0 4px 0;">Doe-opdracht — jouw prompt:</p>
-          <p style="font-size:12px; color:#333; margin:2px 0; white-space:pre-wrap;"><strong>Prompt:</strong> ${esc(pUsed)}</p>
-          <p style="font-size:12px; color:#333; margin:2px 0; white-space:pre-wrap;"><strong>Resultaat:</strong> ${esc(pResult)}</p>
-          <p style="font-size:12px; color:#333; margin:2px 0; white-space:pre-wrap;"><strong>Tevreden?</strong> ${esc(pSat)}</p>`;
+        html += `<p style="font-size:12px; font-weight:700; color:#06038D; margin:10px 0 4px 0;">Doe-opdracht — jouw prompt:</p>
+          <p style="font-size:12px; color:#06038D; margin:2px 0; white-space:pre-wrap;"><strong>Prompt:</strong> ${esc(pUsed)}</p>
+          <p style="font-size:12px; color:#06038D; margin:2px 0; white-space:pre-wrap;"><strong>Resultaat:</strong> ${esc(pResult)}</p>
+          <p style="font-size:12px; color:#06038D; margin:2px 0; white-space:pre-wrap;"><strong>Tevreden?</strong> ${esc(pSat)}</p>`;
       }
     }
     if(i===3){
       const pUsed = localStorage.getItem('sr_l_prompt_used_m3');
       const pResult = localStorage.getItem('sr_l_prompt_result_m3');
       if(pUsed || pResult){
-        html += `<p style="font-size:12px; font-weight:700; color:#3d4f8a; margin:10px 0 4px 0;">Doe-opdracht — jouw prompt:</p>
-          <p style="font-size:12px; color:#333; margin:2px 0; white-space:pre-wrap;"><strong>Prompt:</strong> ${esc(pUsed)}</p>
-          <p style="font-size:12px; color:#333; margin:2px 0; white-space:pre-wrap;"><strong>Resultaat:</strong> ${esc(pResult)}</p>`;
+        html += `<p style="font-size:12px; font-weight:700; color:#06038D; margin:10px 0 4px 0;">Doe-opdracht — jouw prompt:</p>
+          <p style="font-size:12px; color:#06038D; margin:2px 0; white-space:pre-wrap;"><strong>Prompt:</strong> ${esc(pUsed)}</p>
+          <p style="font-size:12px; color:#06038D; margin:2px 0; white-space:pre-wrap;"><strong>Resultaat:</strong> ${esc(pResult)}</p>`;
       }
     }
     // Charter (module 5)
     if(i===5){
       const charter = localStorage.getItem('sr_l_charter1');
       if(charter){
-        html += `<p style="font-size:12px; font-weight:700; color:#3d4f8a; margin:10px 0 4px 0;">Jouw klascharter-voorstel:</p>
-          <p style="font-size:12px; color:#333; margin:2px 0; white-space:pre-wrap;">${esc(charter)}</p>`;
+        html += `<p style="font-size:12px; font-weight:700; color:#06038D; margin:10px 0 4px 0;">Jouw klascharter-voorstel:</p>
+          <p style="font-size:12px; color:#06038D; margin:2px 0; white-space:pre-wrap;">${esc(charter)}</p>`;
       }
     }
 
     // Reflectie
     const ref = localStorage.getItem('sr_l_ref'+i);
-    html += `<p style="font-size:12px; font-weight:700; color:#3d4f8a; margin:10px 0 4px 0;">Reflectie — ${esc(REFLECTIE_LABELS[i]||'')}</p>
-      <p style="font-size:12px; color:#333; margin:2px 0 2px 0; white-space:pre-wrap; background:#f9f9f9; padding:8px; border-radius:4px;">${ref ? esc(ref) : '<em>Niet ingevuld.</em>'}</p>`;
+    html += `<p style="font-size:12px; font-weight:700; color:#06038D; margin:10px 0 4px 0;">Reflectie — ${esc(REFLECTIE_LABELS[i]||'')}</p>
+      <p style="font-size:12px; color:#06038D; margin:2px 0 2px 0; white-space:pre-wrap; background:#FFFFFF; padding:8px; border-radius:4px;">${ref ? esc(ref) : '<em>Niet ingevuld.</em>'}</p>`;
 
     html += `</div>`;
   }
@@ -691,14 +711,14 @@ function buildAnswersReport(){
     const m7txt = localStorage.getItem('sr_l_m7_txt_result');
     const m7study = localStorage.getItem('sr_l_m7_study_result');
     html += `<div style="margin-bottom: 28px; page-break-inside: avoid;">
-      <h2 style="font-size: 16px; color: var(--orange); background: #fff3e0; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px;">Module 7 (optioneel) — Copilot Ontdekken ✅</h2>`;
+      <h2 style="font-size: 16px; color: var(--orange); background: #FFFFFF; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px;">Module 7 (optioneel) — Copilot Ontdekken ✓</h2>`;
     if(m7img_p) html += `<p style="font-size:12px; margin:4px 0;"><strong>Afbeelding-prompt:</strong> ${esc(m7img_p)}</p><p style="font-size:12px; margin:4px 0 10px 0;"><strong>Resultaat:</strong> ${esc(m7img_r)}</p>`;
     if(m7txt) html += `<p style="font-size:12px; margin:4px 0 10px 0;"><strong>Creatieve tekst:</strong> ${esc(m7txt)}</p>`;
     if(m7study) html += `<p style="font-size:12px; margin:4px 0;"><strong>Studiehulpmiddel:</strong> ${esc(m7study)}</p>`;
     html += `</div>`;
   }
 
-  html += `<p style="font-size:10px; color:#999; margin-top:20px; border-top:1px solid #ddd; padding-top:10px;">Sint-Rembert AI-Skills · Automatisch gegenereerd antwoordenrapport · ${new Date().toLocaleString('nl-BE')}</p>`;
+  html += `<p style="font-size:10px; color:#06038D; margin-top:20px; border-top:1px solid #ddd; padding-top:10px;">Sint-Rembert AI-Skills · Automatisch gegenereerd antwoordenrapport · ${new Date().toLocaleString('nl-BE')}</p>`;
   html += `</div>`;
 
   const target = document.getElementById('cert-answers-print');
@@ -719,7 +739,7 @@ function renderStartTest(){
 
 function renderStartTestLocked(c){
   c.innerHTML = `
-<div class="qh"><div class="qi">🧪</div><div><div class="qt">Startest al afgelegd</div><div class="qs">Score: ${S.starttest.score}%</div></div></div>
+<div class="qh"><div class="qi"></div><div><div class="qt">Startest al afgelegd</div><div class="qs">Score: ${S.starttest.score}%</div></div></div>
 <div style="text-align:center;padding:24px 0;">
   <p class="cp">Je hebt de startest al één keer afgelegd. ${S.starttest.passed ? 'Je hebt de basisvraag rond "Wat is AI?" goed beantwoord.' : 'Geen zorgen — je doorloopt gewoon alle 6 modules, te beginnen bij Module 1.'}</p>
   <button class="sr-btn g" onclick="goHome()">Naar startpagina →</button>
@@ -728,9 +748,9 @@ function renderStartTestLocked(c){
 
 function renderStartTestQuiz(c){
   c.innerHTML = `
-<div class="qh"><div class="qi">🧪</div><div><div class="qt">Startest — Wat weet je al over AI?</div><div class="qs">10 vragen · geen slaagdrempel, gewoon om te peilen · vul eerst je naam in</div></div></div>
+<div class="qh"><div class="qi"></div><div><div class="qt">Startest — Wat weet je al over AI?</div><div class="qs">10 vragen · geen slaagdrempel, gewoon om te peilen · vul eerst je naam in</div></div></div>
 <div style="background:white;border-radius:12px;padding:20px;margin-bottom:16px;">
-  <label style="font-weight:700;font-size:13px;color:var(--blue);display:block;margin-bottom:8px;">👋 Wat is je naam?</label>
+  <label style="font-weight:700;font-size:13px;color:var(--blue);display:block;margin-bottom:8px;">Wat is je naam?</label>
   <input type="text" id="st-name-input" placeholder="Voornaam Achternaam" style="width:100%;padding:12px;border:2px solid #e0e4f5;border-radius:8px;font-size:14px;font-family:'Nunito',sans-serif;" value="${S.name||''}">
 </div>
 <div id="st-quiz-box"></div>`;
@@ -822,7 +842,7 @@ function renderStartTestQuiz(c){
       // Toon uitleg
       const fb = document.getElementById('stq-f'+qi);
       fb.className = 'fb show ' + (isCorrect ? 'ok' : 'nok');
-      fb.textContent = (isCorrect ? '✅ ' : '❌ ') + q.f;
+      fb.textContent = (isCorrect ? '✓ ' : '✗ ') + q.f;
     });
 
     const score = Math.round(correct/quiz.length*100);
@@ -864,31 +884,31 @@ function m1Gefilterd(){
 function rm1(){ const c=document.getElementById('m1c'); c.innerHTML=''; const arr=m1Gefilterd(); rDots(1,arr.length,S.mod1.step); arr[S.mod1.step](c); fixStepBadge(c,S.mod1.step,arr.length); lockNextButtons(c); }
 function n1(){ const arr=m1Gefilterd(); S.mod1.step++; ss(); S.mod1.step>=arr.length ? d1() : rm1(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); }
 function p1(){ if(S.mod1.step > 0){ S.mod1.step--; ss(); rm1(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); } }
-function d1(){ S.mod1.done=true; S.mod1.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('🎉 Module 1 voltooid! Module 2 is nu beschikbaar.'),300); }
+function d1(){ S.mod1.done=true; S.mod1.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('Module 1 voltooid! Module 2 is nu beschikbaar.'),300); }
 
 function m1s0(c){
   c.innerHTML = `
-<div class="s-badge">🤔 Stap 1 van 12 · AI is overal</div>
+<div class="s-badge">Stap 1 van 12 · AI is overal</div>
 <h2 class="ch2">AI is <em>overal</em> aanwezig</h2>
 <p class="cp">Geloof het of niet, maar je komt voortdurend in contact met AI. Apps zoals Waze of Google Maps, sociale media zoals Instagram en TikTok, streamingplatformen zoals Netflix en Spotify: ze maken allemaal gebruik van AI. En dat is nog maar het begin — AI wordt in nog veel meer toepassingen gebruikt.</p>
 
-<div style="background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); border-radius: 12px; padding: 18px 20px; margin: 16px 0; text-align: center; color: white;">
-  <div style="font-size: 22px; margin-bottom: 8px;">🎧</div>
+<div style="background: #06038D; border-radius: 12px; padding: 18px 20px; margin: 16px 0; text-align: center; color: white;">
+  <div style="font-size: 22px; margin-bottom: 8px;"></div>
   <p style="font-size: 13px; margin: 0 0 12px 0; font-weight: 600;">Liever luisteren dan lezen? Er is een podcast over deze cursus.</p>
-  <button onclick="playPodcastL1()" style="background: rgba(255,255,255,0.95); color: #9C27B0; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 700; cursor: pointer; font-size: 13px;">▶ Beluister de podcast</button>
+  <button onclick="playPodcastL1()" style="background: rgba(255,255,255,0.95); color: #06038D; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 700; cursor: pointer; font-size: 13px;">▶ Beluister de podcast</button>
 </div>
 
 <div class="ib warn">
-  <div class="ib-t">💭 Denk even na</div>
+  <div class="ib-t">Denk even na</div>
   <div class="ib-b">Voor je verdergaat: in welke apps of toestellen denk jij dat AI verwerkt zit? Onthou je antwoord — aan het eind van deze stap kom je erachter of je gelijk had.</div>
 </div>
 
-<h3 class="ch3">📱 Concrete voorbeelden uit de praktijk</h3>
-<div style="background: rgba(10,31,168,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.9; margin: 0;">
-<strong>🎙️ dj ImAIne (MNM):</strong> Toen dj Imane Boudadi in 2023 een week niet aanwezig kon zijn tijdens haar programma, werd ze vervangen door een AI-versie van haar stem. De presentatieteksten werden geschreven met ChatGPT, en een gekloonde versie van haar stem sprak ze uit. Een week lang praatte deze fictieve "dj ImAIne" het programma Happy Hits aan elkaar.<br><br>
-<strong>📸 Instagram:</strong> Instagram bepaalt welke posts bovenaan je homepagina verschijnen door jouw gedrag te analyseren — welke profielen je volgt, welke foto's je liket, waar je bij stilstaat. Zo ontdekt het patronen en voorspelt het welke content je langer op het platform houdt.<br><br>
-<strong>🚗 Zelfrijdende auto's:</strong> Verschillende autofabrikanten ontwikkelen auto's die volledig zelfstandig van punt A naar B rijden, met behulp van meerdere AI-modellen tegelijk.
+<h3 class="ch3">Concrete voorbeelden uit de praktijk</h3>
+<div style="background: rgba(6,3,141,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.9; margin: 0;">
+<strong>dj ImAIne (MNM):</strong> Toen dj Imane Boudadi in 2023 een week niet aanwezig kon zijn tijdens haar programma, werd ze vervangen door een AI-versie van haar stem. De presentatieteksten werden geschreven met ChatGPT, en een gekloonde versie van haar stem sprak ze uit. Een week lang praatte deze fictieve "dj ImAIne" het programma Happy Hits aan elkaar.<br><br>
+<strong>Instagram:</strong> Instagram bepaalt welke posts bovenaan je homepagina verschijnen door jouw gedrag te analyseren — welke profielen je volgt, welke foto's je liket, waar je bij stilstaat. Zo ontdekt het patronen en voorspelt het welke content je langer op het platform houdt.<br><br>
+<strong>Zelfrijdende auto's:</strong> Verschillende autofabrikanten ontwikkelen auto's die volledig zelfstandig van punt A naar B rijden, met behulp van meerdere AI-modellen tegelijk.
 </p>
 </div>
 
@@ -900,36 +920,36 @@ function m1s0(c){
 
 function m1s1(c){
   c.innerHTML = `
-<div class="s-badge">🔍 Stap 2 van 12 · Een definitie</div>
+<div class="s-badge">Stap 2 van 12 · Een definitie</div>
 <h2 class="ch2">Wat is artificiële <em>intelligentie</em> precies?</h2>
 <p class="cp">Dit is meteen een moeilijke vraag om te beantwoorden, want er bestaan veel verschillende definities. Bovendien blijft AI in volle ontwikkeling.</p>
 
 <div class="ib warn">
-  <div class="ib-t">📖 Werkdefinitie</div>
+  <div class="ib-t">Werkdefinitie</div>
   <div class="ib-b">In brede zin verwijst AI naar <strong>machines die zelfstandig kunnen leren en handelen</strong>. Deze machines kunnen zelf beslissingen nemen, zoals ook dieren en mensen dat doen.</div>
 </div>
 
 <p class="cp">Belangrijk om te onthouden: AI is een <strong>containerbegrip</strong>. Dat wil zeggen dat er veel verschillende dingen onder de noemer "AI" vallen — van een simpele spamfilter tot een chatbot die een volledig gesprek voert.</p>
 
-<h3 class="ch3">📜 Een korte tijdlijn</h3>
+<h3 class="ch3">Een korte tijdlijn</h3>
 <p class="cp">Wetenschappers zijn al even bezig met deze technologie. Er werd voor het eerst over gesproken in de jaren '50. AI heeft ondertussen vele evoluties meegemaakt, en heeft gouden en donkere tijden gekend. Op dit moment leven we in een periode waarin AI enorm aan het groeien is.</p>
 
-<h3 class="ch3">🕵️ Hoe weet je of iets écht "intelligent" is?</h3>
+<h3 class="ch3">Hoe weet je of iets écht "intelligent" is?</h3>
 <p class="cp">Al in de jaren '50 bedacht een wiskundige een simpele test om deze vraag te beantwoorden: laat een mens via een tekstscherm chatten met iets — soms een mens, soms een machine — zonder te weten met wie hij praat. Kan hij na een tijdje niet meer zeggen wie of wat er aan de andere kant zit? Dan gedraagt die machine zich, voor de buitenwereld, "intelligent". Merk op: dit zegt niets over wat er écht in de machine omgaat, enkel over hoe overtuigend ze zich naar buiten toe gedraagt.</p>
 
-<div style="background: rgba(10,31,168,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.8; margin: 0;">
-<strong>💭 Denkoefening: de kamer vol Chinese symbolen</strong><br>
+<div style="background: rgba(6,3,141,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.8; margin: 0;">
+<strong>Denkoefening: de kamer vol Chinese symbolen</strong><br>
 Stel je een gesloten kamer voor met daarin een persoon die geen woord Chinees kent. Via een gleuf in de deur krijgt hij briefjes met Chinese tekens naar binnen geschoven. Hij heeft een dik handboek met regels: "als je dít teken ziet, schrijf dan dát teken terug." Door dat boek perfect te volgen, stuurt hij foutloze Chinese antwoorden naar buiten — voor de mensen buiten de kamer lijkt het alsof daarbinnen iemand vloeiend Chinees spreekt en begrijpt. Maar de persoon zelf begrijpt er geen snars van; hij volgt gewoon regels.<br><br>
 Deze denkoefening laat zien waarom het lastig is om te zeggen of een AI-systeem écht "begrijpt" wat het zegt, of gewoon (razendsnel en heel overtuigend) patronen en regels volgt zonder enig besef van betekenis. Een goede vraag om in je achterhoofd te houden telkens ChatGPT of een andere AI-tool een vlot antwoord geeft.
 </p>
 </div>
 
-<h3 class="ch3">🎯 Meer voorbeelden van AI-impact</h3>
-<div style="background: rgba(127,224,0,0.1); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.9; margin: 0;">
-<strong>🎤 'Because of You' — Gustaph:</strong> De Belgische zanger Gustaph nam in 2023 deel aan het Eurovisiesongfestival met zijn hit "Because of You". VRT NWS deed de test: met AI werd de song ingezongen door sterren als Billie Eilish en Taylor Swift. Zelfs de dode zanger Freddie Mercury en de animatiefiguur Homer Simpson "deden mee"!<br><br>
-<strong>📺 Reclame op sociale media:</strong> MrBeast is een populair YouTube-kanaal. Op sociale media verscheen ooit een reclamefilmpje waarin hij nieuwe smartphones aanbood voor slechts 2 dollar — maar die advertentie was een <strong>deepfake</strong>. Oplichters kunnen dankzij AI geloofwaardige video's maken waarin ze bekende mensen dingen laten zeggen of doen die ze nooit deden.
+<h3 class="ch3">Meer voorbeelden van AI-impact</h3>
+<div style="background: rgba(149,214,0,0.1); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.9; margin: 0;">
+<strong>'Because of You' — Gustaph:</strong> De Belgische zanger Gustaph nam in 2023 deel aan het Eurovisiesongfestival met zijn hit "Because of You". VRT NWS deed de test: met AI werd de song ingezongen door sterren als Billie Eilish en Taylor Swift. Zelfs de dode zanger Freddie Mercury en de animatiefiguur Homer Simpson "deden mee"!<br><br>
+<strong>Reclame op sociale media:</strong> MrBeast is een populair YouTube-kanaal. Op sociale media verscheen ooit een reclamefilmpje waarin hij nieuwe smartphones aanbood voor slechts 2 dollar — maar die advertentie was een <strong>deepfake</strong>. Oplichters kunnen dankzij AI geloofwaardige video's maken waarin ze bekende mensen dingen laten zeggen of doen die ze nooit deden.
 </p>
 </div>
 
@@ -942,25 +962,25 @@ Deze denkoefening laat zien waarom het lastig is om te zeggen of een AI-systeem 
 
 function m1s2(c){
   c.innerHTML = `
-<div class="s-badge">🧩 Stap 3 van 12 · De 3 elementen</div>
+<div class="s-badge">Stap 3 van 12 · De 3 elementen</div>
 <h2 class="ch2">AI bestaat uit <em>3 elementen</em></h2>
 <p class="cp">Om AI te kunnen gebruiken, heb je eerst en vooral een <strong>computer</strong> nodig.</p>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0;">
 <div style="background: white; border: 2px solid var(--blue); border-radius: 8px; padding: 14px; text-align:center;">
-<div style="font-size:28px;margin-bottom:8px;">💻</div>
+<div style="font-size:28px;margin-bottom:8px;"></div>
 <div style="font-weight: 700; color: var(--blue); font-size: 12px; text-transform: uppercase; margin-bottom: 6px;">1. Computersysteem</div>
-<p style="font-size: 12px; color: #3d4f8a; line-height: 1.6; margin: 0;">Een sterk en snel computersysteem om de nodige software te voorzien.</p>
+<p style="font-size: 12px; color: #06038D; line-height: 1.6; margin: 0;">Een sterk en snel computersysteem om de nodige software te voorzien.</p>
 </div>
 <div style="background: white; border: 2px solid var(--green); border-radius: 8px; padding: 14px; text-align:center;">
-<div style="font-size:28px;margin-bottom:8px;">📊</div>
+<div style="font-size:28px;margin-bottom:8px;"></div>
 <div style="font-weight: 700; color: var(--green); font-size: 12px; text-transform: uppercase; margin-bottom: 6px;">2. Data</div>
-<p style="font-size: 12px; color: #3d4f8a; line-height: 1.6; margin: 0;">Heel veel data. Hoe meer data er zijn, hoe gemakkelijker de computer patronen kan vinden.</p>
+<p style="font-size: 12px; color: #06038D; line-height: 1.6; margin: 0;">Heel veel data. Hoe meer data er zijn, hoe gemakkelijker de computer patronen kan vinden.</p>
 </div>
 <div style="background: white; border: 2px solid var(--orange); border-radius: 8px; padding: 14px; text-align:center;">
-<div style="font-size:28px;margin-bottom:8px;">⚙️</div>
+<div style="font-size:28px;margin-bottom:8px;"></div>
 <div style="font-weight: 700; color: var(--orange); font-size: 12px; text-transform: uppercase; margin-bottom: 6px;">3. Algoritmes</div>
-<p style="font-size: 12px; color: #3d4f8a; line-height: 1.6; margin: 0;">Algoritmes gebruiken wiskunde om patronen te herkennen en toe te passen op nieuwe data.</p>
+<p style="font-size: 12px; color: #06038D; line-height: 1.6; margin: 0;">Algoritmes gebruiken wiskunde om patronen te herkennen en toe te passen op nieuwe data.</p>
 </div>
 </div>
 
@@ -977,7 +997,7 @@ function m1s2(c){
 
 function m1s3(c){
   c.innerHTML = `
-<div class="s-badge">🧩 Stap 4 van 12 · Doe-opdracht</div>
+<div class="s-badge">Stap 4 van 12 · Doe-opdracht</div>
 <h2 class="ch2">Is het <em>AI</em> of niet?</h2>
 <p class="cp">Klik op elke kaart en denk eerst zelf na: gebruikt deze toepassing de 3 elementen van AI (computer + data + algoritme dat patronen herkent), of werkt ze met vaste, vooraf geprogrammeerde regels?</p>
 <div id="aig"></div>
@@ -992,13 +1012,13 @@ function m1s3(c){
 
 function m1s4(c){
   c.innerHTML = `
-<div class="s-badge">🌍 Stap 5 van 12 · De impact van AI</div>
+<div class="s-badge">Stap 5 van 12 · De impact van AI</div>
 <h2 class="ch2">De <em>impact</em> van artificiële intelligentie</h2>
 <p class="cp">AI wordt al veel gebruikt in het dagelijkse leven, maar zal dat in de toekomst nog veel vaker doen. Bij sociale media bijvoorbeeld, maar ook op het vlak van mobiliteit, geneeskunde, muziek... De impact van AI op ons leven is dus nu al groot!</p>
 
-<h3 class="ch3">🚗 Bespreek met jezelf: zelfrijdende auto's</h3>
-<div style="background: rgba(10,31,168,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.8; margin: 0;">
+<h3 class="ch3">Bespreek met jezelf: zelfrijdende auto's</h3>
+<div style="background: rgba(6,3,141,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.8; margin: 0;">
 Zouden we in de toekomst zelf niet meer moeten rijden, maar doet de auto alles voor ons? Denk na over deze 3 vragen:<br><br>
 1. Waarom zou dit handig zijn in het verkeer?<br>
 2. Hoe zou AI in het verkeer een gevaar kunnen vormen?<br>
@@ -1006,7 +1026,7 @@ Zouden we in de toekomst zelf niet meer moeten rijden, maar doet de auto alles v
 </p>
 </div>
 
-<h3 class="ch3">📉 Niet alleen voordelen</h3>
+<h3 class="ch3">Niet alleen voordelen</h3>
 <p class="cp">AI heeft veel mogelijkheden. De technologie helpt ons leven op vele vlakken vooruit. Maar aan het gebruik van AI zijn <strong>ook risico's verbonden</strong>, zoals je al in het voorbeeld van de MrBeast-deepfake zag.</p>
 <p class="cp">De impact van AI op de samenleving valt dus niet te onderschatten. Net daarom is het belangrijk om vragen te stellen. Waarvoor willen we deze technologie gebruiken? Op welke vlakken kan ze zinvol zijn? En moeten we beperkingen opleggen? Hier moeten we met z'n allen, als samenleving, over nadenken.</p>
 <p class="cp">Maar dit debat kunnen we enkel voeren wanneer we weten hoe AI en de machines precies werken. En dat gaan we in Module 2 bekijken!</p>
@@ -1020,7 +1040,7 @@ Zouden we in de toekomst zelf niet meer moeten rijden, maar doet de auto alles v
 
 function m1s5(c){
   c.innerHTML = `
-<div class="s-badge">💬 Stap 6 van 12 · Discussie</div>
+<div class="s-badge">Stap 6 van 12 · Discussie</div>
 <h2 class="ch2">Wat denk <em>jij</em>?</h2>
 <div class="disc-card">
   <div class="disc-q">1. dj ImAIne presenteerde een week lang een radioprogramma zonder dat de echte dj aanwezig was. Zou jij dit oké vinden als luisteraar, zolang het duidelijk vermeld wordt?</div>
@@ -1044,11 +1064,11 @@ function m1s5(c){
 
 function m1s6(c){
   c.innerHTML = `
-<div class="s-badge">🎬 Stap 7 van 12 · Video</div>
+<div class="s-badge">Stap 7 van 12 · Video</div>
 <h2 class="ch2">Bekijk: <em>AI-toepassingen in de praktijk</em></h2>
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/sosmC2h4LLE" allowfullscreen loading="lazy" title="EDUbox Artificiële Intelligentie — Introductie"></iframe></div>
 <div class="ib warn">
-  <div class="ib-t">📝 Samenvatting</div>
+  <div class="ib-t">Samenvatting</div>
   <div class="ib-b">Deze video toont hoe AI al overal om ons heen aanwezig is — van persoonlijke aanbevelingen op Spotify en Netflix tot zelfrijdende auto's. Ze plaatst het dagelijkse AI-gebruik in perspectief, precies zoals de voorbeelden die je hierboven las.</div>
 </div>
 
@@ -1061,12 +1081,12 @@ function m1s6(c){
 
 function m1s7(c){
   c.innerHTML = `
-<div class="s-badge">⚖️ Stap 8 van 12 · Hype of realiteit?</div>
+<div class="s-badge">Stap 8 van 12 · Hype of realiteit?</div>
 <h2 class="ch2">AI in het nieuws: <em>hype of realiteit?</em></h2>
 <p class="cp">Op TikTok en YouTube zie je de wildste doemscenario's over AI — en evengoed de wildste beloftes. Belangrijk om dat in perspectief te kunnen plaatsen: wat is een reëel risico, en wat is vooral clickbait?</p>
 
 <div class="ib warn">
-  <div class="ib-t">🎓 Wat zegt de wetenschap?</div>
+  <div class="ib-t">Wat zegt de wetenschap?</div>
   <div class="ib-b">Onderzoeker Rani Van Schoors (KU Leuven) illustreert hoe fout AI kan zitten: Google Bard (nu Gemini) vertelde ooit onterecht dat de James Webb-ruimtetelescoop als eerste beelden van buiten ons zonnestelsel had gemaakt — dat klopte niet. Bron: Klasse, "AI in het onderwijs" — <a href="https://www.klasse.be/722771/ai-in-het-onderwijs-expert-rani-schoors/" target="_blank">klasse.be/722771</a></div>
 </div>
 
@@ -1081,23 +1101,23 @@ function m1s7(c){
 
 function m1s_leefwereld(c){
   c.innerHTML = `
-<div class="s-badge">🎬 Stap 9 van 12 · AI vanuit jouw leefwereld</div>
+<div class="s-badge">Stap 9 van 12 · AI vanuit jouw leefwereld</div>
 <h2 class="ch2">Herkenbare verhalen, <em>geen droge theorie</em></h2>
 <p class="cp">Twee korte video's, dicht bij je eigen leven. Bij elke video: wat je moet weten vóór je kijkt, zodat je gericht kan kijken in plaats van passief.</p>
 
 <div style="background:white; border:1px solid #e0e4f5; border-radius:10px; padding:16px; margin:14px 0;">
-  <div style="font-weight:800; font-size:14px; color:var(--blue); margin-bottom:8px;">🎓 Nooit meer gebuisd dankzij AI? Wij deden de test!</div>
-  <p style="font-size:12px; color:#666; margin-bottom:10px;"><strong>Kijkvraag:</strong> let op wélke vakken/vraagtypes AI wél goed aankon, en waar het net de mist inging. Dat verschil is precies waarom niet elk examen hetzelfde AI-label krijgt (zie Module 5).</p>
+  <div style="font-weight:800; font-size:14px; color:var(--blue); margin-bottom:8px;">Nooit meer gebuisd dankzij AI? Wij deden de test!</div>
+  <p style="font-size:12px; color:#06038D; margin-bottom:10px;"><strong>Kijkvraag:</strong> let op wélke vakken/vraagtypes AI wél goed aankon, en waar het net de mist inging. Dat verschil is precies waarom niet elk examen hetzelfde AI-label krijgt (zie Module 5).</p>
   <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/w_msvsySbcM" allowfullscreen loading="lazy" title="Nooit meer gebuisd dankzij AI? Wij deden de test!"></iframe></div>
 </div>
 
 <div style="background:white; border:1px solid #e0e4f5; border-radius:10px; padding:16px; margin:14px 0;">
-  <div style="font-weight:800; font-size:14px; color:var(--blue); margin-bottom:8px;">💬 Acid gebruikte ChatGPT als therapeut</div>
-  <p style="font-size:12px; color:#666; margin-bottom:10px;"><strong>Achtergrond:</strong> nadat de bekende YouTuber Acid openhartig vertelde over dit gebruik, dook VRT NWS er zelf in met de vraag: <em>"Kan ChatGPT een goede psycholoog zijn?"</em> Chatbots zijn géén therapeut — ze zijn niet opgeleid, kunnen geen crisis herkennen, en bevestigen soms juist wat je al denkt in plaats van het te toetsen.</p>
+  <div style="font-weight:800; font-size:14px; color:var(--blue); margin-bottom:8px;">Acid gebruikte ChatGPT als therapeut</div>
+  <p style="font-size:12px; color:#06038D; margin-bottom:10px;"><strong>Achtergrond:</strong> nadat de bekende YouTuber Acid openhartig vertelde over dit gebruik, dook VRT NWS er zelf in met de vraag: <em>"Kan ChatGPT een goede psycholoog zijn?"</em> Chatbots zijn géén therapeut — ze zijn niet opgeleid, kunnen geen crisis herkennen, en bevestigen soms juist wat je al denkt in plaats van het te toetsen.</p>
   <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/JL1UrrQPOfk" allowfullscreen loading="lazy" title="Acid gebruikte ChatGPT als therapeut"></iframe></div>
 </div>
 
-<h3 class="ch3">💭 Even nadenken</h3>
+<h3 class="ch3">Even nadenken</h3>
 <p class="cp">Welke van deze 2 video's sprak jou het meest aan, en waarom? Herken je jezelf in een van de verhalen?</p>
 <textarea class="sr-ta" id="ref_leefwereld" style="min-height:70px;" placeholder="De video die me het meest aansprak was... omdat..."></textarea>
 
@@ -1131,7 +1151,7 @@ function m1s8(c){
 
 function m1s9(c){
   c.innerHTML = `
-<div class="s-badge">✍️ Stap 10 van 12 · Stellingen</div>
+<div class="s-badge">Stap 10 van 12 · Stellingen</div>
 <h2 class="ch2">Waar sta <em>jij</em>?</h2>
 <p class="cp">Geen goed of fout antwoord — enkel jouw mening.</p>
 <div id="stl-m1"></div>
@@ -1146,15 +1166,15 @@ function m1s9(c){
 
 function m1s10(c){
   c.innerHTML = `
-<div class="s-badge">✍️ Stap 11 van 12 · Jouw reflectie</div>
+<div class="s-badge">Stap 11 van 12 · Jouw reflectie</div>
 <h2 class="ch2">Vertaal naar <em>jouw leven</em></h2>
 <p class="cp">Noteer hieronder je reflectie (minstens een paar zinnen): waar zie JIJ AI in jouw dagelijkse leven — bij dingen die je nu pas beseft dankzij deze module? En wat vond je van de voorbeelden (dj ImAIne, Instagram, de MrBeast-deepfake)?</p>
-<p style="font-size:11px;color:#999;font-style:italic;margin:-8px 0 12px 0;">📄 Werk je liever op papier? Deze samenvatting en reflectie staan ook op <strong>pagina 3-4</strong> van je invulcursus.</p>
+<p style="font-size:11px;color:#06038D;font-style:italic;margin:-8px 0 12px 0;">Werk je liever op papier? Deze samenvatting en reflectie staan ook op <strong>pagina 3-4</strong> van je invulcursus.</p>
 <textarea class="sr-ta" id="ref1" placeholder="Ik gebruik AI eigenlijk al bij... Het voorbeeld dat me het meest verraste was..."></textarea>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p1()">← Vorige</button>
-  <button class="sr-btn g" id="ref1btn" onclick="sRef1()">✅ Module 1 afronden →</button>
+  <button class="sr-btn g" id="ref1btn" onclick="sRef1()">✓ Module 1 afronden →</button>
   <span class="nh">Stap 12/12</span>
 </div>`;
   const ta = document.getElementById('ref1');
@@ -1193,11 +1213,11 @@ function rm2(){ const c=document.getElementById('m2c'); c.innerHTML=''; const ar
 function n2(){ const arr=m2Gefilterd(); S.mod2.step++; ss(); S.mod2.step>=arr.length ? d2() : rm2(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); }
 function p2(){ if(S.mod2.step > 0){ S.mod2.step--; ss(); rm2(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); } }
 
-function d2(){ S.mod2.done=true; S.mod2.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('🎉 Module 2 voltooid! Module 3 is nu beschikbaar.'),300); }
+function d2(){ S.mod2.done=true; S.mod2.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('Module 2 voltooid! Module 3 is nu beschikbaar.'),300); }
 
 function m2s0(c){
   c.innerHTML = `
-<div class="s-badge">⚙️ Stap 1 van 12 · 3 fasen in de geschiedenis van AI</div>
+<div class="s-badge">Stap 1 van 12 · 3 fasen in de geschiedenis van AI</div>
 <h2 class="ch2">Ik denk, jij denkt, <em>het denkt</em></h2>
 <p class="cp">AI is een containerbegrip. Dat wil zeggen dat er veel verschillende dingen onder de noemer "AI" vallen. In het algemeen onderscheiden we <strong>3 fasen</strong> in de geschiedenis van AI.</p>
 
@@ -1206,17 +1226,17 @@ function m2s0(c){
   <div style="background: var(--blue); color:white; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">1</div>
   <strong style="font-size:13px;">Procedurele fase</strong>
 </div>
-<p style="font-size:12px;color:#3d4f8a;margin:0 0 14px 34px;">In de eerste fase, net na de Tweede Wereldoorlog, leek AI op een instructieboekje om een Ikeabed in elkaar te zetten: eerst doe je stap 1, daarna stap 2, enzovoort.</p>
+<p style="font-size:12px;color:#06038D;margin:0 0 14px 34px;">In de eerste fase, net na de Tweede Wereldoorlog, leek AI op een instructieboekje om een Ikeabed in elkaar te zetten: eerst doe je stap 1, daarna stap 2, enzovoort.</p>
 <div style="display:flex; align-items:center; gap: 8px; margin-bottom: 10px;">
   <div style="background: var(--green); color:white; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">2</div>
   <strong style="font-size:13px;">Machine learning</strong>
 </div>
-<p style="font-size:12px;color:#3d4f8a;margin:0 0 14px 34px;">In de jaren '80 ging AI een tweede fase in: die van machine learning. De rekenkracht van machines werd sterker en je kon een machine dingen aanleren.</p>
+<p style="font-size:12px;color:#06038D;margin:0 0 14px 34px;">In de jaren '80 ging AI een tweede fase in: die van machine learning. De rekenkracht van machines werd sterker en je kon een machine dingen aanleren.</p>
 <div style="display:flex; align-items:center; gap: 8px; margin-bottom: 10px;">
   <div style="background: var(--orange); color:white; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">3</div>
   <strong style="font-size:13px;">Deep learning</strong>
 </div>
-<p style="font-size:12px;color:#3d4f8a;margin:0 0 0 34px;">Sinds 2010 spreken we van een derde fase binnen AI: die van deep learning. AI is nu in staat om complexe taken uit te voeren. Dit leidde in 2022 tot de doorbraak van generatieve AI, waarbij machines zelf iets kunnen creëren.</p>
+<p style="font-size:12px;color:#06038D;margin:0 0 0 34px;">Sinds 2010 spreken we van een derde fase binnen AI: die van deep learning. AI is nu in staat om complexe taken uit te voeren. Dit leidde in 2022 tot de doorbraak van generatieve AI, waarbij machines zelf iets kunnen creëren.</p>
 </div>
 
 <div class="nw">
@@ -1227,32 +1247,32 @@ function m2s0(c){
 
 function m2s1(c){
   c.innerHTML = `
-<div class="s-badge">🔧 Stap 2 van 12 · Fase 1: Procedurele AI</div>
+<div class="s-badge">Stap 2 van 12 · Fase 1: Procedurele AI</div>
 <h2 class="ch2">Hoe werkt <em>procedurele</em> AI?</h2>
 <p class="cp">Bij procedurele AI volgt een computer de eenvoudige instructies van een duidelijk stappenplan. Eerst doe je stap 1, dan stap 2, enzovoort.</p>
 
-<div style="background: #f5f5f5; padding: 14px; border-radius: 8px; margin: 16px 0;">
+<div style="background: #FFFFFF; padding: 14px; border-radius: 8px; margin: 16px 0;">
 <div style="display:flex; gap:16px; align-items:center; justify-content:space-around; flex-wrap:wrap;">
-  <div style="text-align:center;"><div style="font-size:32px;">♟️</div><div style="font-size:11px; font-weight:700; color:#3d4f8a;">Schaakcomputer</div></div>
-  <div style="text-align:center;"><div style="font-size:32px;">📧</div><div style="font-size:11px; font-weight:700; color:#3d4f8a;">Spamfilter</div></div>
-  <div style="text-align:center;"><div style="font-size:32px;">💬</div><div style="font-size:11px; font-weight:700; color:#3d4f8a;">Simpele chatbots</div></div>
+  <div style="text-align:center;"><div style="font-size:32px;"></div><div style="font-size:11px; font-weight:700; color:#06038D;">Schaakcomputer</div></div>
+  <div style="text-align:center;"><div style="font-size:32px;"></div><div style="font-size:11px; font-weight:700; color:#06038D;">Spamfilter</div></div>
+  <div style="text-align:center;"><div style="font-size:32px;"></div><div style="font-size:11px; font-weight:700; color:#06038D;">Simpele chatbots</div></div>
 </div>
 </div>
 
-<h3 class="ch3">♟️ Hoe "denkt" een schaakcomputer vooruit?</h3>
+<h3 class="ch3">Hoe "denkt" een schaakcomputer vooruit?</h3>
 <p class="cp">Een klassieke schaakcomputer is een mooi voorbeeld van procedurele AI in actie. Voor elke zet die hij overweegt, tekent hij in gedachten een soort boompje: "als ik hier zet, kan mijn tegenstander daarop reageren met A, B of C — en op elk van die reacties kan ík dan weer reageren met..." Dat boompje van mogelijke zetten en tegenzetten wordt al snel enorm groot.</p>
 <p class="cp">De computer doorloopt dat hele boompje en kent aan elke uiteindelijke stelling een score toe: goed voor hem, of goed voor de tegenstander. Vervolgens redeneert hij terug: hij gaat ervan uit dat hijzelf steeds de beste zet voor zichzelf kiest, en dat zijn tegenstander steeds de beste zet vóór zichzelf (dus de slechtste voor de computer) zal kiezen. Zo rolt er, helemaal volgens vaste regels, één beste zet uit — geen giswerk, puur stap-voor-stap doorrekenen. Bij eenvoudige spelletjes zoals boter-kaas-en-eieren kan een computer op deze manier zelfs nooit meer verliezen.</p>
 
-<h3 class="ch3">🧟 Doe-opdracht: onderscheid zombie van mens</h3>
+<h3 class="ch3">Doe-opdracht: onderscheid zombie van mens</h3>
 <p class="cp">Stel je voor: je moet een computer leren om zombies van mensen te onderscheiden <strong>volgens een vaste procedure</strong> — dus met vaste vragen in een vaste volgorde, zoals een beslisboom:</p>
 
-<div style="background: white; border-radius: 8px; padding: 16px; margin: 16px 0; border: 1px solid #e0e4f5; font-size:12px; color:#3d4f8a; line-height:2;">
-❓ Huidskleur natuurlijk? → Nee → <strong>🧟 Zombie</strong><br>
-✅ Huidskleur natuurlijk? → Ja → volgende vraag: Ogen normaal?<br>
-&nbsp;&nbsp;&nbsp;❓ Ogen leeg? → Ja → volgende vraag: Schedel zichtbaar?<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❓ Hersenen zichtbaar? → Ja → <strong>🧟 Zombie</strong> / Nee → <strong>🙂 Mens</strong><br>
-&nbsp;&nbsp;&nbsp;✅ Ogen normaal? → Ja → volgende vraag: Bloedvijm van de mond?<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❓ Bloedvijm zichtbaar? → Ja → <strong>🧟 Zombie</strong> / Nee → <strong>🙂 Mens</strong>
+<div style="background: white; border-radius: 8px; padding: 16px; margin: 16px 0; border: 1px solid #e0e4f5; font-size:12px; color:#06038D; line-height:2;">
+Huidskleur natuurlijk? → Nee → <strong>Zombie</strong><br>
+✓ Huidskleur natuurlijk? → Ja → volgende vraag: Ogen normaal?<br>
+&nbsp;&nbsp;&nbsp;Ogen leeg? → Ja → volgende vraag: Schedel zichtbaar?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hersenen zichtbaar? → Ja → <strong>Zombie</strong> / Nee → <strong>Mens</strong><br>
+&nbsp;&nbsp;&nbsp;✓ Ogen normaal? → Ja → volgende vraag: Bloedvijm van de mond?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bloedvijm zichtbaar? → Ja → <strong>Zombie</strong> / Nee → <strong>Mens</strong>
 </div>
 
 <p class="cp">Je zal merken: dit werkt goed <strong>zolang elke situatie exact past</strong> in het vaste stappenplan. Maar dit is een nadeel van procedurele AI: het is geen flexibel systeem. Als er iets nieuws bijkomt — een half-mens-half-zombie, of een mens met griep — dan weet het systeem niet hoe het ermee moet omgaan.</p>
@@ -1266,14 +1286,14 @@ function m2s1(c){
 
 function m2s2(c){
   c.innerHTML = `
-<div class="s-badge">🧠 Stap 3 van 12 · Fase 2: Machine Learning</div>
+<div class="s-badge">Stap 3 van 12 · Fase 2: Machine Learning</div>
 <h2 class="ch2">Hoe werkt <em>machine learning</em>?</h2>
 <p class="cp">Vanaf de jaren '80 slaagden machines erin om dingen te leren, de zogenaamde fase van machine learning. Ze werden getraind om verbanden te zien in data.</p>
 
-<h3 class="ch3">📦 De "black box"</h3>
+<h3 class="ch3">De "black box"</h3>
 <p class="cp">Het "leren" gebeurt in de <strong>black box</strong>. Hiermee bedoelen we dat je een resultaat krijgt zonder dat de machine uitlegt of laat zien hoe het dat gedaan heeft.</p>
 
-<div style="background: rgba(10,31,168,0.08); border-radius: 8px; padding: 20px; margin: 16px 0; text-align:center;">
+<div style="background: rgba(6,3,141,0.08); border-radius: 8px; padding: 20px; margin: 16px 0; text-align:center;">
 <div style="display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap;">
   <div style="font-weight:700; color:var(--blue); font-size:14px;">input</div>
   <div style="font-size:20px;">→</div>
@@ -1287,7 +1307,7 @@ function m2s2(c){
 
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/-zmnRz81CNQ" allowfullscreen loading="lazy" title="EDUbox Artificiële Intelligentie — Hoe werken neurale netwerken?"></iframe></div>
 <div class="ib warn">
-  <div class="ib-t">📝 Waar gaat dit over?</div>
+  <div class="ib-t">Waar gaat dit over?</div>
   <div class="ib-b">Deze video toont visueel hoe een neuraal netwerk data verwerkt via lagen van kleine "knopen" — precies het soort black box-verwerking dat je hierboven leerde.</div>
 </div>
 
@@ -1300,34 +1320,34 @@ function m2s2(c){
 
 function m2s3(c){
   c.innerHTML = `
-<div class="s-badge">👁️ Stap 4 van 12 · 1. Gesuperviseerd leren</div>
+<div class="s-badge">Stap 4 van 12 · 1. Gesuperviseerd leren</div>
 <h2 class="ch2">Gesuperviseerd <em>leren</em></h2>
 <p class="cp">Dit betekent <strong>"gecontroleerd leren"</strong>. Je vertelt dan aan de computer wat de voorbeelden zijn.</p>
 
-<div style="background: rgba(10,31,168,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.8; margin: 0;">
+<div style="background: rgba(6,3,141,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.8; margin: 0;">
 Je geeft duizenden foto's van een zombie en zegt: "Dit is een zombie." Je geeft duizenden foto's van een mens en zegt: "Dit is een mens." Zo leert de computer gaandeweg mensen en zombies herkennen. Je werkt met data die een label hebben, ofwel <strong>gelabelde data</strong>.
 </p>
 </div>
 
-<h3 class="ch3">📸 Een voorbeeld dat je al gebruikt hebt</h3>
+<h3 class="ch3">Een voorbeeld dat je al gebruikt hebt</h3>
 <p class="cp">Gezichtsherkenning. De foto-app van jouw smartphone heeft de optie om specifieke personen in je foto's te benoemen, waarna het algoritme op zoek gaat naar andere foto's met dezelfde persoon en deze groepeert. <strong>Maar helemaal zeker is het systeem nooit.</strong></p>
 
-<h3 class="ch3">👥 Eén van de simpelste manieren: kijk naar je "buren"</h3>
+<h3 class="ch3">Eén van de simpelste manieren: kijk naar je "buren"</h3>
 <p class="cp">Een van de makkelijkst te begrijpen technieken achter gesuperviseerd leren is verrassend simpel: vergelijk het nieuwe geval gewoon met de voorbeelden die je al kent, en kijk welke het meest gelijken. Stel dat je duizenden gelabelde zombie- en mensfoto's hebt, elk beschreven aan de hand van een paar kenmerken (bijvoorbeeld: hoe bleek de huid is, hoe leeg de ogen staan). Een nieuwe, ongelabelde foto plaats je dan denkbeeldig tussen al die andere foto's. Welke gelabelde foto's liggen het dichtst in de buurt — qua kenmerken — bij deze nieuwe foto? Als de 5 dichtste "buren" allemaal zombies waren, is de kans groot dat deze nieuwe foto ook een zombie is. Geen ingewikkelde formules nodig: gewoon "wie lijkt het meest op wie".</p>
 
-<h3 class="ch3">📧 En hoe berekent een spamfilter dan een kans?</h3>
+<h3 class="ch3">En hoe berekent een spamfilter dan een kans?</h3>
 <p class="cp">Spamfilters (zie ook Module 1) werken vaak met eenzelfde soort denkwijze, maar dan gebaseerd op hoe vaak bepaalde woorden voorkomen. Stel je onderstaand voorbeeld voor, met ronde getallen om het simpel te houden:</p>
-<div style="background: white; border-radius: 8px; padding: 14px; margin: 12px 0; border: 1px solid #e0e4f5; font-size:12px; color:#3d4f8a; line-height:1.9;">
-📊 Van elke 100 e-mails met het woord "GRATIS" zijn er 90 spam en 10 niet.<br>
-📊 Van elke 100 e-mails zónder dat woord zijn er maar 5 spam.<br>
-📬 Komt er een nieuwe e-mail binnen met het woord "GRATIS"? Dan weet het systeem: dit lijkt sterk op de groep waarin 90% spam bleek te zijn — dus hoge kans dat dit er ook één is.
+<div style="background: white; border-radius: 8px; padding: 14px; margin: 12px 0; border: 1px solid #e0e4f5; font-size:12px; color:#06038D; line-height:1.9;">
+Van elke 100 e-mails met het woord "GRATIS" zijn er 90 spam en 10 niet.<br>
+Van elke 100 e-mails zónder dat woord zijn er maar 5 spam.<br>
+Komt er een nieuwe e-mail binnen met het woord "GRATIS"? Dan weet het systeem: dit lijkt sterk op de groep waarin 90% spam bleek te zijn — dus hoge kans dat dit er ook één is.
 </div>
 <p class="cp">Zo'n filter combineert dit voor tientallen woorden tegelijk, en telt alles samen op tot één eindkans. Simpel om te begrijpen, en toch verrassend krachtig in de praktijk.</p>
 
-<h3 class="ch3">🧪 Doe-opdracht</h3>
+<h3 class="ch3">Doe-opdracht</h3>
 <p class="cp">De computer onderscheidt zombies van mensen door <strong>gelabelde data</strong>: hij leert categorieën herkennen aan de hand van voorbeelden. Na genoeg input kan hij zelfstandig voorspellen.</p>
-<div style="background: white; border-radius: 8px; padding: 14px; margin: 12px 0; border: 1px solid #e0e4f5; font-size:12px; color:#3d4f8a; line-height:1.8;">
+<div style="background: white; border-radius: 8px; padding: 14px; margin: 12px 0; border: 1px solid #e0e4f5; font-size:12px; color:#06038D; line-height:1.8;">
 1️⃣ Stel je voor: je toont de computer 4 voorbeeldfoto's van mensen en 4 van zombies, elk met het juiste label erbij.<br>
 2️⃣ Je toont de computer een nieuwe, ongelabelde foto.<br>
 3️⃣ De computer berekent een kans om te beslissen tot welke groep het kaartje behoort: "zombie" of "mens" — gebaseerd op de kenmerken die het al kent.
@@ -1342,19 +1362,19 @@ Je geeft duizenden foto's van een zombie en zegt: "Dit is een zombie." Je geeft 
 
 function m2s4(c){
   c.innerHTML = `
-<div class="s-badge">🔍 Stap 5 van 12 · 2. Ongesuperviseerd leren</div>
+<div class="s-badge">Stap 5 van 12 · 2. Ongesuperviseerd leren</div>
 <h2 class="ch2">Ongesuperviseerd <em>leren</em></h2>
 <p class="cp">Bij ongesuperviseerd leren worden er geen labels meegegeven aan de input. De machine gaat "ongecontroleerd" leren en moet zelf structuur aanbrengen in de data.</p>
 <p class="cp">De algoritmes moeten de data dus onderbrengen in groepen, zonder te weten hoe ze eraan moet beginnen. De machine doet dit door op zoek te gaan naar overeenkomsten in de data. Op basis hiervan zal ze <strong>verzamelingen voorstellen</strong>.</p>
 
 <div class="ib warn">
-  <div class="ib-t">🎵 Een voorbeeld dat je kent: Spotify, Netflix, YouTube</div>
+  <div class="ib-t">Een voorbeeld dat je kent: Spotify, Netflix, YouTube</div>
   <div class="ib-b">De computer verdeelt gebruikers of content in groepen en kan je bepaalde groepen van producten aanraden, gebaseerd op je kijk-, luister- of koopgedrag. Maar soms loopt dit al eens fout en krijg je producten voorgesteld die je niet leuk vindt.</div>
 </div>
 
 <p class="cp">Vergelijk het met een computer die duizenden zombie/mens-kaartjes krijgt <strong>zonder labels</strong>. De machine kijkt zelf naar overeenkomsten (kleur, vorm, patroon) en verdeelt de kaartjes in bijvoorbeeld 2 groepen — zonder dat iemand haar heeft verteld welke groep "zombie" is en welke "mens".</p>
 
-<h3 class="ch3">🕹️ Vergelijk met een spel</h3>
+<h3 class="ch3">Vergelijk met een spel</h3>
 <p class="cp">Denk aan een winkel die producten netjes in categorieën verdeelt zonder dat iemand haar vertelde welke categorieën er bestaan — de machine ontdekt die zelf, op basis van wat vaak samen gekocht wordt.</p>
 
 <div class="nw">
@@ -1366,45 +1386,45 @@ function m2s4(c){
 
 function m2s5(c){
   c.innerHTML = `
-<div class="s-badge">🎮 Stap 6 van 12 · 3. Versterkend leren</div>
+<div class="s-badge">Stap 6 van 12 · 3. Versterkend leren</div>
 <h2 class="ch2">Versterkend <em>leren</em> (reinforcement learning)</h2>
 <p class="cp">Ten slotte is er binnen machine learning ook versterkend leren of "reinforcement learning". Dit is zoals een nieuwe videogame die je aan het spelen bent: je leert wat je moet doen door je personage in het spel rond te laten lopen en af en toe fouten te laten maken. Zo leer je al doende wat wel en niet kan.</p>
 
 <svg viewBox="0 0 400 260" style="width:100%;max-width:420px;height:auto;display:block;margin:16px auto;" xmlns="http://www.w3.org/2000/svg">
-  <rect x="10" y="10" width="380" height="240" rx="12" fill="#f0f2f5"/>
-  <rect x="30" y="30" width="30" height="30" fill="#0A1FA8"/>
-  <rect x="90" y="30" width="30" height="30" fill="#0A1FA8"/>
-  <rect x="90" y="90" width="30" height="30" fill="#0A1FA8"/>
-  <rect x="150" y="90" width="30" height="30" fill="#0A1FA8"/>
+  <rect x="10" y="10" width="380" height="240" rx="12" fill="#FFFFFF"/>
+  <rect x="30" y="30" width="30" height="30" fill="#06038D"/>
+  <rect x="90" y="30" width="30" height="30" fill="#06038D"/>
+  <rect x="90" y="90" width="30" height="30" fill="#06038D"/>
+  <rect x="150" y="90" width="30" height="30" fill="#06038D"/>
   <rect x="150" y="150" width="30" height="150" fill="none"/>
-  <rect x="210" y="60" width="30" height="30" fill="#0A1FA8"/>
-  <rect x="270" y="120" width="30" height="30" fill="#0A1FA8"/>
-  <circle cx="45" cy="200" r="12" fill="#7FE000"/>
-  <text x="45" y="205" text-anchor="middle" font-size="14">🤖</text>
-  <circle cx="340" cy="45" r="12" fill="#FFC107"/>
-  <text x="340" y="50" text-anchor="middle" font-size="14">⭐</text>
-  <path d="M45 188 L60 160 L90 160 L120 130 L150 130 L180 130 L210 100 L240 90 L270 90 L300 60 L340 55" stroke="#7FE000" stroke-width="3" fill="none" stroke-dasharray="6,4"/>
+  <rect x="210" y="60" width="30" height="30" fill="#06038D"/>
+  <rect x="270" y="120" width="30" height="30" fill="#06038D"/>
+  <circle cx="45" cy="200" r="12" fill="#95D600"/>
+  <text x="45" y="205" text-anchor="middle" font-size="14"></text>
+  <circle cx="340" cy="45" r="12" fill="#95D600"/>
+  <text x="340" y="50" text-anchor="middle" font-size="14"></text>
+  <path d="M45 188 L60 160 L90 160 L120 130 L150 130 L180 130 L210 100 L240 90 L270 90 L300 60 L340 55" stroke="#95D600" stroke-width="3" fill="none" stroke-dasharray="6,4"/>
 </svg>
 
-<div style="background: rgba(255,193,7,0.12); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.8; margin: 0;">
+<div style="background: rgba(149,214,0,0.15); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.8; margin: 0;">
 De machine komt terecht in een <strong>omgeving waarin van alles gebeurt en verandert</strong>. De machine leert wat hij moet doen door fouten te maken waardoor hij wordt gestraft, of goede dingen te doen waarvoor hij wordt beloond. Het algoritme ontdekt dus door <strong>trial and error</strong> (door het gewoon te proberen) welke strategieën het gewenste resultaat opleveren.
 </p>
 </div>
 
-<h3 class="ch3">📋 De 3 soorten machine learning samengevat</h3>
+<h3 class="ch3">De 3 soorten machine learning samengevat</h3>
 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 16px 0;">
 <div style="background: white; border: 2px solid var(--blue); border-radius: 8px; padding: 12px;">
-<div style="font-weight: 700; color: var(--blue); font-size: 11px;">👁️ Gesuperviseerd</div>
-<p style="font-size: 11px; color: #3d4f8a; margin-top:6px;">Data zijn gelabeld; het algoritme leert het resultaat te voorspellen.</p>
+<div style="font-weight: 700; color: var(--blue); font-size: 11px;">Gesuperviseerd</div>
+<p style="font-size: 11px; color: #06038D; margin-top:6px;">Data zijn gelabeld; het algoritme leert het resultaat te voorspellen.</p>
 </div>
 <div style="background: white; border: 2px solid var(--green); border-radius: 8px; padding: 12px;">
-<div style="font-weight: 700; color: var(--green); font-size: 11px;">🔍 Ongesuperviseerd</div>
-<p style="font-size: 11px; color: #3d4f8a; margin-top:6px;">Data zijn niet gelabeld; het algoritme leert zelf structuur te vinden.</p>
+<div style="font-weight: 700; color: var(--green); font-size: 11px;">Ongesuperviseerd</div>
+<p style="font-size: 11px; color: #06038D; margin-top:6px;">Data zijn niet gelabeld; het algoritme leert zelf structuur te vinden.</p>
 </div>
 <div style="background: white; border: 2px solid var(--orange); border-radius: 8px; padding: 12px;">
-<div style="font-weight: 700; color: var(--orange); font-size: 11px;">🎮 Versterkend</div>
-<p style="font-size: 11px; color: #3d4f8a; margin-top:6px;">Door trial-and-error leert de machine welke actie het beste is.</p>
+<div style="font-weight: 700; color: var(--orange); font-size: 11px;">Versterkend</div>
+<p style="font-size: 11px; color: #06038D; margin-top:6px;">Door trial-and-error leert de machine welke actie het beste is.</p>
 </div>
 </div>
 
@@ -1417,7 +1437,7 @@ De machine komt terecht in een <strong>omgeving waarin van alles gebeurt en vera
 
 function m2s6(c){
   c.innerHTML = `
-<div class="s-badge">🧩 Stap 7 van 12 · Doe-opdracht</div>
+<div class="s-badge">Stap 7 van 12 · Doe-opdracht</div>
 <h2 class="ch2">Welke soort <em>machine learning</em> is dit?</h2>
 <p class="cp">Klik op elk voorbeeld: is dit gesuperviseerd, ongesuperviseerd, of versterkend leren?</p>
 <div id="mltype"></div>
@@ -1432,14 +1452,14 @@ function m2s6(c){
 
 function m2s7(c){
   c.innerHTML = `
-<div class="s-badge">🕸️ Stap 8 van 12 · Fase 3: Deep Learning</div>
+<div class="s-badge">Stap 8 van 12 · Fase 3: Deep Learning</div>
 <h2 class="ch2">Hoe werkt <em>deep learning</em>?</h2>
 <p class="cp">Een mens kan snel een hond onderscheiden van een koekje, doordat onze hersenen bliksemsnel enkele vragen stellen: wat ruik ik? Welke kleur heeft het? Maakt het lawaai? Een computer moet dit allemaal aangeleerd krijgen.</p>
 
 <p class="cp">Of neem bijvoorbeeld autorijden. Daar komt veel bij kijken: letten op je omgeving, schakelen, gas geven, remmen, verkeersborden herkennen, in je spiegels kijken, enzovoort. Een zelfrijdende auto zou <strong>voor elk van die taken een apart algoritme</strong> nodig hebben. Een combinatie van al die taken maakt het mogelijk om de auto zelf te laten rijden. Zo'n combinatie noemen we een <strong>neuraal netwerk</strong>.</p>
 
 <div class="ib warn">
-  <div class="ib-t">💡 Deep learning = machine learning + neurale netwerken</div>
+  <div class="ib-t">Deep learning = machine learning + neurale netwerken</div>
   <div class="ib-b"><strong>Deep learning</strong> is de combinatie van machine learning met neurale netwerken. Deze techniek heeft de laatste 15 jaar veel nieuwe toepassingen mogelijk gemaakt, omdat ze veel complexere zaken kan analyseren dan één simpel algoritme.</div>
 </div>
 
@@ -1447,7 +1467,7 @@ function m2s7(c){
 
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/fZ_r7LXsMHs" allowfullscreen loading="lazy" title="EDUbox Artificiële Intelligentie — Toepassingen van AI"></iframe></div>
 <div class="ib warn">
-  <div class="ib-t">📝 Waar gaat dit over?</div>
+  <div class="ib-t">Waar gaat dit over?</div>
   <div class="ib-b">Isaak Vandermaesen (Scivil) toont enkele straffe, concrete toepassingen van deep learning en generatieve AI — een mooie brug naar wat je in Module 3 gaat leren.</div>
 </div>
 
@@ -1460,13 +1480,13 @@ function m2s7(c){
 
 function m2s8(c){
   c.innerHTML = `
-<div class="s-badge">📓 Stap 9 van 12 · NotebookLM ontdekken</div>
+<div class="s-badge">Stap 9 van 12 · NotebookLM ontdekken</div>
 <h2 class="ch2">Google <em>NotebookLM</em>: jouw AI-studiehulp</h2>
 <p class="cp">NotebookLM is een gratis AI-tool van Google die speciaal ontworpen is om je te helpen studeren. In tegenstelling tot een chatbot die "uit het hele internet" antwoordt, baseert NotebookLM zich <strong>enkel op documenten die JIJ zelf uploadt</strong> — dus veel minder kans op verzonnen informatie.</p>
 
-<h3 class="ch3">📋 Stap voor stap: hoe gebruik je NotebookLM?</h3>
+<h3 class="ch3">Stap voor stap: hoe gebruik je NotebookLM?</h3>
 <div style="background: white; border-left: 4px solid var(--blue); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 2; margin: 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 2; margin: 0;">
 <strong>Stap 1:</strong> Ga naar <strong>notebooklm.google.com</strong> en log in met een Google-account.<br>
 <strong>Stap 2:</strong> Klik op "Nieuwe notebook" en geef die een naam (bijv. "Geschiedenis — Hoofdstuk 4").<br>
 <strong>Stap 3:</strong> Upload je bronnen: een PDF van je cursus, je eigen nota's, of een link naar een artikel.<br>
@@ -1485,12 +1505,12 @@ function m2s8(c){
 
 function m2s_verdieping3(c){
   c.innerHTML = `
-<div class="s-badge">🎓 Stap 11 van 12 · Verdieping (3e graad)</div>
+<div class="s-badge">Stap 11 van 12 · Verdieping (3e graad)</div>
 <h2 class="ch2">Welk AI-systeem past bij <em>welke taak</em>?</h2>
 <p class="cp">Je zag al 3 soorten machine learning en deep learning. Nu ga je een stap verder: niet elk AI-systeem is voor elke taak even geschikt — en waarom dat zo is, hangt af van het model zelf, de data waarmee het trainde, en de instellingen die eronder zitten.</p>
 
 <div class="ib warn">
-  <div class="ib-t">🧠 Drie dingen die de output bepalen</div>
+  <div class="ib-t">Drie dingen die de output bepalen</div>
   <div class="ib-b">
   <strong>1. Het model</strong> — een taalmodel is getraind om tekst te voorspellen, geen beelden. Vraag het om een schilderij te "tekenen" in woorden, en je krijgt een beschrijving, geen afbeelding.<br><br>
   <strong>2. De trainingsdata</strong> — een model dat vooral Engelstalige teksten zag, presteert zwakker in het Nederlands. Een model getraind vóór 2024 weet niets over gebeurtenissen erna.<br><br>
@@ -1498,7 +1518,7 @@ function m2s_verdieping3(c){
   </div>
 </div>
 
-<h3 class="ch3">🧩 Doe-opdracht: kies het juiste systeem</h3>
+<h3 class="ch3">Doe-opdracht: kies het juiste systeem</h3>
 <p class="cp">Voor elke taak hieronder: welk type AI-systeem zou jij kiezen, en welk risico moet je in gedachten houden?</p>
 
 <div style="background:white; border:1px solid #e0e4f5; border-radius:10px; padding:16px; margin:14px 0;">
@@ -1512,7 +1532,7 @@ function m2s_verdieping3(c){
 </div>
 
 <div class="ib warn">
-  <div class="ib-t">💡 Waarom dit ertoe doet</div>
+  <div class="ib-t">Waarom dit ertoe doet</div>
   <div class="ib-b">Een gewone chatbot zonder actuele internettoegang kan bij taak 2 makkelijk verouderde of verzonnen cijfers geven — een technische beperking (geen live data) die zich vertaalt naar een concreet risico (foutieve informatie in je werk). Dat soort vertaalslag — van technische beperking naar praktisch risico — is precies wat AI-geletterdheid op dit niveau vraagt.</div>
 </div>
 
@@ -1538,23 +1558,23 @@ function sVerdieping3(){
 
 function m2s9(c){
   c.innerHTML = `
-<div class="s-badge">🧪 Stap 10 van 12 · Doe-opdracht: aan de slag!</div>
+<div class="s-badge">Stap 10 van 12 · Doe-opdracht: aan de slag!</div>
 <h2 class="ch2">Probeer het <em>zelf</em>: jouw eerste prompt</h2>
 <p class="cp">Tijd om zelf te experimenteren! Open in een nieuw tabblad <strong>Copilot</strong> (met je schoolaccount), <strong>NotebookLM</strong>, of een andere toegestane AI-tool.</p>
 
 <div class="ib warn">
-  <div class="ib-t">⚠️ Vergeet dit niet!</div>
+  <div class="ib-t">Vergeet dit niet!</div>
   <div class="ib-b">Vermeld <strong>altijd</strong> of je toestemming had om AI te gebruiken voor een bepaalde taak (zie het AI-label van je leerkracht, Module 5). Voor deze oefening mag je vrij experimenteren.</div>
 </div>
 
-<h3 class="ch3">🎯 De opdracht</h3>
+<h3 class="ch3">De opdracht</h3>
 <p class="cp">Kies één van deze twee taken en probeer ze uit:</p>
-<ul style="font-size: 13px; color: #3d4f8a; line-height: 1.8; padding-left: 20px;">
+<ul style="font-size: 13px; color: #06038D; line-height: 1.8; padding-left: 20px;">
 <li><strong>Optie A:</strong> Laat AI een vak-onderwerp uitleggen dat je lastig vindt, in maximaal 5 zinnen, met een voorbeeld erbij.</li>
 <li><strong>Optie B:</strong> Als je NotebookLM gebruikt: upload een korte tekst of je nota's, en stel er een vraag over.</li>
 </ul>
 
-<h3 class="ch3">✍️ Noteer hieronder wat er gebeurde</h3>
+<h3 class="ch3">Noteer hieronder wat er gebeurde</h3>
 <p class="cp"><strong>Welke prompt heb je precies getypt?</strong></p>
 <textarea class="sr-ta" id="promptused" style="min-height:60px;" placeholder="Ik typte precies: ..."></textarea>
 
@@ -1603,20 +1623,20 @@ function m2s10(c){
 
 function m2s11(c){
   c.innerHTML = `
-<div class="s-badge">✍️ Stap 12 van 12 · Jouw reflectie</div>
+<div class="s-badge">Stap 12 van 12 · Jouw reflectie</div>
 <h2 class="ch2">Wat vind <em>jij</em> hiervan?</h2>
 <p class="cp">Je begrijpt nu de 3 fasen van AI: procedureel, machine learning (met de 3 soorten), en deep learning. En je hebt zelf al geëxperimenteerd met een AI-tool!</p>
 
-<h3 class="ch3">💭 Stellingen</h3>
+<h3 class="ch3">Stellingen</h3>
 <div id="stl-m2"></div>
 
 <p class="cp">Noteer je reflectie: Welke van de 3 soorten machine learning (gesuperviseerd, ongesuperviseerd, versterkend) vond je het makkelijkst te begrijpen, en welke het moeilijkst? En hoe was het om zelf een prompt uit te proberen?</p>
-<p style="font-size:11px;color:#999;font-style:italic;margin:-8px 0 12px 0;">📄 Werk je liever op papier? Deze samenvatting, stellingen en reflectie staan ook op <strong>pagina 5-7</strong> van je invulcursus.</p>
+<p style="font-size:11px;color:#06038D;font-style:italic;margin:-8px 0 12px 0;">Werk je liever op papier? Deze samenvatting, stellingen en reflectie staan ook op <strong>pagina 5-7</strong> van je invulcursus.</p>
 <textarea class="sr-ta" id="ref2" placeholder="Het makkelijkst te begrijpen vond ik... Toen ik zelf een prompt probeerde, merkte ik..."></textarea>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p2()">← Vorige</button>
-  <button class="sr-btn g" id="ref2btn" onclick="sRef2()">✅ Module 2 afronden →</button>
+  <button class="sr-btn g" id="ref2btn" onclick="sRef2()">✓ Module 2 afronden →</button>
   <span class="nh">Stap 12/12</span>
 </div>`;
   const ta = document.getElementById('ref2');
@@ -1651,18 +1671,18 @@ function m3Gefilterd(){
 function rm3(){ const c=document.getElementById('m3c'); c.innerHTML=''; const arr=m3Gefilterd(); rDots(3,arr.length,S.mod3.step); arr[S.mod3.step](c); fixStepBadge(c,S.mod3.step,arr.length); lockNextButtons(c); }
 function n3(){ const arr=m3Gefilterd(); S.mod3.step++; ss(); S.mod3.step>=arr.length ? d3() : rm3(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); }
 function p3(){ if(S.mod3.step > 0){ S.mod3.step--; ss(); rm3(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); } }
-function d3(){ S.mod3.done=true; S.mod3.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('🎉 Module 3 voltooid! Module 4 is nu beschikbaar.'),300); }
+function d3(){ S.mod3.done=true; S.mod3.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('Module 3 voltooid! Module 4 is nu beschikbaar.'),300); }
 
 function m3s0(c){
   c.innerHTML = `
-<div class="s-badge">✨ Stap 1 van 13 · Generatieve AI</div>
+<div class="s-badge">Stap 1 van 13 · Generatieve AI</div>
 <h2 class="ch2">AI is nu een stapje <em>verder</em> gegaan</h2>
 <p class="cp">In Module 2 leerde je over deep learning. AI is recent nog een stapje verder gegaan. Algoritmes kunnen nu ook <strong>nieuwe dingen creëren</strong>. We spreken dan van <strong>generatieve AI</strong>.</p>
 <p class="cp">Deze nieuwe vorm kon doorbreken omdat computers nu een veel grotere rekenkracht hebben. Zij zijn getraind met bijna alle online informatie. Wanneer jij aan die machine een vraag stelt, voorspelt het algoritme het antwoord door woorden logisch achter elkaar te plaatsen. Dit heeft dus voornamelijk met <strong>kansberekening</strong> te maken.</p>
 <p class="cp">Deze algoritmes noemen we ook <strong>taalmodellen</strong>, omdat ze getraind zijn om natuurlijke taal te begrijpen. Met deze modellen kan je niet alleen teksten, maar ook foto's en video's maken.</p>
 
 <div class="ib warn">
-  <div class="ib-t">💬 Voorbeeld: chatten met "Friends"</div>
+  <div class="ib-t">Voorbeeld: chatten met "Friends"</div>
   <div class="ib-b">Stel je voor: je traint een bestaand taalmodel met alle scenario's van de Amerikaanse tv-reeks 'Friends'. Het model leert zo het denken en spreken van de personages imiteren. Nadien kan je een fictief chatgesprek voeren met alle personages. Zij reageren dan op jouw vragen en opmerkingen alsof je écht met hen praat, ook al hebben ze die zinnen nooit uitgesproken.</div>
 </div>
 
@@ -1674,12 +1694,12 @@ function m3s0(c){
 
 function m3s1(c){
   c.innerHTML = `
-<div class="s-badge">📝 Stap 2 van 13 · Hoe genereert AI tekst?</div>
+<div class="s-badge">Stap 2 van 13 · Hoe genereert AI tekst?</div>
 <h2 class="ch2">Woord voor woord: hoe <em>ChatGPT schrijft</em></h2>
 <p class="cp">Wanneer je ChatGPT een vraag stelt, "denkt" het niet zoals jij. Het genereert het antwoord <strong>woord voor woord</strong>, en kiest telkens het meest waarschijnlijke volgende woord — gebaseerd op alles wat het geleerd heeft uit miljarden teksten.</p>
 
-<div style="background: rgba(10,31,168,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.8; margin: 0;">
+<div style="background: rgba(6,3,141,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.8; margin: 0;">
 <strong>Jij typt:</strong> "Schrijf een gedicht over de zee"<br>
 <strong>AI genereert:</strong> "De" → "De zee" → "De zee is" → "De zee is blauw" → ...<br><br>
 Bij élke stap berekent het model kansen voor duizenden mogelijke volgende woorden, en kiest meestal het meest waarschijnlijke.
@@ -1690,7 +1710,7 @@ Bij élke stap berekent het model kansen voor duizenden mogelijke volgende woord
 
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/UD0a-i2EBdE" allowfullscreen loading="lazy" title="EDUbox Artificiële Intelligentie — MNM DJ ImAIne"></iframe></div>
 <div class="ib warn">
-  <div class="ib-t">📝 Waar gaat dit over?</div>
+  <div class="ib-t">Waar gaat dit over?</div>
   <div class="ib-b">Deze video toont hoe generatieve AI de stem van dj Imane kon nabootsen voor "dj ImAIne" (zie Module 1) — een concreet voorbeeld van tekst én stem die woord voor woord/klank voor klank gegenereerd worden.</div>
 </div>
 
@@ -1703,13 +1723,13 @@ Bij élke stap berekent het model kansen voor duizenden mogelijke volgende woord
 
 function m3s2(c){
   c.innerHTML = `
-<div class="s-badge">👻 Stap 3 van 13 · Hallucinaties</div>
+<div class="s-badge">Stap 3 van 13 · Hallucinaties</div>
 <h2 class="ch2">Hoe kan je zien of iets met <em>AI is gemaakt</em>?</h2>
 <p class="cp">Je kan er niet zomaar op rekenen dat programma's als ChatGPT jouw huiswerk foutloos maken. <strong>Let vooral op details</strong>, zoals de lichtinval, vingers, gezichten of details in de achtergrond. Een korrelig beeld is meestal ook een teken.</p>
 
 <div style="background: white; border: 2px dashed var(--red); border-radius: 8px; padding: 18px; margin: 16px 0;">
-  <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;margin-bottom:10px;">🚨 Een echt voorbeeld</div>
-  <p style="font-size:13px;color:#333;line-height:1.7;margin:0;">
+  <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;margin-bottom:10px;">Een echt voorbeeld</div>
+  <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">
   Op een AI-gegenereerde foto van een reddingswerker die een kind draagt, tel je bij nader inzien <strong>6 vingers</strong> aan één hand. Dit is een hallucinatie: het beeld ziet er op het eerste gezicht overtuigend echt uit, maar bevat een detail dat onmogelijk klopt.
   </p>
 </div>
@@ -1717,7 +1737,7 @@ function m3s2(c){
 <p class="cp">Hetzelfde geldt voor tekst: een taalmodel kan met evenveel zelfvertrouwen een <strong>verzonnen feit, bron of citaat</strong> presenteren als een correct antwoord. Het "weet" niet dat het fout zit — het genereert gewoon het meest waarschijnlijke antwoord.</p>
 
 <div class="ib warn">
-  <div class="ib-t">✅ Onthoud dit</div>
+  <div class="ib-t">✓ Onthoud dit</div>
   <div class="ib-b">Je kan er dus niet zomaar op rekenen dat AI-programma's je huiswerk foutloos maken. Controleer altijd wat je van AI krijgt, zeker voor je het gebruikt in een werkstuk of taak.</div>
 </div>
 
@@ -1730,20 +1750,20 @@ function m3s2(c){
 
 function m3s3(c){
   c.innerHTML = `
-<div class="s-badge">🎮 Stap 4 van 13 · Spelen met AI</div>
+<div class="s-badge">Stap 4 van 13 · Spelen met AI</div>
 <h2 class="ch2">Aan de slag met <em>generatieve AI</em></h2>
 <p class="cp">In deze module mag je experimenteren met generatieve AI, de vorm van AI die zelf dingen kan creëren. Zo leer je de mogelijkheden kennen en ontdek je verschillende aspecten.</p>
 
 <p class="cp">Maar voor we aan de oefeningen beginnen, nog even dit. Om iets te kunnen creëren, heeft de machine een opdracht nodig. Daarin zeg je wat je verwacht dat de machine maakt. Zo'n opdracht noemen we <strong>een prompt</strong>.</p>
 
 <div class="ib warn">
-  <div class="ib-t">🎯 Wat ga je doen?</div>
+  <div class="ib-t">Wat ga je doen?</div>
   <div class="ib-b">Je doorloopt zo meteen een reeks opdrachten waarin je telkens een specifiek aspect van generatieve AI bestudeert en uitprobeert: herkennen wat AI kan, prompts leren lezen, en zelf prompts schrijven.</div>
 </div>
 
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/ctCj3yYuSW4" allowfullscreen loading="lazy" title="ChatGPT na 2 jaar niet meer weg te denken uit het onderwijs"></iframe></div>
 <div class="ib warn">
-  <div class="ib-t">📝 Waar gaat dit over?</div>
+  <div class="ib-t">Waar gaat dit over?</div>
   <div class="ib-b">Deze VRT NWS-reportage toont hoe ChatGPT en gelijkaardige tools intussen niet meer weg te denken zijn uit scholen — exact het soort generatieve AI waar je hier zelf mee gaat experimenteren.</div>
 </div>
 
@@ -1756,7 +1776,7 @@ function m3s3(c){
 
 function m3s4(c){
   c.innerHTML = `
-<div class="s-badge">🧩 Stap 5 van 13 · Opdracht 1: Is het echt of AI?</div>
+<div class="s-badge">Stap 5 van 13 · Opdracht 1: Is het echt of AI?</div>
 <h2 class="ch2">Is het <em>echt</em> of AI?</h2>
 <p class="cp">Je bent ongetwijfeld al vaak in contact gekomen met beelden of teksten die door AI zijn gemaakt. Misschien zelfs zonder dat je het wist. Maar kan jij ook echte content onderscheiden van AI-content?</p>
 <p class="cp">Bekijk elke beschrijving hieronder en beslis: is dit waarschijnlijk een teken van AI-gegenereerde content, of niet?</p>
@@ -1772,7 +1792,7 @@ function m3s4(c){
 
 function m3s5(c){
   c.innerHTML = `
-<div class="s-badge">🧩 Stap 6 van 13 · Opdracht 2: Raad de prompt</div>
+<div class="s-badge">Stap 6 van 13 · Opdracht 2: Raad de prompt</div>
 <h2 class="ch2">Raad de <em>prompt</em></h2>
 <p class="cp">Je hebt nu een eerste keer met prompts gespeeld — al was het passief. Dat is niet altijd eenvoudig. Taalmodellen moet je leren gebruiken. Maar geen nood: prompten kan je leren.</p>
 <p class="cp">Bij elk paar prompts hieronder: welke zou een beter, bruikbaarder antwoord opleveren? Klik je keuze aan.</p>
@@ -1788,13 +1808,13 @@ function m3s5(c){
 
 function m3s6(c){
   c.innerHTML = `
-<div class="s-badge">🔑 Stap 7 van 13 · Prompt-tips</div>
+<div class="s-badge">Stap 7 van 13 · Prompt-tips</div>
 <h2 class="ch2">Hoe maak je een <em>goede prompt</em>?</h2>
 <p class="cp">Prompten is een vak apart. Dat leer je niet zomaar in één, twee, drie. Er bestaan intussen zelfs opleidingen voor en er zijn mensen die dit als beroep doen, <strong>prompt engineers</strong> genoemd. Maar we kunnen je wel enkele tips geven om het resultaat van je prompt zo goed mogelijk te maken.</p>
 
-<h3 class="ch3">📝 Hoe maak je een goede prompt voor tekst?</h3>
-<div style="background: rgba(10,31,168,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.9; margin: 0;">
+<h3 class="ch3">Hoe maak je een goede prompt voor tekst?</h3>
+<div style="background: rgba(6,3,141,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.9; margin: 0;">
 <strong>1. Wees specifiek over het onderwerp</strong><br>
 <strong>2. Geef voldoende context</strong><br>
 <strong>3. Wees concreet over de lengte en de output</strong><br>
@@ -1802,21 +1822,21 @@ function m3s6(c){
 </p>
 </div>
 
-<div style="background: #f0f2f5; padding: 14px; border-radius: 6px; margin: 16px 0; font-size:13px; color:#333;">
-✅ <em>"Wat zijn de voordelen van regelmatig hardlopen voor de mentale gezondheid? Schrijf een artikel van ongeveer 150 woorden dat jongeren van 16 jaar moeten begrijpen."</em>
+<div style="background: #FFFFFF; padding: 14px; border-radius: 6px; margin: 16px 0; font-size:13px; color:#06038D;">
+✓ <em>"Wat zijn de voordelen van regelmatig hardlopen voor de mentale gezondheid? Schrijf een artikel van ongeveer 150 woorden dat jongeren van 16 jaar moeten begrijpen."</em>
 </div>
 
-<h3 class="ch3">🖼️ Hoe maak je een goede prompt voor een beeld?</h3>
-<div style="background: rgba(127,224,0,0.1); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.9; margin: 0;">
+<h3 class="ch3">Hoe maak je een goede prompt voor een beeld?</h3>
+<div style="background: rgba(149,214,0,0.1); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.9; margin: 0;">
 <strong>1. Wees specifiek over het onderwerp</strong><br>
 <strong>2. Geef de gewenste outputvorm</strong><br>
 <strong>3. Verduidelijk de stijl</strong>
 </p>
 </div>
 
-<div style="background: #f0f2f5; padding: 14px; border-radius: 6px; margin: 16px 0; font-size:13px; color:#333;">
-✅ <em>"Maak een tekening van een fietsend paard met een pilotenmuts, dat een sigaret rookt, in de stijl van het surrealisme."</em>
+<div style="background: #FFFFFF; padding: 14px; border-radius: 6px; margin: 16px 0; font-size:13px; color:#06038D;">
+✓ <em>"Maak een tekening van een fietsend paard met een pilotenmuts, dat een sigaret rookt, in de stijl van het surrealisme."</em>
 </div>
 
 <div class="nw">
@@ -1828,19 +1848,19 @@ function m3s6(c){
 
 function m3s7(c){
   c.innerHTML = `
-<div class="s-badge">🧪 Stap 8 van 13 · Opdracht 4: Schrijf zelf de prompt</div>
+<div class="s-badge">Stap 8 van 13 · Opdracht 4: Schrijf zelf de prompt</div>
 <h2 class="ch2">Nu jij: <em>schrijf zelf een prompt</em></h2>
 <p class="cp">Deze tips zijn een eerste hulpmiddel om het beste resultaat uit een prompt te halen. Laten we dit eens uittesten! Open een toegestane AI-tool (Copilot, ChatGPT, ...) in een nieuw tabblad.</p>
 
 <div class="ib warn">
-  <div class="ib-t">⚠️ Vergeet dit niet!</div>
+  <div class="ib-t">Vergeet dit niet!</div>
   <div class="ib-b">Check altijd eerst of je AI mag gebruiken voor de taak die je uitvoert (het AI-label van je leerkracht, zie Module 5). Voor deze les-oefening mag je vrij oefenen — maar vermeld dit steeds bij echt schoolwerk!</div>
 </div>
 
-<h3 class="ch3">🎯 De opdracht</h3>
+<h3 class="ch3">De opdracht</h3>
 <p class="cp">Kies een onderwerp en schrijf een prompt met minstens 3 van de tips uit de vorige stap. Probeer hem uit in je AI-tool.</p>
 
-<h3 class="ch3">✍️ Noteer hieronder wat er gebeurde</h3>
+<h3 class="ch3">Noteer hieronder wat er gebeurde</h3>
 <p class="cp"><strong>Welke prompt heb je precies geschreven?</strong></p>
 <textarea class="sr-ta" id="promptused3" style="min-height:70px;" placeholder="Mijn prompt was: ..."></textarea>
 
@@ -1869,13 +1889,13 @@ function sPromptExercise3(){
 
 function m3s8(c){
   c.innerHTML = `
-<div class="s-badge">📰 Stap 9 van 13 · Opdracht 5: AI als assistent</div>
+<div class="s-badge">Stap 9 van 13 · Opdracht 5: AI als assistent</div>
 <h2 class="ch2">Maak een afbeelding bij <em>een artikel</em></h2>
 <p class="cp">Generatieve AI geeft zelden direct de output die je in gedachten had. Meestal heb je meerdere pogingen nodig om een goed resultaat te krijgen.</p>
 <p class="cp">Maar als je prompten goed onder de knie hebt, kan generatieve AI een <strong>goede assistent</strong> zijn bij bepaalde taken. Journalisten of andere makers kunnen AI inzetten als hulpmiddel — bijvoorbeeld om een passende titel of afbeelding te bedenken bij een artikel. In dat geval moet je wel goed weten hoe je een prompt, stap voor stap, opbouwt.</p>
 
 <div class="ib warn">
-  <div class="ib-t">💭 Denk na</div>
+  <div class="ib-t">Denk na</div>
   <div class="ib-b">Stel je bent journalist en schreef een artikel over "de terugkeer van de otter in Vlaamse rivieren". Welke prompt zou jij schrijven om een passende illustratie te laten genereren? Gebruik de 3 tips uit stap 7 (onderwerp, outputvorm, stijl).</div>
 </div>
 
@@ -1888,16 +1908,16 @@ function m3s8(c){
 
 function m3s9(c){
   c.innerHTML = `
-<div class="s-badge">🎭 Stap 10 van 13 · Opdracht 6: Deepfake of niet?</div>
+<div class="s-badge">Stap 10 van 13 · Opdracht 6: Deepfake of niet?</div>
 <h2 class="ch2">Deepfake of <em>niet</em>?</h2>
 <p class="cp">AI kan een journalist of een andere maker helpen bij het creëren van een goede titel of het maken van een geschikte afbeelding voor een tekst. Dat gaat gemakkelijk. Maar dan hebben we wel duidelijke regels nodig, want <strong>niet iedereen heeft dezelfde goede bedoelingen</strong> als een journalist. Generatieve AI kan ook worden misbruikt.</p>
 
-<h3 class="ch3">🧩 Doe-opdracht: herken bias-signalen</h3>
+<h3 class="ch3">Doe-opdracht: herken bias-signalen</h3>
 <p class="cp">Bekijk elk scenario en beslis: is hier sprake van een AI-signaal dat wijst op mogelijk misbruik?</p>
 <div id="deepfakecheck"></div>
 
 <div class="ib warn">
-  <div class="ib-t">⚖️ Conclusie</div>
+  <div class="ib-t">Conclusie</div>
   <div class="ib-b">Mensen met slechte bedoelingen kunnen AI misbruiken, bijvoorbeeld door nepnieuws of propaganda te maken en te verspreiden. Omdat de kwaliteit van de resultaten zo goed is, is het onderscheid tussen echt en nep niet meer altijd duidelijk. In de eerste oefeningen ging het nog om onschuldige beelden. Maar als het gaat over het nieuws en de waarheid, dan is de impact van AI veel ingrijpender. We moeten dus met z'n allen alert blijven!</div>
 </div>
 
@@ -1911,7 +1931,7 @@ function m3s9(c){
 
 function m3s10(c){
   c.innerHTML = `
-<div class="s-badge">💬 Stap 11 van 13 · Discussie</div>
+<div class="s-badge">Stap 11 van 13 · Discussie</div>
 <h2 class="ch2">Waar ligt <em>de grens</em>?</h2>
 <div class="disc-card">
   <div class="disc-q">1. Je gebruikt AI om ideeën te brainstormen voor een opstel, maar schrijft de tekst zelf. Is dat "vals spelen"?</div>
@@ -1947,20 +1967,20 @@ function m3s11(c){
 
 function m3s12(c){
   c.innerHTML = `
-<div class="s-badge">✍️ Stap 13 van 13 · Jouw reflectie</div>
+<div class="s-badge">Stap 13 van 13 · Jouw reflectie</div>
 <h2 class="ch2">Generatieve AI in <em>jouw leven</em></h2>
 <p class="cp">Je begrijpt nu hoe generatieve AI teksten en beelden maakt, hoe je goede prompts schrijft (en hebt dit zelf uitgeprobeerd!), en welke risico's erbij horen.</p>
 
-<h3 class="ch3">💭 Stellingen</h3>
+<h3 class="ch3">Stellingen</h3>
 <div id="stl-m3"></div>
 
 <p class="cp">Noteer je reflectie: Voor welke taak zou jij generatieve AI het liefst gebruiken (school of vrije tijd)? En wat vind je van de discussie rond AI-kunst en auteursrecht?</p>
-<p style="font-size:11px;color:#999;font-style:italic;margin:-8px 0 12px 0;">📄 Werk je liever op papier? Deze samenvatting, prompt-tips en reflectie staan ook op <strong>pagina 8-10</strong> van je invulcursus.</p>
+<p style="font-size:11px;color:#06038D;font-style:italic;margin:-8px 0 12px 0;">Werk je liever op papier? Deze samenvatting, prompt-tips en reflectie staan ook op <strong>pagina 8-10</strong> van je invulcursus.</p>
 <textarea class="sr-ta" id="ref3" placeholder="Ik zou generatieve AI gebruiken voor... Over AI-kunst en auteursrecht denk ik..."></textarea>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p3()">← Vorige</button>
-  <button class="sr-btn g" id="ref3btn" onclick="sRef3()">✅ Module 3 afronden →</button>
+  <button class="sr-btn g" id="ref3btn" onclick="sRef3()">✓ Module 3 afronden →</button>
   <span class="nh">Stap 13/13</span>
 </div>`;
   const ta = document.getElementById('ref3');
@@ -1995,16 +2015,16 @@ function m4Gefilterd(){
 function rm4(){ const c=document.getElementById('m4c'); c.innerHTML=''; const arr=m4Gefilterd(); rDots(4,arr.length,S.mod4.step); arr[S.mod4.step](c); fixStepBadge(c,S.mod4.step,arr.length); lockNextButtons(c); }
 function n4(){ const arr=m4Gefilterd(); S.mod4.step++; ss(); S.mod4.step>=arr.length ? d4() : rm4(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); }
 function p4(){ if(S.mod4.step > 0){ S.mod4.step--; ss(); rm4(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); } }
-function d4(){ S.mod4.done=true; S.mod4.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('🎉 Module 4 voltooid! Module 5 is nu beschikbaar.'),300); }
+function d4(){ S.mod4.done=true; S.mod4.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('Module 4 voltooid! Module 5 is nu beschikbaar.'),300); }
 
 function m4s0(c){
   c.innerHTML = `
-<div class="s-badge">⚠️ Stap 1 van 11 · Vooroordelen bij AI</div>
+<div class="s-badge">Stap 1 van 11 · Vooroordelen bij AI</div>
 <h2 class="ch2">AI is <em>niet neutraal</em></h2>
 <p class="cp">AI gebruikt modellen om data te analyseren, te zoeken naar patronen en een voorspelling te maken. Omdat de wereld zo complex is, gebeurt dit <strong>niet met absolute zekerheid</strong>. Dat is geen probleem, zolang we ons hiervan bewust zijn als mens.</p>
 
 <div class="ib warn">
-  <div class="ib-t">🐶🍪 Een herkenbaar voorbeeld: hond of koekje?</div>
+  <div class="ib-t">Een herkenbaar voorbeeld: hond of koekje?</div>
   <div class="ib-b">AI-systemen die getraind zijn om afbeeldingen te herkennen, verwarren soms een bruin, rond koekje met het gezicht van een hond met vlekken — omdat de patronen (rond, bruin, met vlekken) op elkaar lijken. Onschuldig in dit geval, maar het toont hoe AI met kansen werkt, niet met zekerheden.</div>
 </div>
 
@@ -2018,7 +2038,7 @@ function m4s0(c){
 
 function m4s1(c){
   c.innerHTML = `
-<div class="s-badge">⚖️ Stap 2 van 11 · Ethische dilemma's</div>
+<div class="s-badge">Stap 2 van 11 · Ethische dilemma's</div>
 <h2 class="ch2">AI en <em>ethische dilemma's</em></h2>
 <p class="cp">AI komt tot stand dankzij wiskunde. Maar je kan niet alles aan cijferwerk overlaten. <strong>Het menselijk leven is complexer dan cijfers en wiskunde.</strong> Ook waarden en normen spelen een belangrijke rol, en die kan je niet eenvoudig evalueren met een computer.</p>
 
@@ -2026,7 +2046,7 @@ function m4s1(c){
 
 <p class="cp">Om waarden af te wegen of de context van een dilemma beter te begrijpen, heb je <strong>emotioneel inzicht</strong> nodig. En dat kan AI niet nabootsen. Sommige beslissingen kunnen we dus niet zomaar overlaten aan AI alleen.</p>
 
-<h3 class="ch3">💼 Voorbeeld: sollicitaties sorteren</h3>
+<h3 class="ch3">Voorbeeld: sollicitaties sorteren</h3>
 <p class="cp">Een bedrijf gebruikte ooit een AI-tool om CV's te sorteren voor technische functies. Het systeem werd getraind op 10 jaar aan CV's van vorige sollicitanten — vooral mannen, omdat de sector historisch mannelijker was. Het gevolg: CV's met het woord "vrouwen" (bijvoorbeeld "vrouwenschaakclub") kregen automatisch een lagere score. Het bedrijf ontdekte dit op tijd en schafte het systeem af.</p>
 
 <div class="nw">
@@ -2038,25 +2058,25 @@ function m4s1(c){
 
 function m4s2(c){
   c.innerHTML = `
-<div class="s-badge">🌍 Stap 3 van 11 · Energieverbruik van AI</div>
+<div class="s-badge">Stap 3 van 11 · Energieverbruik van AI</div>
 <h2 class="ch2">AI en het <em>milieu</em>: de verborgen kost</h2>
 <p class="cp">AI is geëvolueerd naar grote neurale netwerken die enorm veel berekeningen uitvoeren. Om deze neurale netwerken te laten werken, worden krachtige supercomputers gebruikt die hiervoor een massa aan gegevens verwerken.</p>
 <p class="cp">Maar deze berekeningen hebben wel een prijs. <strong>Computers gebruiken namelijk energie als ze een opdracht uitvoeren.</strong> Ook bij het trainen van een nieuw algoritme is dit het geval. Het energieverbruik van AI is immens!</p>
 
 <div class="ib warn">
-  <div class="ib-t">⚡ Concreet cijfer</div>
+  <div class="ib-t">Concreet cijfer</div>
   <div class="ib-b">Een zoekopdracht op ChatGPT gebruikt ongeveer <strong>25 keer meer energie</strong> dan eenzelfde zoekopdracht op Google.</div>
 </div>
 
-<h3 class="ch3">🌱 2 suggesties om bewuster om te gaan met AI</h3>
+<h3 class="ch3">2 suggesties om bewuster om te gaan met AI</h3>
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0;">
 <div style="background: white; border-left: 4px solid var(--green); border-radius: 8px; padding: 14px;">
 <strong style="color: var(--green); font-size: 12px;">1️⃣ Gebruik ChatGPT niet voor alles</strong>
-<p style="font-size: 12px; color: #3d4f8a; margin-top: 8px;">Meestal vind je je antwoord ook gewoon op Google. En dat is beter: want een zoekopdracht op ChatGPT gebruikt 25 keer meer energie dan Google.</p>
+<p style="font-size: 12px; color: #06038D; margin-top: 8px;">Meestal vind je je antwoord ook gewoon op Google. En dat is beter: want een zoekopdracht op ChatGPT gebruikt 25 keer meer energie dan Google.</p>
 </div>
 <div style="background: white; border-left: 4px solid var(--green); border-radius: 8px; padding: 14px;">
 <strong style="color: var(--green); font-size: 12px;">2️⃣ Kleiner taalmodel op je eigen computer</strong>
-<p style="font-size: 12px; color: #3d4f8a; margin-top: 8px;">Zo bespaar je energie, want je hoeft niet elke vraag naar de andere kant van de wereld te sturen. Voordeel: je hebt zelf geen internet nodig en je gegevens blijven veilig bewaard.</p>
+<p style="font-size: 12px; color: #06038D; margin-top: 8px;">Zo bespaar je energie, want je hoeft niet elke vraag naar de andere kant van de wereld te sturen. Voordeel: je hebt zelf geen internet nodig en je gegevens blijven veilig bewaard.</p>
 </div>
 </div>
 
@@ -2069,12 +2089,12 @@ function m4s2(c){
 
 function m4s3(c){
   c.innerHTML = `
-<div class="s-badge">🎬 Stap 4 van 11 · Impact op creatieve beroepen</div>
+<div class="s-badge">Stap 4 van 11 · Impact op creatieve beroepen</div>
 <h2 class="ch2">Wat betekent AI voor <em>creatief werk</em>?</h2>
 <p class="cp">Ook mensen met een creatief beroep (zoals schrijvers en tekenaars) zijn ongerust. Generatieve AI kan namelijk zelf teksten en beelden maken, dus misschien hebben zij binnenkort minder werk? Bovendien zijn die modellen getraind met hun teksten en beelden, zonder dat ze daarvoor zijn betaald.</p>
 
 <div class="ib warn">
-  <div class="ib-t">🎬 Hollywood, 2023</div>
+  <div class="ib-t">Hollywood, 2023</div>
   <div class="ib-b">In Hollywood hebben acteurs en scenarioschrijvers in 2023 maandenlang gestaakt. Ze wilden zeker zijn dat hun creativiteit ook in de toekomst wordt erkend. Generatieve AI kan wel leuke ideeën aanbrengen, maar uiteindelijk beschikt het menselijk brein over net wat meer originaliteit.</div>
 </div>
 
@@ -2082,7 +2102,7 @@ function m4s3(c){
 
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/YvbibGLIJzo" allowfullscreen loading="lazy" title="EDUbox Artificiële Intelligentie — Ethische dilemma's"></iframe></div>
 <div class="ib warn">
-  <div class="ib-t">📝 Waar gaat dit over?</div>
+  <div class="ib-t">Waar gaat dit over?</div>
   <div class="ib-b">Deze video gaat dieper in op ethische dilemma's rond AI — situaties waarin er geen makkelijk juist of fout antwoord bestaat, en waarbij menselijk oordeel onmisbaar blijft.</div>
 </div>
 
@@ -2095,26 +2115,26 @@ function m4s3(c){
 
 function m4s4(c){
   c.innerHTML = `
-<div class="s-badge">🎭 Stap 5 van 11 · Deepfakes herkennen</div>
+<div class="s-badge">Stap 5 van 11 · Deepfakes herkennen</div>
 <h2 class="ch2">Hoe herken je een <em>deepfake</em>?</h2>
 <p class="cp">Je zag in Module 1 al het voorbeeld van de nep-MrBeast-advertentie. Deepfakes worden steeds beter en moeilijker te herkennen met het blote oog. Toch zijn er signalen om op te letten:</p>
 
-<h3 class="ch3">👀 Visuele signalen</h3>
-<ul style="font-size: 13px; color: #3d4f8a; line-height: 1.8; padding-left: 20px;">
+<h3 class="ch3">Visuele signalen</h3>
+<ul style="font-size: 13px; color: #06038D; line-height: 1.8; padding-left: 20px;">
 <li>Onnatuurlijk knipperen met de ogen, of net helemaal niet knipperen</li>
 <li>Vreemde overgangen bij de rand van het gezicht of haar</li>
 <li>Verlichting op het gezicht die niet klopt met de rest van de scène</li>
 <li>Lipbewegingen die niet helemaal synchroon lopen met het geluid</li>
 </ul>
 
-<h3 class="ch3">🔊 Audio-signalen</h3>
-<ul style="font-size: 13px; color: #3d4f8a; line-height: 1.8; padding-left: 20px;">
+<h3 class="ch3">Audio-signalen</h3>
+<ul style="font-size: 13px; color: #06038D; line-height: 1.8; padding-left: 20px;">
 <li>Robotachtige of onnatuurlijke intonatie</li>
 <li>Vreemde pauzes op ongebruikelijke plekken</li>
 </ul>
 
 <div class="ib warn">
-  <div class="ib-t">✅ De gouden regel</div>
+  <div class="ib-t">✓ De gouden regel</div>
   <div class="ib-b">Twijfel je? Check de bron. Komt deze video van een officieel, geverifieerd account? Wordt hetzelfde nieuws ook gemeld door betrouwbare media (VRT, De Standaard...)? Als een schokkend filmpje enkel op één anoniem account staat, wees extra voorzichtig voor je het deelt.</div>
 </div>
 
@@ -2129,12 +2149,12 @@ function m4s4(c){
 
 function m4s5(c){
   c.innerHTML = `
-<div class="s-badge">🔐 Stap 6 van 11 · Privacy & jouw data</div>
+<div class="s-badge">Stap 6 van 11 · Privacy & jouw data</div>
 <h2 class="ch2">Wat gebeurt er met wat <em>jij</em> intypt?</h2>
 <p class="cp">Wanneer je iets typt in ChatGPT of een andere AI-tool, verdwijnt dat niet zomaar. Bij gratis, publieke AI-tools wordt wat je intypt vaak gebruikt om het model verder te trainen, of bewaard op servers van het bedrijf.</p>
 
-<h3 class="ch3">❌ Wat deel je best NOOIT met AI-chatbots?</h3>
-<ul style="font-size: 13px; color: #3d4f8a; line-height: 1.8; padding-left: 20px;">
+<h3 class="ch3">✗ Wat deel je best NOOIT met AI-chatbots?</h3>
+<ul style="font-size: 13px; color: #06038D; line-height: 1.8; padding-left: 20px;">
 <li>Je volledige naam samen met adres, telefoonnummer of geboortedatum</li>
 <li>Wachtwoorden of inloggegevens</li>
 <li>Foto's van paspoort, identiteitskaart of andere officiële documenten</li>
@@ -2143,7 +2163,7 @@ function m4s5(c){
 </ul>
 
 <div class="ib warn">
-  <div class="ib-t">💡 Sint-Rembert kiest bewust voor Copilot</div>
+  <div class="ib-t">Sint-Rembert kiest bewust voor Copilot</div>
   <div class="ib-b">Dat is waarom de school kiest voor Microsoft Copilot met je schoolaccount: die gegevens blijven binnen de beveiligde schoolomgeving en worden niet gebruikt om AI-modellen te trainen. Meer hierover in Module 5.</div>
 </div>
 
@@ -2156,11 +2176,11 @@ function m4s5(c){
 
 function m4s6(c){
   c.innerHTML = `
-<div class="s-badge">🎬 Stap 7 van 11 · Video: vooroordelen bij AI</div>
+<div class="s-badge">Stap 7 van 11 · Video: vooroordelen bij AI</div>
 <h2 class="ch2">Bekijk: <em>AI en vooroordelen</em></h2>
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/Yft4D4TdPxQ" allowfullscreen loading="lazy" title="EDUbox Artificiële Intelligentie — Ethiek en Bias met An Jacobs"></iframe></div>
 <div class="ib warn">
-  <div class="ib-t">📝 Waar gaat dit over?</div>
+  <div class="ib-t">Waar gaat dit over?</div>
   <div class="ib-b">In de EDUbox-cursus legt professor An Jacobs uit hoe vooroordelen een rol spelen bij AI: omdat systemen leren van data die mensen maakten, kunnen ze bestaande ongelijkheden overnemen en zelfs versterken — vaak zonder dat het bewust zo bedoeld was.</div>
 </div>
 
@@ -2173,7 +2193,7 @@ function m4s6(c){
 
 function m4s7(c){
   c.innerHTML = `
-<div class="s-badge">🧩 Stap 8 van 11 · Doe-opdracht</div>
+<div class="s-badge">Stap 8 van 11 · Doe-opdracht</div>
 <h2 class="ch2">Herken de <em>bias</em></h2>
 <p class="cp">Bekijk elk scenario en beslis: is hier sprake van mogelijke bias in het AI-systeem?</p>
 <div id="biascheck"></div>
@@ -2188,7 +2208,7 @@ function m4s7(c){
 
 function m4s8(c){
   c.innerHTML = `
-<div class="s-badge">💬 Stap 9 van 11 · Discussievragen</div>
+<div class="s-badge">Stap 9 van 11 · Discussievragen</div>
 <h2 class="ch2">Wat denk <em>jij</em> hiervan?</h2>
 <div class="disc-card">
   <div class="disc-q">1. Als een AI-systeem onbedoeld discrimineert (zoals bij het sollicitatie-voorbeeld), wie is dan verantwoordelijk?</div>
@@ -2225,20 +2245,20 @@ function m4s9(c){
 
 function m4s10(c){
   c.innerHTML = `
-<div class="s-badge">✍️ Stap 11 van 12 · Jouw reflectie</div>
+<div class="s-badge">Stap 11 van 12 · Jouw reflectie</div>
 <h2 class="ch2">Welk risico raakt <em>jou</em> het meest?</h2>
 <p class="cp">Je kent nu de belangrijkste ethische risico's van AI: vooroordelen/bias, ethische dilemma's, energieverbruik, impact op creatief werk, deepfakes en privacy.</p>
 
-<h3 class="ch3">💭 Stellingen</h3>
+<h3 class="ch3">Stellingen</h3>
 <div id="stl-m4"></div>
 
 <p class="cp">Noteer je reflectie: Welk risico vind jij het meest verontrustend, en waarom? Wat zou jij zelf doen om hier voorzichtig mee om te gaan?</p>
-<p style="font-size:11px;color:#999;font-style:italic;margin:-8px 0 12px 0;">📄 Werk je liever op papier? Deze samenvatting, stellingen en reflectie staan ook op <strong>pagina 11-12</strong> van je invulcursus.</p>
+<p style="font-size:11px;color:#06038D;font-style:italic;margin:-8px 0 12px 0;">Werk je liever op papier? Deze samenvatting, stellingen en reflectie staan ook op <strong>pagina 11-12</strong> van je invulcursus.</p>
 <textarea class="sr-ta" id="ref4" placeholder="Het risico dat mij het meest zorgen baart is... Ik zou zelf..."></textarea>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p4()">← Vorige</button>
-  <button class="sr-btn g" id="ref4btn" onclick="sRef4()">✅ Module 4 afronden →</button>
+  <button class="sr-btn g" id="ref4btn" onclick="sRef4()">✓ Module 4 afronden →</button>
   <span class="nh">Stap 11/11</span>
 </div>`;
   const ta = document.getElementById('ref4');
@@ -2259,7 +2279,7 @@ function sRef4(){
    Gebaseerd op EDUbox Artificiële Intelligentie, deel 4 "AI en jij" + Sint-Rembert beleid
    ════════════════════════════════════════════ */
 
-const m5 = [m5s0, m5s1, m5s2, m5s3, m5s4, m5s5, m5s6, m5s_verdieping3, m5s7, m5s8, m5s9, m5s10];
+const m5 = [m5s0, m5s1, m5s2, m5s3, m5s4, m5s5, m5s6, m5s_verdieping3, m5s_vermelden, m5s7, m5s8, m5s9, m5s10];
 
 // "AI-detectie: waarom niet?" (index 6) is expliciet een 3e-graadcompetentie uit het kader
 // ("Ik kan uitleggen waarom AI-detectie geen sluitend bewijs vormt.") — voor jongere graden
@@ -2276,21 +2296,21 @@ function m5Gefilterd(){
 function rm5(){ const c=document.getElementById('m5c'); c.innerHTML=''; const arr=m5Gefilterd(); rDots(5,arr.length,S.mod5.step); arr[S.mod5.step](c); fixStepBadge(c,S.mod5.step,arr.length); lockNextButtons(c); }
 function n5(){ const arr=m5Gefilterd(); S.mod5.step++; ss(); S.mod5.step>=arr.length ? d5() : rm5(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); }
 function p5(){ if(S.mod5.step > 0){ S.mod5.step--; ss(); rm5(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); } }
-function d5(){ S.mod5.done=true; S.mod5.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('🎉 Module 5 voltooid! Module 6 (laatste!) is nu beschikbaar.'),300); }
+function d5(){ S.mod5.done=true; S.mod5.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('Module 5 voltooid! Module 6 (laatste!) is nu beschikbaar.'),300); }
 
 function m5s0(c){
   c.innerHTML = `
-<div class="s-badge">📚 Stap 1 van 11 · AI in de klas</div>
+<div class="s-badge">Stap 1 van 11 · AI in de klas</div>
 <h2 class="ch2">AI is een <em>handig hulpmiddel</em> — met afspraken</h2>
 <p class="cp">We kunnen er niet omheen: AI is een handig hulpmiddel, ook in de klas of bij je huiswerk. AI-tools kunnen bijvoorbeeld een samenvatting maken van een deel van je cursus, of nogmaals uitleggen hoe een wiskundige berekening precies werkt.</p>
 <p class="cp">Maar je zou AI ook een opstel in jouw plaats kunnen laten schrijven. Dat is uiteraard erg gemakkelijk maar niet de bedoeling. Rond het gebruik van AI in de klas zijn daarom <strong>afspraken nodig</strong>.</p>
 
 <div class="ib warn">
-  <div class="ib-t">💡 Waarom werkt Sint-Rembert met AI-labels?</div>
+  <div class="ib-t">Waarom werkt Sint-Rembert met AI-labels?</div>
   <div class="ib-b">Niet elke opdracht leent zich tot AI-gebruik. Een opstel om je eigen schrijfvaardigheid te tonen is anders dan een infographic waar creativiteit met tools centraal staat. Labels maken voor jou meteen duidelijk wat de bedoeling is bij elke opdracht.</div>
 </div>
 
-<h3 class="ch3">🎬 Bekijk: waarom afspraken nodig zijn</h3>
+<h3 class="ch3">Bekijk: waarom afspraken nodig zijn</h3>
 <p class="cp">Deze video (VRT NWS) stelt precies de vraag die aan de basis ligt van deze module: als je AI voor alles laat werken, leer je zelf nog wel iets? Dat is exact waarom de AI-labels bestaan die je zo meteen leert kennen.</p>
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/0RXV8Omf6pg" allowfullscreen loading="lazy" title="Krijgen we dommere studenten door ChatGPT?"></iframe></div>
 
@@ -2302,13 +2322,13 @@ function m5s0(c){
 
 function m5s1(c){
   c.innerHTML = `
-<div class="s-badge">✅❌ Stap 2 van 11 · Enkele afspraken</div>
+<div class="s-badge">✓✗ Stap 2 van 11 · Enkele afspraken</div>
 <h2 class="ch2">AI-tools gebruiken in de <em>klas</em></h2>
 <p class="cp">Hier zijn enkele algemene afspraken om AI-tools te gebruiken in de klas of bij je huiswerk:</p>
 
 <div class="grid2">
   <div class="pane-ok lijst-ok">
-    <div class="lijst-h-ok">✅ WEL</div>
+    <div class="lijst-h-ok">✓ WEL</div>
     <div>→ Gebruik AI-tools om je te helpen bij bepaalde taken, zoals samenvatten of brainstormen</div>
     <div>→ Laat je inspireren door AI, maar kopieer het niet zomaar</div>
     <div>→ Controleer je resultaat altijd op fouten</div>
@@ -2316,7 +2336,7 @@ function m5s1(c){
     <div>→ Wees altijd kritisch voor de output</div>
   </div>
   <div class="pane-nok lijst-nok">
-    <div class="lijst-h-nok">❌ NIET</div>
+    <div class="lijst-h-nok">✗ NIET</div>
     <div>→ Laat AI nooit het hele werk overnemen</div>
     <div>→ Schuif fouten niet af op AI: jij behoudt de verantwoordelijkheid</div>
     <div>→ Deel nooit persoonlijke gegevens met een AI-tool</div>
@@ -2333,7 +2353,7 @@ function m5s1(c){
 
 function m5s2(c){
   c.innerHTML = `
-<div class="s-badge">🏷️ Stap 3 van 11 · De 4 AI-labels van Sint-Rembert</div>
+<div class="s-badge">Stap 3 van 11 · De 4 AI-labels van Sint-Rembert</div>
 <h2 class="ch2">Sint-Rembert vertaalt dit naar <em>4 labels</em></h2>
 <p class="cp">Om deze afspraken heel concreet te maken per opdracht, gebruikt Sint-Rembert een schaal van 4 labels — van geen AI (label 1) tot volledig toegestaan (label 4). Hoe hoger het label, hoe meer AI je mag inzetten.</p>
 
@@ -2343,7 +2363,7 @@ function m5s2(c){
   <div class="label-card l3"><div class="lc-num">3</div><div class="lc-name">Als ondersteuning</div></div>
   <div class="label-card l4"><div class="lc-num">4</div><div class="lc-name">Toegestaan</div></div>
 </div>
-<p style="text-align:center; font-size:11px; color:#999; font-weight:700; margin-top:-16px; margin-bottom:20px;">← minder AI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; meer AI →</p>
+<p style="text-align:center; font-size:11px; color:#06038D; font-weight:700; margin-top:-16px; margin-bottom:20px;">← minder AI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; meer AI →</p>
 
 <div class="grid2">
   <div class="pane-ok lijst-ok">
@@ -2367,15 +2387,15 @@ function m5s2(c){
 </div>
 
 <div class="ib warn" style="margin-top:20px;">
-  <div class="ib-t">📋 Op je examens en taken</div>
+  <div class="ib-t">Op je examens en taken</div>
   <div class="ib-b">Bij elk examen of elke grote taak vind je bovenaan een vakje met de 4 labels, waarbij je leerkracht aankruist welk label geldt. Twijfel je? Vraag het na vóór je begint.</div>
 </div>
 
-<p style="font-size:11px; color:#999; font-style:italic; text-align:center; margin-top:20px;">De 4 AI-labels van Lut De Jaegher · Sint-Jozefscollege Torhout</p>
+<p style="font-size:11px; color:#06038D; font-style:italic; text-align:center; margin-top:20px;">De 4 AI-labels van Lut De Jaegher · Sint-Jozefscollege Torhout</p>
 
-<div style="background:rgba(127,224,0,0.1);border-left:4px solid var(--green);border-radius:8px;padding:14px 16px;margin:20px 0;">
-  <div style="font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;margin-bottom:4px;">📁 Documenten</div>
-  <p style="font-size:13px;color:#3d4f8a;line-height:1.7;margin:0;">De <strong>AI-labels</strong> (met klasposter) kan je hier bekijken en downloaden. <a href="AI-labels-poster%20(1).png" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800;">Open klasposter →</a></p>
+<div style="background:rgba(149,214,0,0.1);border-left:4px solid var(--green);border-radius:8px;padding:14px 16px;margin:20px 0;">
+  <div style="font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;margin-bottom:4px;">Documenten</div>
+  <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">De <strong>AI-labels</strong> (met klasposter) kan je hier bekijken en downloaden. <a href="AI-labels-poster%20(1).png" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800;">Open klasposter →</a></p>
 </div>
 
 <div class="nw">
@@ -2387,7 +2407,7 @@ function m5s2(c){
 
 function m5s3(c){
   c.innerHTML = `
-<div class="s-badge">🧩 Stap 4 van 11 · Doe-opdracht</div>
+<div class="s-badge">Stap 4 van 11 · Doe-opdracht</div>
 <h2 class="ch2">Welk label hoort <em>hier</em>?</h2>
 <p class="cp">Bekijk elke opdrachtomschrijving en klik op het label (1 t.e.m. 5) dat er volgens jou het best bij past.</p>
 <div id="lblmatch"></div>
@@ -2402,13 +2422,13 @@ function m5s3(c){
 
 function m5s4(c){
   c.innerHTML = `
-<div class="s-badge">🛠️ Stap 5 van 11 · Welke tools mag je gebruiken?</div>
+<div class="s-badge">Stap 5 van 11 · Welke tools mag je gebruiken?</div>
 <h2 class="ch2">Goedgekeurde <em>AI-tools</em></h2>
 <p class="cp">Sint-Rembert kiest bewust voor <strong>Microsoft Copilot</strong> als voornaamste AI-tool voor onderwijsdoeleinden. Copilot is geïntegreerd in je schoolaccount, waardoor je gebruik binnen de beveiligde schoolomgeving blijft. Wat je intypt wordt <strong>niet</strong> gebruikt om AI-modellen mee te trainen. Daarnaast staat het officiële beleidskader ook een aantal andere tools toe.</p>
 
 <div class="grid2">
   <div class="pane-ok lijst-ok">
-    <div class="lijst-h-ok">✅ Toegestane AI-toepassingen</div>
+    <div class="lijst-h-ok">✓ Toegestane AI-toepassingen</div>
     <div>→ Microsoft Copilot for M365 (eerste keuze, met schoolaccount)</div>
     <div>→ Microsoft Copilot Chat</div>
     <div>→ NotebookLM (zie Module 2)</div>
@@ -2419,7 +2439,7 @@ function m5s4(c){
     <div>→ Gamma.app</div>
   </div>
   <div class="pane-nok lijst-nok">
-    <div class="lijst-h-nok">⚠️ Let op</div>
+    <div class="lijst-h-nok">Let op</div>
     <div>→ Bij twijfel: vraag het aan je leerkracht voor je een nieuwe tool gebruikt</div>
     <div>→ Gebruik nooit tools waarbij je moet betalen zonder toestemming van je ouders</div>
     <div>→ Enkel Copilot M365 (met je schoolaccount) is volledig veilig voor gevoelige/persoonlijke informatie</div>
@@ -2435,14 +2455,14 @@ function m5s4(c){
 
 function m5s5(c){
   c.innerHTML = `
-<div class="s-badge">🧑‍🎓 Stap 6 van 11 · Praktijkscenario's</div>
+<div class="s-badge">Stap 6 van 11 · Praktijkscenario's</div>
 <h2 class="ch2">Praktijkscenario's: <em>wat zou jij doen?</em></h2>
 <p class="cp">Hier volgen herkenbare situaties uit het echte schoolleven. Bekijk elk scenario en beslis: mag dit wel, of mag dit niet?</p>
 <div id="magwel-leerling"></div>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p5()">← Vorige</button>
-  <button class="sr-btn g" onclick="n5()">Volgende: waarom geen detectietools →</button>
+  <button class="sr-btn g" onclick="n5()">Volgende →</button>
   <span class="nh">Stap 6/11</span>
 </div>`;
   renderMagWelLeerling();
@@ -2450,12 +2470,12 @@ function m5s5(c){
 
 function m5s6(c){
   c.innerHTML = `
-<div class="s-badge">🔍 Stap 7 van 11 · AI-detectie: waarom niet?</div>
+<div class="s-badge">Stap 7 van 11 · AI-detectie: waarom niet?</div>
 <h2 class="ch2">Waarom gebruikt Sint-Rembert <em>geen</em> AI-detectietools?</h2>
 <p class="cp">Je zou verwachten dat een school tools gebruikt die "AI-tekst" herkennen om plagiaat op te sporen. Sint-Rembert doet dit bewust <strong>niet</strong>.</p>
 
 <div class="ib warn">
-  <div class="ib-t">⚠️ AI-detectietools zijn onbetrouwbaar</div>
+  <div class="ib-t">AI-detectietools zijn onbetrouwbaar</div>
   <div class="ib-b">Tools die beweren AI-tekst te herkennen leveren regelmatig <strong>valse beschuldigingen</strong> op — vooral bij leerlingen die formeel schrijven, of niet-moedertaalsprekers.</div>
 </div>
 
@@ -2463,7 +2483,7 @@ function m5s6(c){
 
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/2bHH6U0UtnA" allowfullscreen loading="lazy" title="Kan SCHOOL zien dat je AI gebruikt?"></iframe></div>
 <div class="ib warn">
-  <div class="ib-t">📝 Waar gaat dit over?</div>
+  <div class="ib-t">Waar gaat dit over?</div>
   <div class="ib-b">Deze reportage (NOS) toont hoe andere scholen omgaan met AI-gebruik door leerlingen, en waarom leerkrachten steeds vaker inzetten op gesprek in plaats van detectiesoftware — exact de reden waarom Sint-Rembert dezelfde keuze maakte.</div>
 </div>
 
@@ -2471,19 +2491,19 @@ function m5s6(c){
 
 <div class="nw">
   <button class="sr-btn b" onclick="p5()">← Vorige</button>
-  <button class="sr-btn g" onclick="n5()">Volgende: charter maken →</button>
+  <button class="sr-btn g" onclick="n5()">Volgende →</button>
   <span class="nh">Stap 7/11</span>
 </div>`;
 }
 
 function m5s_verdieping3(c){
   c.innerHTML = `
-<div class="s-badge">🎓 Stap 8 van 11 · Verdieping (3e graad)</div>
+<div class="s-badge">Stap 8 van 11 · Verdieping (3e graad)</div>
 <h2 class="ch2">Privacy <em>kritisch</em> beoordelen</h2>
 <p class="cp">Je weet al welke gegevens je niet zomaar deelt met AI. Nu ga je een stap verder: zelf inschatten of een AI-tool geschikt is voor een bepaalde taak, en gegevens minimaliseren wanneer dat kan.</p>
 
 <div class="ib warn">
-  <div class="ib-t">🔎 3 vragen vóór je een AI-tool gebruikt voor iets gevoeligs</div>
+  <div class="ib-t">3 vragen vóór je een AI-tool gebruikt voor iets gevoeligs</div>
   <div class="ib-b">
   <strong>1. Wat gebeurt er met mijn input?</strong> Gebruikt de tool dit om toekomstige modellen te trainen? Bij Copilot met schoolaccount: nee. Bij een gratis, willekeurige tool: vaak wel — en dat staat meestal (in kleine lettertjes) in de voorwaarden.<br><br>
   <strong>2. Kan ik minder delen en toch hetzelfde resultaat krijgen?</strong> Moet je een volledig document uploaden, of volstaat een samenvatting zonder namen? Data minimaliseren = enkel delen wat echt nodig is.<br><br>
@@ -2491,15 +2511,15 @@ function m5s_verdieping3(c){
   </div>
 </div>
 
-<h3 class="ch3">🧩 Doe-opdracht: anonimiseer zelf</h3>
+<h3 class="ch3">Doe-opdracht: anonimiseer zelf</h3>
 <p class="cp">Herschrijf onderstaande zin zodat ze veilig in een AI-tool kan, zonder de kernvraag te verliezen:</p>
 <div style="background:white; border:1px solid #e0e4f5; border-radius:10px; padding:16px; margin:14px 0;">
-  <p style="font-size:13px; font-style:italic; color:#666;">"Kan je helpen met een mail aan meneer Janssens, wonende Kerkstraat 12 in Torhout, over de afwezigheid van mijn zus Lotte Peeters op 14 maart wegens ziekte?"</p>
+  <p style="font-size:13px; font-style:italic; color:#06038D;">"Kan je helpen met een mail aan meneer Janssens, wonende Kerkstraat 12 in Torhout, over de afwezigheid van mijn zus Lotte Peeters op 14 maart wegens ziekte?"</p>
 </div>
 <textarea class="sr-ta" id="vd3m5_anon" style="min-height:70px;" placeholder="Mijn geanonimiseerde versie: 'Kan je helpen met een mail aan...'"></textarea>
 
 <div class="ib warn">
-  <div class="ib-t">💡 Waarom dit ertoe doet</div>
+  <div class="ib-t">Waarom dit ertoe doet</div>
   <div class="ib-b">De kern van de vraag (hulp bij een afwezigheidsmail) blijft overeind zonder namen, adres of familierelatie. Dat is precies wat "gegevens minimaliseren" betekent: evenveel nut, minder risico.</div>
 </div>
 
@@ -2519,18 +2539,144 @@ function sVerdieping3M5(){
   n5();
 }
 
+/* ===================== AI-GEBRUIK VERMELDEN (bronvermelding & AI-verantwoording) ===================== */
+const AV_TOOLS = [
+  {n:'Copilot (schoolaccount)', titel:'Microsoft Copilot', dev:'Microsoft'},
+  {n:'ChatGPT', titel:'ChatGPT', dev:'OpenAI'},
+  {n:'Claude', titel:'Claude', dev:'Anthropic'},
+  {n:'Gemini', titel:'Gemini', dev:'Google'},
+  {n:'NotebookLM', titel:'NotebookLM', dev:'Google'},
+  {n:'BookWidgets AI', titel:'BookWidgets AI', dev:'BookWidgets'},
+  {n:'Gamma', titel:'Gamma', dev:'Gamma'}
+];
+const AV_DOEL = ['ideeën zoeken','een structuur of planning maken','uitleg vragen','informatie zoeken','mijn taal en spelling laten nakijken','feedback op mijn tekst','een beeld laten maken','code laten maken','tekst letterlijk overnemen'];
+const AV_FASE = ['voorbereiding','schrijven of maken','nalezen en verbeteren','presentatie'];
+function avEsc(s){ return String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function avRender(id, graadOverride){
+  const box = document.getElementById(id); if(!box) return;
+  const g = graadOverride || S.graad || 3;
+  box.dataset.g = g;
+  const vink = (naam, lijst) => lijst.map((o,i)=>`<label class="av-vink"><input type="checkbox" name="${naam}" value="${i}" onchange="avMaak('${id}')"> ${avEsc(o)}</label>`).join('');
+  const doelen = g===1 ? AV_DOEL.slice(0,3).concat([AV_DOEL[4], AV_DOEL[6]]) : AV_DOEL;
+  box.innerHTML = `
+  <div class="av-niveau">
+    <span>Niveau:</span>
+    ${[1,2,3].map(n=>`<button type="button" class="${n===g?'on':''}" onclick="avRender('${id}',${n})">${n}e graad</button>`).join('')}
+  </div>
+  <div class="av-form">
+    <div class="av-veld"><b>Gebruikte je AI bij deze opdracht?</b>
+      <label class="av-vink"><input type="radio" name="${id}-ja" value="ja" checked onchange="avMaak('${id}')"> Ja</label>
+      <label class="av-vink"><input type="radio" name="${id}-ja" value="nee" onchange="avMaak('${id}')"> Nee</label>
+    </div>
+    ${g>=3 ? `<div class="av-veld"><b>AI-label van de opdracht</b><select name="label" onchange="avMaak('${id}')"><option value="">kies</option><option>1 · Verboden</option><option>2 · Als inspiratie</option><option>3 · Als ondersteuning</option><option>4 · Toegestaan</option></select></div>` : ''}
+    ${g>=2 ? `<div class="av-veld"><b>Welke tool?</b><select name="tool" onchange="avMaak('${id}')">${AV_TOOLS.map((t,i)=>`<option value="${i}">${avEsc(t.n)}</option>`).join('')}</select><small>Gebruik enkel een tool die je leerkracht toelaat. Op school is dat in de eerste plaats Copilot met je schoolaccount.</small></div>` : ''}
+    <div class="av-veld"><b>Waarvoor gebruikte je AI?</b><div class="av-vinken">${vink('doel', doelen)}</div></div>
+    ${g>=3 ? `<div class="av-veld"><b>In welke fase?</b><div class="av-vinken">${vink('fase', AV_FASE)}</div></div>` : ''}
+    ${g>=2 ? `<div class="av-veld"><b>Wat deed je zelf, en wat paste je aan?</b><textarea name="zelf" rows="2" maxlength="400" oninput="avMaak('${id}')" placeholder="Bv. ik koos zelf twee van de vijf ideeën en schreef de tekst volledig zelf."></textarea></div>` : ''}
+    ${g>=3 ? `<div class="av-veld"><b>Hoe controleerde je de output?</b><textarea name="controle" rows="2" maxlength="400" oninput="avMaak('${id}')" placeholder="Bv. ik vergeleek de uitleg met mijn cursus en met twee betrouwbare bronnen."></textarea></div>
+    <div class="av-veld"><b>Bewijs</b><select name="bewijs" onchange="avMaak('${id}')"><option>link naar de chat in bijlage</option><option>screenshots van de chat in bijlage</option><option>chat bewaard, op vraag beschikbaar</option></select></div>` : ''}
+  </div>
+  <div class="av-uit"><b>Jouw ${g===1?'AI-zin':(g===2?'AI-vermelding':'AI-verantwoording')}</b><pre id="${id}-tekst"></pre>
+    <button type="button" class="sr-btn g" onclick="avKopieer('${id}')" id="${id}-kopieer">Kopieer</button>
+    <p class="av-tip">Plak dit onderaan je werk${g>=3?' of als bijlage':''}. Vul nooit namen of andere persoonsgegevens in.</p>
+  </div>`;
+  avMaak(id);
+}
+function avMaak(id){
+  const box = document.getElementById(id); if(!box) return;
+  const g = +box.dataset.g || 3;
+  const q = s => box.querySelector(s);
+  const gekozen = (naam, lijst) => [...box.querySelectorAll(`input[name="${naam}"]:checked`)].map(i=>lijst[+i.value]);
+  const doelenLijst = g===1 ? AV_DOEL.slice(0,3).concat([AV_DOEL[4], AV_DOEL[6]]) : AV_DOEL;
+  const ja = (box.querySelector(`input[name="${id}-ja"]:checked`)||{}).value !== 'nee';
+  const doel = gekozen('doel', doelenLijst);
+  const lijstTekst = a => a.length ? (a.length===1 ? a[0] : a.slice(0,-1).join(', ')+' en '+a[a.length-1]) : '…';
+  const tool = AV_TOOLS[+(q('select[name="tool"]')||{value:0}).value || 0];
+  const zelf = (q('textarea[name="zelf"]')||{}).value?.trim() || '…';
+  let tekst;
+  if(!ja){ tekst = g===1 ? 'Ik gebruikte geen AI.' : 'AI-vermelding: bij deze opdracht gebruikte ik geen AI.'; }
+  else if(g===1){ tekst = 'Ik gebruikte AI. Waarvoor: ' + lijstTekst(doel) + '.'; }
+  else if(g===2){ tekst = 'AI-vermelding: ik gebruikte ' + tool.n + ' voor ' + lijstTekst(doel) + '.\nWat ik zelf deed en aanpaste: ' + zelf; }
+  else {
+    const jaar = new Date().getFullYear();
+    const label = q('select[name="label"]').value || '…';
+    const fase = gekozen('fase', AV_FASE);
+    const controle = q('textarea[name="controle"]').value.trim() || '…';
+    const bewijs = q('select[name="bewijs"]').value;
+    tekst = 'AI-VERANTWOORDING\nAI-label van de opdracht: ' + label +
+      '\nTool: ' + tool.n +
+      '\nWaarvoor: ' + lijstTekst(doel) +
+      '\nFase: ' + lijstTekst(fase) +
+      '\nWat ik zelf deed en aanpaste: ' + zelf +
+      '\nHoe ik de output controleerde: ' + controle +
+      '\nBewijs: ' + bewijs +
+      '\nIk gebruikte AI enkel binnen de afspraken van deze opdracht en kan mijn werk mondeling toelichten.';
+    if(doel.includes('tekst letterlijk overnemen') || doel.includes('een beeld laten maken')){
+      tekst += '\n\nBRONVERMELDING (APA)\nIn de tekst: (' + tool.dev + ', ' + jaar + ')\nIn de bronnenlijst: ' + tool.dev + '. (' + jaar + '). ' + tool.titel + ' [Generatieve AI]. (link naar de tool)';
+    }
+  }
+  const pre = document.getElementById(id+'-tekst'); if(pre) pre.textContent = tekst;
+}
+function avKopieer(id){
+  const t = document.getElementById(id+'-tekst')?.textContent || '';
+  const k = document.getElementById(id+'-kopieer');
+  const ok = () => { if(k){ k.textContent='✓ Gekopieerd'; setTimeout(()=>k.textContent='Kopieer',1800); } };
+  if(navigator.clipboard) navigator.clipboard.writeText(t).then(ok).catch(()=>alert(t)); else alert(t);
+}
+
+function m5s_vermelden(c){
+  const g = S.graad || 3;
+  const intro = {
+    1: 'Als je AI gebruikt bij een opdracht, zeg je dat eerlijk. In de 1e graad volstaat één korte zin onder je werk.',
+    2: 'Als je AI gebruikt bij een opdracht, vermeld je dat onder je werk: welke tool, waarvoor, en wat je zelf deed.',
+    3: 'In het hoger onderwijs moet je altijd kunnen tonen hoe je AI gebruikte. Hogescholen en universiteiten vragen een bronvermelding én een AI-verantwoording. Dat oefen je nu al.'
+  }[g];
+  const derde = g>=3 ? `
+<h3 class="ch3">Zo doen ze het in het hoger onderwijs</h3>
+<div class="av-lagen">
+  <div><b>1. Verwijs naar de echte bron</b><p>Zocht AI informatie voor je? Lees dan de originele bron zelf en vermeld die, niet de AI.</p></div>
+  <div><b>2. Citeer AI bij letterlijke overname</b><p>Enkel als het label het toelaat: tussen aanhalingstekens, met een verwijzing in APA-stijl. Het bedrijf is de auteur.</p></div>
+  <div><b>3. Voeg een AI-verantwoording toe</b><p>Welke tool, waarvoor, in welke fase, wat je zelf deed en hoe je controleerde, met de chatlink of screenshots als bewijs.</p></div>
+</div>
+<h3 class="ch3">Wat noteer je, bij welk gebruik?</h3>
+<div class="av-tabel"><table>
+<tr><th>Wat deed AI?</th><th>Wat noteer je?</th></tr>
+<tr><td>Taal en spelling nakijken in je eigen tekst</td><td>Korte vermelding in je AI-verantwoording</td></tr>
+<tr><td>Ideeën, brainstorm of structuur</td><td>Vermelding in je AI-verantwoording: waarvoor en wat je ermee deed</td></tr>
+<tr><td>Uitleg vragen of informatie zoeken</td><td>De originele bron zelf lezen en vermelden, AI in je verantwoording</td></tr>
+<tr><td>Tekst letterlijk overnemen (enkel als het mag)</td><td>Aanhalingstekens + verwijzing in de tekst + bronnenlijst (APA)</td></tr>
+<tr><td>Een beeld, grafiek of code laten maken</td><td>Onderschrift "AI-gegenereerd beeld (naam tool)" + vermelding in je verantwoording</td></tr>
+</table></div>
+<div class="ib warn"><div class="ib-t">Voorbeeld APA</div><div class="ib-b">In de tekst: "…" (Microsoft, ${new Date().getFullYear()})<br>In de bronnenlijst: Microsoft. (${new Date().getFullYear()}). <em>Microsoft Copilot</em> [Generatieve AI]. (link naar de tool)<br><br>Elke hogeschool en universiteit heeft eigen afspraken. Kijk later altijd na wat jouw opleiding vraagt.</div></div>` : '';
+  c.innerHTML = `
+<div class="s-badge">Stap 9 van 12 · AI-gebruik vermelden</div>
+<h2 class="ch2">Zeg hoe je <em>AI gebruikte</em></h2>
+<p class="cp">${intro}</p>
+<div class="ib warn"><div class="ib-t">Waarom?</div><div class="ib-b">Je leerkracht wil zien wat jij kan. Als je eerlijk vermeldt wat AI deed, kan je leerkracht je werk juist beoordelen. Je blijft altijd zelf verantwoordelijk voor je werk, en je moet kunnen uitleggen hoe je AI gebruikte.</div></div>
+${derde}
+<h3 class="ch3">Doe-opdracht: maak je eigen ${g===1?'AI-zin':(g===2?'AI-vermelding':'AI-verantwoording')}</h3>
+<p class="cp">Denk aan een opdracht waarbij je AI gebruikte (of zou gebruiken). Vul in, en kopieer de tekst onder je werk. Je vindt dit hulpmiddel ook altijd terug bij <strong>Documenten</strong>.</p>
+<div id="av-m5" class="avg"></div>
+<div class="nw">
+  <button class="sr-btn b" onclick="p5()">← Vorige</button>
+  <button class="sr-btn g" onclick="n5()">Volgende: klascharter →</button>
+  <span class="nh">Stap 9/12</span>
+</div>`;
+  avRender('av-m5', g);
+}
+
 function m5s7(c){
   c.innerHTML = `
-<div class="s-badge">📝 Stap 8 van 11 · Stel een charter op</div>
+<div class="s-badge">Stap 8 van 11 · Stel een charter op</div>
 <h2 class="ch2">Maak <em>je eigen</em> klascharter</h2>
 <p class="cp">Stel je nu met je klas een <strong>charter</strong> op met daarin afspraken rond het gebruik van AI in de klas. Zijn de afspraken die je in deze module leerde voldoende, of heeft jouw klas nog extra afspraken nodig?</p>
 
 <div class="ib warn">
-  <div class="ib-t">💡 Tip</div>
+  <div class="ib-t">Tip</div>
   <div class="ib-b">Weet jij wat er in het schoolreglement staat over het gebruik van AI? Misschien is dit het juiste moment om dat eens te checken!</div>
 </div>
 
-<h3 class="ch3">✍️ Schrijf 2 extra afspraken die jij zou toevoegen</h3>
+<h3 class="ch3">Schrijf 2 extra afspraken die jij zou toevoegen</h3>
 <textarea class="sr-ta" id="charter1" style="min-height:90px;" placeholder="Bijvoorbeeld: 'Als we AI gebruiken voor een groepswerk, moeten we dat samen beslissen.' of 'We spreken af dat...'"></textarea>
 
 <div class="nw">
@@ -2564,20 +2710,20 @@ function m5s8(c){
 
 function m5s9(c){
   c.innerHTML = `
-<div class="s-badge">✍️ Stap 10 van 11 · Jouw eigen AI-afspraken</div>
+<div class="s-badge">Stap 10 van 11 · Jouw eigen AI-afspraken</div>
 <h2 class="ch2">Wat zijn <em>jouw</em> regels?</h2>
 <p class="cp">Je kent nu de 4 AI-labels en het beleid van Sint-Rembert.</p>
 
-<h3 class="ch3">💭 Stellingen</h3>
+<h3 class="ch3">Stellingen</h3>
 <div id="stl-m5"></div>
 
 <p class="cp">Noteer je reflectie: Welk AI-label vind jij het makkelijkst om je aan te houden, en welk het moeilijkst? Wat zou jij doen als een klasgenoot je vraagt om "gewoon zijn ChatGPT-tekst te kopiëren"?</p>
-<p style="font-size:11px;color:#999;font-style:italic;margin:-8px 0 12px 0;">📄 Werk je liever op papier? De labeltabel, stellingen en reflectie staan ook op <strong>pagina 13-14</strong> van je invulcursus.</p>
+<p style="font-size:11px;color:#06038D;font-style:italic;margin:-8px 0 12px 0;">Werk je liever op papier? De labeltabel, stellingen en reflectie staan ook op <strong>pagina 13-14</strong> van je invulcursus.</p>
 <textarea class="sr-ta" id="ref5" placeholder="Het makkelijkste label vind ik... Als een klasgenoot me dat zou vragen, zou ik..."></textarea>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p5()">← Vorige</button>
-  <button class="sr-btn g" id="ref5btn" onclick="sRef5()">✅ Module 5 afronden →</button>
+  <button class="sr-btn g" id="ref5btn" onclick="sRef5()">✓ Module 5 afronden →</button>
   <span class="nh">Stap 10/12</span>
 </div>`;
   const ta = document.getElementById('ref5');
@@ -2594,15 +2740,15 @@ function sRef5(){
 
 function m5s10(c){
   c.innerHTML = `
-<div class="s-badge">📋 Stap 11 van 11 · Samenvatting</div>
+<div class="s-badge">Stap 11 van 11 · Samenvatting</div>
 <h2 class="ch2">Samengevat: <em>AI op school</em></h2>
-<div style="background: rgba(127,224,0,0.1); border-radius: 12px; padding: 20px; margin: 16px 0;">
-<p style="font-size: 14px; color: #3d4f8a; line-height: 1.9; margin: 0;">
-✅ Check altijd het <strong>AI-label</strong> van een opdracht voor je AI gebruikt<br>
-✅ Bij twijfel: <strong>vraag het aan je leerkracht</strong><br>
-✅ Gebruik bij voorkeur <strong>Copilot met je schoolaccount</strong><br>
-✅ Wees <strong>eerlijk en transparant</strong> over je AI-gebruik<br>
-✅ AI-detectie wordt niet gebruikt — vertrouwen en gesprek staan centraal
+<div style="background: rgba(149,214,0,0.1); border-radius: 12px; padding: 20px; margin: 16px 0;">
+<p style="font-size: 14px; color: #06038D; line-height: 1.9; margin: 0;">
+✓ Check altijd het <strong>AI-label</strong> van een opdracht voor je AI gebruikt<br>
+✓ Bij twijfel: <strong>vraag het aan je leerkracht</strong><br>
+✓ Gebruik bij voorkeur <strong>Copilot met je schoolaccount</strong><br>
+✓ Wees <strong>eerlijk en transparant</strong> over je AI-gebruik<br>
+✓ AI-detectie wordt niet gebruikt — vertrouwen en gesprek staan centraal
 </p>
 </div>
 <p class="cp">Je bent nu klaar voor de laatste module: wat betekent AI voor de wereld en jouw toekomst?</p>
@@ -2616,11 +2762,11 @@ function m5s10(c){
 
 
 /* ════════════════════════════════════════════
-   MODULE 6 — AI IN MAATSCHAPPIJ (11 stappen, FINALE)
+   MODULE 6 — AI IN MAATSCHAPPIJ (13 stappen, FINALE)
    Gebaseerd op EDUbox Artificiële Intelligentie, deel 4 "AI en de samenleving" + deel 5
    ════════════════════════════════════════════ */
 
-const m6 = [m6s0, m6s1, m6s2, m6s3, m6s4, m6s5, m6s6, m6s7, m6s8, m6s9, m6s10];
+const m6 = [m6s0, m6s1, m6s2, m6s3, m6s4, m6s5, m6s6, m6s7, m6s_trendhype, m6s_gevolgen, m6s8, m6s9, m6s10];
 
 // Maatschappelijke discussie (jobs, creativiteit, regelgeving, toekomst) vraagt geen
 // technische voorkennis — toegankelijk voor elke graad. Geen stappen gefilterd.
@@ -2638,16 +2784,16 @@ function d6(){ S.mod6.done=true; S.mod6.step=0; ss(); up(); rmc(); sv('cert'); }
 
 function m6s0(c){
   c.innerHTML = `
-<div class="s-badge">🌍 Stap 1 van 11 · De laatste module!</div>
+<div class="s-badge">Stap 1 van 11 · De laatste module!</div>
 <h2 class="ch2">AI in de <em>Samenleving</em></h2>
 <p class="cp">Ook in de samenleving zorgen de nieuwe mogelijkheden van AI voor veel veranderingen. Sommige veranderingen komen iedereen ten goede, maar het is belangrijk om bij andere dingen even stil te staan.</p>
 
 <div class="ib warn">
-  <div class="ib-t">🏁 Bijna klaar!</div>
+  <div class="ib-t">Bijna klaar!</div>
   <div class="ib-b">Na deze module krijg je je certificaat. Deze module bevat 3 klasgesprek-stellingen en een <strong>grote afsluitende reflectie</strong> — neem er de tijd voor.</div>
 </div>
 
-<h3 class="ch3">🎬 Bekijk: hype of realiteit?</h3>
+<h3 class="ch3">Bekijk: hype of realiteit?</h3>
 <p class="cp">Voor je begint aan de stellingen over AI en de maatschappij: deze video (NOS op 3) plaatst de wildste doemscenario's rond AI in perspectief, en verlegt de focus naar de échte uitdagingen — precies waar deze afsluitende module over gaat.</p>
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/-WDdSiVjBhg" allowfullscreen loading="lazy" title="NOS op 3 — Roeit AI ons uit of is het hype"></iframe></div>
 
@@ -2671,19 +2817,19 @@ function sM6Video1(){
 
 function m6s1(c){
   c.innerHTML = `
-<div class="s-badge">💼 Stap 2 van 11 · Stelling 1: jobs</div>
+<div class="s-badge">Stap 2 van 11 · Stelling 1: jobs</div>
 <h2 class="ch2">Stelling: "AI zal op termijn <em>alle jobs</em> doen verdwijnen"</h2>
 <p class="cp">Bespreek deze stelling met jezelf of je klasgenoten. Ben je akkoord of niet? En waarom? De hulpvragen hieronder kunnen je helpen om een mening te formuleren.</p>
 
 <div style="background: white; border-radius: 8px; padding: 16px; margin: 16px 0; border: 1px solid #e0e4f5;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.9; margin: 0;">
-🤔 Is deze angst realistisch?<br>
-🤔 Heeft AI alleen een impact in technische sectoren?<br>
-🤔 Welke banen zijn kwetsbaar? En welke zijn minder kwetsbaar?
+<p style="font-size: 13px; color: #06038D; line-height: 1.9; margin: 0;">
+Is deze angst realistisch?<br>
+Heeft AI alleen een impact in technische sectoren?<br>
+Welke banen zijn kwetsbaar? En welke zijn minder kwetsbaar?
 </p>
 </div>
 
-<h3 class="ch3">📉 Wat weten we wel?</h3>
+<h3 class="ch3">Wat weten we wel?</h3>
 <p class="cp">Taken die <strong>routinematig en voorspelbaar</strong> zijn, worden het snelst beïnvloed door AI: eenvoudige teksten schrijven, data invoeren, eerste-lijns klantenservice. Dit betekent niet dat deze jobs volledig verdwijnen — vaak veranderen ze, waarbij AI het routinewerk overneemt.</p>
 
 <div class="nw">
@@ -2695,7 +2841,7 @@ function m6s1(c){
 
 function m6s2(c){
   c.innerHTML = `
-<div class="s-badge">🧩 Stap 3 van 11 · Doe-opdracht</div>
+<div class="s-badge">Stap 3 van 11 · Doe-opdracht</div>
 <h2 class="ch2">Hoe <em>AI-proof</em> is dit beroep?</h2>
 <p class="cp">Bekijk elk beroep: hoe sterk denk je dat AI dit beroep zal beïnvloeden de komende 10 jaar? Klik om het antwoord te zien.</p>
 <div id="jobcheck"></div>
@@ -2710,19 +2856,19 @@ function m6s2(c){
 
 function m6s3(c){
   c.innerHTML = `
-<div class="s-badge">🚫 Stap 4 van 11 · Stelling 2: liever niet</div>
+<div class="s-badge">Stap 4 van 11 · Stelling 2: liever niet</div>
 <h2 class="ch2">Stelling: "Voor sommige zaken wil ik AI <em>liever niet</em> inzetten"</h2>
 <p class="cp">Bespreek deze stelling. Ben je akkoord of niet? De hulpvragen kunnen je helpen:</p>
 
 <div style="background: white; border-radius: 8px; padding: 16px; margin: 16px 0; border: 1px solid #e0e4f5;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.9; margin: 0;">
-🤔 Waar kan AI je vooral bij helpen?<br>
-🤔 In welke aspecten van je leven wil je AI liever niet gebruiken?<br>
-🤔 Waar zijn mensen beter in dan AI?
+<p style="font-size: 13px; color: #06038D; line-height: 1.9; margin: 0;">
+Waar kan AI je vooral bij helpen?<br>
+In welke aspecten van je leven wil je AI liever niet gebruiken?<br>
+Waar zijn mensen beter in dan AI?
 </p>
 </div>
 
-<h3 class="ch3">🎓 Aan het woord: universitaire experts</h3>
+<h3 class="ch3">Aan het woord: universitaire experts</h3>
 <p class="cp">De Universiteit van Vlaanderen behandelt in korte online colleges vraagstukken zoals: "Moet je nooit meer zelf een eindwerk of verjaardagskaart schrijven dankzij ChatGPT?" en "Gaan slimme computers de wereld veroveren?" — boeiend om zelf eens te bekijken op <a href="https://www.universiteitvanvlaanderen.be" target="_blank">universiteitvanvlaanderen.be</a>.</p>
 
 <div class="nw">
@@ -2734,15 +2880,15 @@ function m6s3(c){
 
 function m6s4(c){
   c.innerHTML = `
-<div class="s-badge">🎨 Stap 5 van 11 · Stelling 3: creativiteit</div>
+<div class="s-badge">Stap 5 van 11 · Stelling 3: creativiteit</div>
 <h2 class="ch2">Stelling: "AI zal nooit zo creatief kunnen zijn <em>als mensen</em>"</h2>
 <p class="cp">Bespreek deze laatste stelling. De hulpvragen:</p>
 
 <div style="background: white; border-radius: 8px; padding: 16px; margin: 16px 0; border: 1px solid #e0e4f5;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.9; margin: 0;">
-🤔 Wat betekent creativiteit eigenlijk?<br>
-🤔 Kan AI op dezelfde manier creatief zijn als mensen?<br>
-🤔 Kan een schilderij of gedicht dat door AI is gemaakt, kunst zijn?
+<p style="font-size: 13px; color: #06038D; line-height: 1.9; margin: 0;">
+Wat betekent creativiteit eigenlijk?<br>
+Kan AI op dezelfde manier creatief zijn als mensen?<br>
+Kan een schilderij of gedicht dat door AI is gemaakt, kunst zijn?
 </p>
 </div>
 
@@ -2757,11 +2903,11 @@ function m6s4(c){
 
 function m6s5(c){
   c.innerHTML = `
-<div class="s-badge">🎬 Stap 6 van 11 · Video</div>
+<div class="s-badge">Stap 6 van 11 · Video</div>
 <h2 class="ch2">Bekijk: <em>waar moeten we op letten?</em></h2>
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/Rswv6FuAZug" allowfullscreen loading="lazy" title="EDUbox Artificiële Intelligentie — Moeten we ons zorgen maken over AI?"></iframe></div>
 <div class="ib warn">
-  <div class="ib-t">📝 Waar gaat dit over?</div>
+  <div class="ib-t">Waar gaat dit over?</div>
   <div class="ib-b">Hoe meer AI verweven raakt met ons dagelijks leven, hoe meer we ons bewust moeten zijn van de gevaren die de technologie met zich meebrengt. Een AI-expert bekijkt het potentieel van AI, maar vraagt zich ook luidop af wat er gebeurt als de technologie zich sneller ontwikkelt dan de regelgeving.</div>
 </div>
 
@@ -2786,12 +2932,12 @@ function sM6Video2(){
 
 function m6s6(c){
   c.innerHTML = `
-<div class="s-badge">⚖️ Stap 7 van 11 · Regelgeving</div>
+<div class="s-badge">Stap 7 van 11 · Regelgeving</div>
 <h2 class="ch2">De <em>EU AI Act</em>: Europa maakt regels</h2>
 <p class="cp">Omdat AI-ontwikkeling zo snel gaat, hebben overheden regelgeving nodig. De <strong>EU AI Act</strong> (2024) is de eerste uitgebreide AI-wetgeving ter wereld.</p>
 
 <div style="background: white; border-left: 4px solid var(--blue); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.8; margin: 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.8; margin: 0;">
 De wet verbiedt bepaalde toepassingen (zoals massale sociale scoring van burgers) en verplicht transparantie en veiligheidstests voor risicovolle AI-systemen. Ze verplicht bijvoorbeeld ook dat personeel van organisaties die AI gebruiken voldoende "AI-geletterd" moet zijn — precies waarom jij deze cursus volgt!
 </p>
 </div>
@@ -2807,27 +2953,132 @@ De wet verbiedt bepaalde toepassingen (zoals massale sociale scoring van burgers
 
 function m6s7(c){
   c.innerHTML = `
-<div class="s-badge">🔮 Stap 8 van 11 · Blik vooruit</div>
+<div class="s-badge">Stap 8 van 11 · Blik vooruit</div>
 <h2 class="ch2">AI over <em>5 en 10 jaar</em></h2>
 <p class="cp">Niemand kan de toekomst voorspellen, maar experts schetsen wel scenario's op basis van huidige trends.</p>
 
 <div style="background: white; border-left: 4px solid var(--green); border-radius: 12px; padding: 18px; margin: 16px 0;">
-  <div style="font-family: 'Archivo Black', sans-serif; font-size: 14px; color: var(--green); margin-bottom: 10px;">📅 Over 5 jaar</div>
-  <p style="font-size: 13px; color: #3d4f8a; line-height: 1.7;">AI-assistenten worden nog gewoner in school en werk. Verwacht: betere AI-tutoren op maat, striktere regelgeving rond deepfakes en AI-transparantie.</p>
+  <div style="font-family: 'Archivo Black', sans-serif; font-size: 14px; color: var(--green); margin-bottom: 10px;">Over 5 jaar</div>
+  <p style="font-size: 13px; color: #06038D; line-height: 1.7;">AI-assistenten worden nog gewoner in school en werk. Verwacht: betere AI-tutoren op maat, striktere regelgeving rond deepfakes en AI-transparantie.</p>
 </div>
 
 <div style="background: white; border-left: 4px solid var(--blue); border-radius: 12px; padding: 18px; margin: 16px 0;">
-  <div style="font-family: 'Archivo Black', sans-serif; font-size: 14px; color: var(--blue); margin-bottom: 10px;">📅 Over 10 jaar</div>
-  <p style="font-size: 13px; color: #3d4f8a; line-height: 1.7;">Grotere veranderingen op de arbeidsmarkt worden zichtbaar. AI-geletterdheid wordt een basisvaardigheid, net als lezen en rekenen vandaag.</p>
+  <div style="font-family: 'Archivo Black', sans-serif; font-size: 14px; color: var(--blue); margin-bottom: 10px;">Over 10 jaar</div>
+  <p style="font-size: 13px; color: #06038D; line-height: 1.7;">Grotere veranderingen op de arbeidsmarkt worden zichtbaar. AI-geletterdheid wordt een basisvaardigheid, net als lezen en rekenen vandaag.</p>
 </div>
 
-<h3 class="ch3">🔬 Wil je zelf verder experimenteren?</h3>
+<h3 class="ch3">Wil je zelf verder experimenteren?</h3>
 <p class="cp">Met de gratis tool <strong>Scratch</strong> kan je een neuraal netwerk cijfers aanleren. Je helpt het algoritme cijfers te herkennen — een leuke, visuele manier om te zien hoe machine learning werkt in de praktijk.</p>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p6()">← Vorige</button>
-  <button class="sr-btn g" onclick="n6()">Volgende: kennischeck →</button>
+  <button class="sr-btn g" onclick="n6()">Volgende: trend of hype? →</button>
   <span class="nh">Stap 8/11</span>
+</div>`;
+}
+
+/* ---- Toekomstdenken (geïnspireerd op de EDUbox Toekomstgeletterdheid, VRT) ---- */
+const TH_ITEMS = [
+  {n:'Steeds meer apps en programma\'s krijgen een ingebouwde AI-assistent.', a:'trend', u:'Dit zie je al jaren terugkomen, in steeds meer toepassingen. Het verdwijnt niet na een paar weken.'},
+  {n:'Een AI-filter die je gezicht ouder maakt, gaat een week lang viraal.', a:'hype', u:'Populair door sociale media en snel weer vergeten: typisch een hype.'},
+  {n:'Leerlingen gebruiken AI om uitleg te vragen bij hun leerstof.', a:'trend', u:'Dit groeit al een hele tijd en scholen maken er afspraken over. Het blijft.'},
+  {n:'Een AI-liedje van een nep-artiest staat een paar dagen bovenaan in de hitlijsten.', a:'hype', u:'Eén succes dat snel opkomt en snel verdwijnt. Let op: dat AI muziek maakt, kan wél een trend zijn.'},
+  {n:'Bedrijven zetten AI in om klantvragen te beantwoorden.', a:'trend', u:'Dit neemt al jaren toe in heel veel sectoren.'},
+  {n:'Iedereen post plots een AI-portret van zichzelf als stripfiguur.', a:'hype', u:'Een rage die even overal is en daarna weer verdwijnt.'}
+];
+function thKies(i, keuze){
+  const it = TH_ITEMS[i], fb = document.getElementById('th-fb-'+i), box = document.getElementById('th-'+i);
+  if(!fb || !box) return;
+  const ok = keuze === it.a;
+  box.querySelectorAll('button').forEach(b=>{ b.disabled = true; if(b.dataset.k===it.a) b.classList.add('th-juist'); else if(b.dataset.k===keuze) b.classList.add('th-fout'); });
+  fb.className = 'th-fb ' + (ok ? 'ok' : 'nok');
+  fb.textContent = (ok ? '✓ Juist. ' : '✗ Eerder een ' + it.a + '. ') + it.u;
+  const klaar = TH_ITEMS.every((_,k)=>document.getElementById('th-fb-'+k)?.textContent);
+  if(klaar){ const s=document.getElementById('th-klaar'); if(s) s.hidden=false; }
+}
+function m6s_trendhype(c){
+  c.innerHTML = `
+<div class="s-badge">Stap 9 van 13 · Trend of hype?</div>
+<h2 class="ch2">Trend of <em>hype</em>?</h2>
+<p class="cp">Over AI verschijnt elke dag nieuws. Sommige dingen blijven en veranderen echt hoe we leven, andere zijn na een week weer vergeten. Wie het verschil ziet, kijkt kritischer naar alles wat over "de toekomst van AI" gezegd wordt.</p>
+<div class="th-grid">
+  <div class="th-kol"><b>Trend</b><ul><li>Je ziet het <strong>steeds opnieuw</strong> terugkomen.</li><li>Het duurt <strong>langer dan een paar maanden</strong>.</li><li>Het kan iets zijn dat <strong>toeneemt</strong> (meer online bestellen) of <strong>afneemt</strong> (minder cash geld).</li></ul></div>
+  <div class="th-kol hype"><b>Hype</b><ul><li>Een korte, <strong>tijdelijke</strong> rage.</li><li>Populair door <strong>sociale media</strong> of bekende mensen.</li><li><strong>Verdwijnt</strong> vaak even snel als ze opkwam.</li></ul></div>
+</div>
+<h3 class="ch3">Doe-opdracht: sorteer het AI-nieuws</h3>
+<p class="cp">Is dit eerder een trend of een hype? Klik je keuze aan en lees de uitleg.</p>
+<div class="th-lijst">
+${TH_ITEMS.map((it,i)=>`<div class="th-item" id="th-${i}"><p>${it.n}</p><div class="th-knoppen"><button type="button" data-k="trend" onclick="thKies(${i},'trend')">Trend</button><button type="button" data-k="hype" onclick="thKies(${i},'hype')">Hype</button></div><div class="th-fb" id="th-fb-${i}"></div></div>`).join('')}
+</div>
+<div class="ib warn" id="th-klaar" hidden><div class="ib-t">Denk verder</div><div class="ib-b">Niet altijd zwart-wit: een hype kan het begin zijn van een trend. Bespreek met je buur: welke AI-toepassing die jij gebruikt, is volgens jou over vijf jaar nog altijd belangrijk? Waarom?</div></div>
+<div class="nw">
+  <button class="sr-btn b" onclick="p6()">← Vorige</button>
+  <button class="sr-btn g" onclick="n6()">Volgende: gevolgen van gevolgen →</button>
+  <span class="nh">Stap 9/13</span>
+</div>`;
+}
+
+const GV_START = [
+  'Elke leerling krijgt een eigen AI-tutor die altijd beschikbaar is.',
+  'AI kan elk gesprek meteen en perfect vertalen naar elke taal.',
+  'AI-video\'s zijn niet meer van echte video\'s te onderscheiden.'
+];
+function gvKies(i){
+  document.querySelectorAll('.gv-start button').forEach((b,k)=>b.setAttribute('aria-pressed', k===i));
+  const v = document.getElementById('gv-verandering'); if(v) v.textContent = GV_START[i];
+  const s = document.getElementById('gv-schema'); if(s) s.hidden = false;
+  gvUpdate();
+}
+function gvUpdate(){
+  const val = id => (document.getElementById(id)?.value || '').trim();
+  ['a','b'].forEach(x=>{
+    const l1 = val('gv-'+x), w = document.getElementById('gv-'+x+'-2w');
+    if(w) w.hidden = !l1;
+    const l2 = val('gv-'+x+'2'), w3 = document.getElementById('gv-'+x+'-3w');
+    if(w3) w3.hidden = !l2;
+  });
+  const knop = document.getElementById('gv-kopieer'); if(knop) knop.disabled = !(val('gv-a') && val('gv-b'));
+}
+function gvKopieer(){
+  const val = id => (document.getElementById(id)?.value || '').trim() || '…';
+  const tekst = 'Verandering: ' + (document.getElementById('gv-verandering')?.textContent || '') +
+    '\n\nGevolg A: ' + val('gv-a') + '\n  → daardoor: ' + val('gv-a2') + '\n    → en dan: ' + val('gv-a3') +
+    '\n\nGevolg B: ' + val('gv-b') + '\n  → daardoor: ' + val('gv-b2') + '\n    → en dan: ' + val('gv-b3') +
+    '\n\nKrantenkop: ' + val('gv-kop');
+  const k = document.getElementById('gv-kopieer');
+  const klaar = () => { if(k){ k.textContent = '✓ Gekopieerd'; setTimeout(()=>k.textContent='Kopieer mijn schema', 1800); } };
+  if(navigator.clipboard) navigator.clipboard.writeText(tekst).then(klaar).catch(()=>alert(tekst)); else alert(tekst);
+}
+function m6s_gevolgen(c){
+  const veld = (id, ph) => `<input id="${id}" class="gv-in" type="text" maxlength="140" placeholder="${ph}" oninput="gvUpdate()">`;
+  const tak = x => `<div class="gv-tak">
+    <div class="gv-niv"><span>1ste lijn</span>${veld('gv-'+x, 'Een gevolg dat je meteen ziet …')}</div>
+    <div class="gv-niv l2" id="gv-${x}-2w" hidden><span>2de lijn</span>${veld('gv-'+x+'2', 'Wat gebeurt er daardoor?')}</div>
+    <div class="gv-niv l3" id="gv-${x}-3w" hidden><span>3de lijn</span>${veld('gv-'+x+'3', 'En wat is daar weer het gevolg van?')}</div>
+  </div>`;
+  c.innerHTML = `
+<div class="s-badge">Stap 10 van 13 · Gevolgen van gevolgen</div>
+<h2 class="ch2">De gevolgen … van <em>de gevolgen</em></h2>
+<p class="cp">Eén verandering zet veel meer in gang dan je eerst denkt. Een gevolg heeft zelf weer gevolgen, en die hebben er ook weer. Zo kijken toekomstdenkers verder dan het eerste wat in hen opkomt. Want "de toekomst" bestaat niet: er zijn veel mogelijke toekomsten, en onze keuzes van vandaag bepalen mee welke werkelijkheid wordt.</p>
+<h3 class="ch3">1. Kies een verandering</h3>
+<div class="gv-start">${GV_START.map((s,i)=>`<button type="button" aria-pressed="false" onclick="gvKies(${i})">${s}</button>`).join('')}</div>
+<div id="gv-schema" hidden>
+  <h3 class="ch3">2. Denk zelf door: eerst jij</h3>
+  <div class="gv-boom">
+    <div class="gv-wortel" id="gv-verandering"></div>
+    <div class="gv-takken">${tak('a')}${tak('b')}</div>
+  </div>
+  <h3 class="ch3">3. Nieuws uit 2040</h3>
+  <p class="cp">Kies het gevolg dat jou het meest verrast en schrijf er een krantenkop over, alsof het in 2040 in de krant staat.</p>
+  <input id="gv-kop" class="gv-in kop" type="text" maxlength="120" placeholder="Bv. &quot;Eerste school zonder huiswerk: AI-tutor neemt het over&quot;">
+  <p style="margin-top:14px"><button type="button" class="sr-btn g" id="gv-kopieer" onclick="gvKopieer()" disabled>Kopieer mijn schema</button></p>
+  <div class="ib warn"><div class="ib-t">4. Daarna pas: vergelijk met AI</div><div class="ib-b">Pas als je schema af is: vraag aan Copilot (met je schoolaccount) welke gevolgen jij misschien vergeten bent. Lees kritisch: welke ideeën van AI zijn sterk, welke vind je onrealistisch, en wat bedacht jij dat AI níet zag? Volg altijd het AI-label dat je leerkracht gaf.</div></div>
+</div>
+<p style="font-size:13px;opacity:.85;margin-top:18px">Werkvormen geïnspireerd op de EDUbox Toekomstgeletterdheid (VRT).</p>
+<div class="nw">
+  <button class="sr-btn b" onclick="p6()">← Vorige</button>
+  <button class="sr-btn g" onclick="n6()">Volgende: kennischeck →</button>
+  <span class="nh">Stap 10/13</span>
 </div>`;
 }
 
@@ -2844,28 +3095,28 @@ function m6s8(c){
 
 function m6s9(c){
   c.innerHTML = `
-<div class="s-badge">✍️ Stap 10 van 11 · GROTE Afsluitende Reflectie</div>
+<div class="s-badge">Stap 10 van 11 · GROTE Afsluitende Reflectie</div>
 <h2 class="ch2">Jouw <em>visie</em> op AI</h2>
 <p class="cp">Dit is de belangrijkste reflectie van de hele cursus. Je hebt nu 6 modules doorlopen: wat AI is, hoe het werkt, wat generatieve AI kan, welke ethische risico's er zijn, wat de regels op school zijn, en wat AI betekent voor de maatschappij.</p>
 
 <div class="ib warn">
-  <div class="ib-t">🎯 Neem er de tijd voor</div>
+  <div class="ib-t">Neem er de tijd voor</div>
   <div class="ib-b">Schrijf minstens <strong>een volledige paragraaf</strong> (5-8 zinnen). Er is geen goed of fout antwoord — dit is jouw eigen, doordachte visie.</div>
 </div>
 
-<h3 class="ch3">💭 Denk na over:</h3>
-<ul style="font-size: 13px; color: #3d4f8a; line-height: 1.8; padding-left: 20px;">
+<h3 class="ch3">Denk na over:</h3>
+<ul style="font-size: 13px; color: #06038D; line-height: 1.8; padding-left: 20px;">
 <li>Hoe wil JIJ dat AI eruitziet over 10 jaar — voor school, voor werk, voor de maatschappij?</li>
 <li>Wat vind je het meest hoopvol aan AI? Wat vind je het meest verontrustend?</li>
 <li>Wat ga je zelf anders doen na deze cursus?</li>
 </ul>
-<p style="font-size:11px;color:#999;font-style:italic;margin:0 0 12px 0;">📄 Werk je liever op papier? Deze grote afsluitende reflectie staat ook op <strong>pagina 15-16</strong> van je invulcursus.</p>
+<p style="font-size:11px;color:#06038D;font-style:italic;margin:0 0 12px 0;">Werk je liever op papier? Deze grote afsluitende reflectie staat ook op <strong>pagina 15-16</strong> van je invulcursus.</p>
 
 <textarea class="sr-ta" id="ref6" style="min-height: 180px;" placeholder="Mijn visie op AI over 10 jaar is... Het meest hoopvolle vind ik... Het meest verontrustende vind ik... Na deze cursus ga ik zelf..."></textarea>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p6()">← Vorige</button>
-  <button class="sr-btn g" id="ref6btn" onclick="sRef6()">✅ Module 6 afronden →</button>
+  <button class="sr-btn g" id="ref6btn" onclick="sRef6()">✓ Module 6 afronden →</button>
   <span class="nh">Stap 10/12</span>
 </div>`;
   const ta = document.getElementById('ref6');
@@ -2881,24 +3132,24 @@ function sRef6(){
 
 function m6s10(c){
   c.innerHTML = `
-<div class="s-badge">🎉 Stap 11 van 11 · Klaar!</div>
+<div class="s-badge">Stap 11 van 11 · Klaar!</div>
 <h2 class="ch2">Je hebt het <em>gehaald</em>!</h2>
 <p class="cp">Je hebt alle 6 modules van de AI-Skills cursus voltooid. Je begrijpt nu:</p>
-<div style="background: rgba(127,224,0,0.1); border-radius: 12px; padding: 20px; margin: 16px 0;">
-<p style="font-size: 14px; color: #3d4f8a; line-height: 1.9; margin: 0;">
-✅ Wat AI is en de 3 elementen waaruit het bestaat<br>
-✅ De 3 fasen: procedureel, machine learning, deep learning<br>
-✅ Hoe generatieve AI werkt en hoe je goede prompts schrijft<br>
-✅ Ethische risico's: bias, energieverbruik, deepfakes, privacy<br>
-✅ De 4 AI-labels en regels van Sint-Rembert<br>
-✅ Wat AI betekent voor de maatschappij, jobs, en jouw toekomst
+<div style="background: rgba(149,214,0,0.1); border-radius: 12px; padding: 20px; margin: 16px 0;">
+<p style="font-size: 14px; color: #06038D; line-height: 1.9; margin: 0;">
+✓ Wat AI is en de 3 elementen waaruit het bestaat<br>
+✓ De 3 fasen: procedureel, machine learning, deep learning<br>
+✓ Hoe generatieve AI werkt en hoe je goede prompts schrijft<br>
+✓ Ethische risico's: bias, energieverbruik, deepfakes, privacy<br>
+✓ De 4 AI-labels en regels van Sint-Rembert<br>
+✓ Wat AI betekent voor de maatschappij, jobs, en jouw toekomst
 </p>
 </div>
 <p class="cp">Klik hieronder om je certificaat te bekijken en te downloaden!</p>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p6()">← Vorige</button>
-  <button class="sr-btn g" onclick="n6()">🏆 Bekijk mijn certificaat →</button>
+  <button class="sr-btn g" onclick="n6()">Bekijk mijn certificaat →</button>
   <span class="nh">Stap 11/11</span>
 </div>`;
 }
@@ -2909,25 +3160,25 @@ function m6s10(c){
    Geen AI-label nodig — dit is een oefenzone, geen schoolopdracht.
    ════════════════════════════════════════════ */
 
-const m7 = [m7s0, m7s1, m7s2, m7s3, m7s4, m7s5, m7s6];
+const m7 = [m7s0, m7s1, m7s2, m7s3, m7s4, m7s5, m7s_samen, m7s6];
 
-function rm7(){ const c=document.getElementById('m7c'); c.innerHTML=''; rDots(7,m7.length,S.mod7.step); m7[S.mod7.step](c); lockNextButtons(c); }
+function rm7(){ const c=document.getElementById('m7c'); c.innerHTML=''; rDots(7,m7.length,S.mod7.step); m7[S.mod7.step](c); fixStepBadge(c,S.mod7.step,m7.length); lockNextButtons(c); }
 function n7(){ S.mod7.step++; ss(); S.mod7.step>=m7.length ? d7() : rm7(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); }
 function p7(){ if(S.mod7.step > 0){ S.mod7.step--; ss(); rm7(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); } }
-function d7(){ S.mod7.done=true; S.mod7.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('🎉 Copilot Ontdekken voltooid! Je kan dit altijd herhalen om verder te experimenteren.'),300); }
+function d7(){ S.mod7.done=true; S.mod7.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('Copilot Ontdekken voltooid! Je kan dit altijd herhalen om verder te experimenteren.'),300); }
 
 function m7s0(c){
   c.innerHTML = `
-<div><span class="opt-badge">🎨 Optioneel</span><span class="s-badge">✨ Stap 1 van 7 · Welkom</span></div>
+<div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 1 van 7 · Welkom</span></div>
 <h2 class="ch2">Copilot: <em>ontdek het zelf</em></h2>
 <p class="cp">Je hebt nu geleerd wat AI is, hoe het werkt, en wat de regels op school zijn. Tijd om zelf aan de slag te gaan! In deze module ga je écht dingen <strong>maken</strong> met Copilot: een afbeelding, een tekst, een studiehulpmiddel — jij kiest.</p>
 
 <div class="ib warn">
-  <div class="ib-t">🆓 Dit is een vrije oefenzone</div>
+  <div class="ib-t">Dit is een vrije oefenzone</div>
   <div class="ib-b">In tegenstelling tot een echte schoolopdracht hoort hier <strong>geen AI-label</strong> bij (zie Module 5) — dit is bedoeld om vrij te experimenteren en de tool te leren kennen. Gebruik wat je hier maakt gerust voor jezelf, maar lever het niet zomaar in als een "echte" opdracht zonder dat je leerkracht dat heeft goedgekeurd.</div>
 </div>
 
-<h3 class="ch3">🛡️ Voor je begint: log veilig in</h3>
+<h3 class="ch3">Voor je begint: log veilig in</h3>
 <p class="cp">Open Copilot via je schoolaccount (bijvoorbeeld via office.com of de Copilot-app). Check bovenaan het scherm of je een klein <strong>schild-icoon</strong> ziet — dat betekent dat je binnen de beveiligde schoolomgeving werkt en je gegevens niet gebruikt worden om het AI-model te trainen. Zie je geen schild? Meld je dan opnieuw aan met je schoolaccount.</p>
 
 <div class="nw">
@@ -2938,12 +3189,12 @@ function m7s0(c){
 
 function m7s1(c){
   c.innerHTML = `
-<div><span class="opt-badge">🎨 Optioneel</span><span class="s-badge">💬 Stap 2 van 7 · Prompten opfrissen</span></div>
+<div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 2 van 7 · Prompten opfrissen</span></div>
 <h2 class="ch2">Snel <em>opgefrist</em>: een goede prompt</h2>
 <p class="cp">Je leerde dit al in Module 3, maar hier een snelle opfrisser voor je begint te experimenteren:</p>
 
-<div style="background: rgba(10,31,168,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
-<p style="font-size: 13px; color: #3d4f8a; line-height: 1.9; margin: 0;">
+<div style="background: rgba(6,3,141,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 1.9; margin: 0;">
 <strong>1. Wees specifiek</strong> — "maak een poster" is vaag, "maak een poster over plastic in de oceaan, felle kleuren, voor 12-jarigen" is duidelijk<br>
 <strong>2. Geef context</strong> — waarvoor is het bedoeld? Voor wie?<br>
 <strong>3. Zeg wat je verwacht</strong> — lengte, stijl, vorm<br>
@@ -2962,10 +3213,10 @@ function m7s1(c){
 
 function m7s2(c){
   c.innerHTML = `
-<div><span class="opt-badge">🎨 Optioneel</span><span class="s-badge">🖼️ Stap 3 van 7 · Doe-opdracht: maak een beeld</span></div>
+<div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 3 van 7 · Doe-opdracht: maak een beeld</span></div>
 <h2 class="ch2">Maak <em>zelf</em> een afbeelding of poster</h2>
 <p class="cp">Open Copilot en zoek de <strong>Create</strong>-functie (soms "Designer" genoemd). Kies iets dat je écht zou kunnen gebruiken:</p>
-<ul style="font-size: 13px; color: #3d4f8a; line-height: 1.8; padding-left: 20px;">
+<ul style="font-size: 13px; color: #06038D; line-height: 1.8; padding-left: 20px;">
 <li>Een poster voor een schoolproject of -event</li>
 <li>Een illustratie bij een verhaal dat je schrijft</li>
 <li>Een uitnodiging voor een verjaardag of activiteit</li>
@@ -2974,11 +3225,11 @@ function m7s2(c){
 <p class="cp">Probeer minstens 2 keer een andere prompt of stijl, en kies je favoriete resultaat.</p>
 
 <div class="ib warn">
-  <div class="ib-t">✏️ Let op tekst in het beeld</div>
+  <div class="ib-t">Let op tekst in het beeld</div>
   <div class="ib-b">Staat er tekst op je afbeelding? AI maakt daar vaak spelfouten in. Gebruik de "Edit Text"-optie om dit zelf te corrigeren.</div>
 </div>
 
-<h3 class="ch3">✍️ Noteer hieronder wat je maakte</h3>
+<h3 class="ch3">Noteer hieronder wat je maakte</h3>
 <p class="cp"><strong>Welke prompt gebruikte je (uiteindelijke versie)?</strong></p>
 <textarea class="sr-ta" id="m7img_prompt" style="min-height:60px;" placeholder="Mijn prompt was: ..."></textarea>
 <p class="cp" style="margin-top:14px;"><strong>Wat maakte je, en ben je tevreden met het resultaat?</strong></p>
@@ -3006,10 +3257,10 @@ function sM7Img(){
 
 function m7s3(c){
   c.innerHTML = `
-<div><span class="opt-badge">🎨 Optioneel</span><span class="s-badge">✍️ Stap 4 van 7 · Doe-opdracht: schrijf iets creatiefs</span></div>
+<div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 4 van 7 · Doe-opdracht: schrijf iets creatiefs</span></div>
 <h2 class="ch2">Schrijf <em>iets</em> met Copilot</h2>
 <p class="cp">Open de chat in Copilot en laat je creativiteit los. Kies één optie (of verzin je eigen idee):</p>
-<ul style="font-size: 13px; color: #3d4f8a; line-height: 1.8; padding-left: 20px;">
+<ul style="font-size: 13px; color: #06038D; line-height: 1.8; padding-left: 20px;">
 <li>Een kort verhaal (max. 200 woorden) over een onderwerp dat jij kiest</li>
 <li>Een gedicht of rap over iets dat je bezighoudt</li>
 <li>Een grappige dialoog tussen twee onwaarschijnlijke personages</li>
@@ -3017,7 +3268,7 @@ function m7s3(c){
 </ul>
 <p class="cp">Vraag gerust door: "maak het spannender", "voeg een plottwist toe", "schrijf het opnieuw in een andere stijl" — dat is precies hoe je met AI leert samenwerken.</p>
 
-<h3 class="ch3">✍️ Noteer hieronder wat je maakte</h3>
+<h3 class="ch3">Noteer hieronder wat je maakte</h3>
 <p class="cp"><strong>Wat liet je schrijven, en wat vond je van het resultaat?</strong></p>
 <textarea class="sr-ta" id="m7txt_result" style="min-height:80px;" placeholder="Ik liet Copilot... schrijven. Het resultaat vond ik..."></textarea>
 
@@ -3039,12 +3290,12 @@ function sM7Txt(){
 
 function m7s4(c){
   c.innerHTML = `
-<div><span class="opt-badge">🎨 Optioneel</span><span class="s-badge">🎛️ Stap 5 van 7 · Copilot op jouw maat</span></div>
+<div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 5 van 7 · Copilot op jouw maat</span></div>
 <h2 class="ch2">Personaliseer <em>Copilot</em></h2>
 <p class="cp">Wist je dat je Copilot kan vragen om voortaan rekening te houden met jouw voorkeuren? Via <strong>Instellingen → Personalisation → Custom instructions</strong> kan je bijvoorbeeld vragen: "Antwoord voortaan altijd kort en bondig" of "Leg dingen uit alsof ik 14 jaar ben, met concrete voorbeelden."</p>
 <p class="cp">Eén keer instellen, en elk volgend gesprek houdt daar automatisch rekening mee — handig als je Copilot regelmatig gebruikt om te studeren.</p>
 
-<h3 class="ch3">🧪 Probeer het uit</h3>
+<h3 class="ch3">Probeer het uit</h3>
 <p class="cp">Stel minstens 1 custom instruction in, en test even of Copilot zich er echt aan houdt in een nieuw gesprek.</p>
 
 <div class="nw">
@@ -3056,10 +3307,10 @@ function m7s4(c){
 
 function m7s5(c){
   c.innerHTML = `
-<div><span class="opt-badge">🎨 Optioneel</span><span class="s-badge">📚 Stap 6 van 7 · Doe-opdracht: maak een studiehulp</span></div>
+<div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 6 van 7 · Doe-opdracht: maak een studiehulp</span></div>
 <h2 class="ch2">Maak een <em>studiehulpmiddel</em></h2>
 <p class="cp">Tot slot: gebruik Copilot om iets te maken dat je écht kan helpen bij het studeren. Kies bijvoorbeeld:</p>
-<ul style="font-size: 13px; color: #3d4f8a; line-height: 1.8; padding-left: 20px;">
+<ul style="font-size: 13px; color: #06038D; line-height: 1.8; padding-left: 20px;">
 <li>Een korte quiz (5 vragen) over een onderwerp dat je aan het studeren bent</li>
 <li>Een samenvatting van een moeilijk hoofdstuk, in je eigen woorden herschreven</li>
 <li>Ezelsbruggetjes om iets beter te onthouden</li>
@@ -3067,12 +3318,12 @@ function m7s5(c){
 </ul>
 <p class="cp">Controleer daarna altijd zelf: klopt de inhoud? Mist er iets belangrijks? AI is een startpunt, geen eindpunt.</p>
 
-<h3 class="ch3">✍️ Noteer hieronder wat je maakte</h3>
+<h3 class="ch3">Noteer hieronder wat je maakte</h3>
 <textarea class="sr-ta" id="m7study_result" style="min-height:80px;" placeholder="Ik liet Copilot een... maken over... Het hielp mij omdat..."></textarea>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p7()">← Vorige</button>
-  <button class="sr-btn g" id="m7study_btn" onclick="sM7Study()">Volgende: afronden →</button>
+  <button class="sr-btn g" id="m7study_btn" onclick="sM7Study()">Volgende: samen studeren →</button>
   <span class="nh">Stap 6/7</span>
 </div>`;
   const ta = document.getElementById('m7study_result');
@@ -3086,35 +3337,97 @@ function sM7Study(){
   n7();
 }
 
+/* ---- Samen studeren met Copilot ---- */
+const SAMEN_PROMPTS = [
+  {t:'Elkaar overhoren', p:'Hier is onze samenvatting van [hoofdstuk]. Maak 10 vragen om elkaar te overhoren: 4 om te onthouden, 4 om te begrijpen en 2 om toe te passen. Zet de antwoorden apart onderaan, zodat we ze eerst kunnen afdekken.'},
+  {t:'Feedback op jullie samenvatting', p:'Dit is de samenvatting die onze groep schreef over [onderwerp]. Welke kernbegrippen uit de cursus ontbreken of zijn onduidelijk? Herschrijf niets, geef enkel tips zodat wij het zelf kunnen verbeteren.'},
+  {t:'Groepswerk plannen', p:'We zijn met [aantal] en moeten [opdracht] indienen op [datum]. Stel een planning per week voor met tussenstappen en een moment om elkaars werk na te lezen. Wij verdelen zelf de taken.'},
+  {t:'Uitleg controleren', p:'Ik leg uit wat [begrip] is: [mijn uitleg]. Klopt mijn uitleg? Zeg wat juist is en wat ontbreekt, en stel me daarna een vervolgvraag. Geef niet meteen de volledige uitleg.'}
+];
+function samenKopieer(i, btn){
+  const t = SAMEN_PROMPTS[i].p;
+  const ok = () => { btn.textContent='✓ Gekopieerd'; setTimeout(()=>btn.textContent='Kopieer prompt',1800); };
+  if(navigator.clipboard) navigator.clipboard.writeText(t).then(ok).catch(()=>alert(t)); else alert(t);
+}
+function m7s_samen(c){
+  const g = S.graad || 3;
+  const intro = g>=3
+    ? 'In het hoger onderwijs studeer je vaak samen, met je laptop: samenvattingen delen, elkaar overhoren, groepswerk plannen. Copilot kan daarbij helpen, maar jullie doen het denkwerk. Dat oefen je nu al.'
+    : 'Samen studeren werkt goed: je legt elkaar dingen uit en je overhoort elkaar. Copilot kan daarbij helpen, maar jullie doen het denkwerk.';
+  c.innerHTML = `
+<div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 7 van 8 · Samen studeren</span></div>
+<h2 class="ch2">Samen studeren <em>met Copilot</em></h2>
+<p class="cp">${intro}</p>
+<div class="ib warn"><div class="ib-t">De gouden regel</div><div class="ib-b">Eerst jullie, dan Copilot. Maak eerst zelf je samenvatting, vragen of uitleg. Gebruik Copilot daarna om te controleren, aan te vullen of te oefenen. Zo blijft het leren bij jullie.</div></div>
+
+<h3 class="ch3">Vier manieren om samen te studeren</h3>
+<div class="av-lagen twee">
+  <div><b>1. Elkaar overhoren</b><p>Iedereen maakt eerst zelf drie vragen. Laat Copilot daarna extra vragen maken uit jullie samenvatting, en overhoor elkaar met de laptop dicht.</p></div>
+  <div><b>2. Samen één samenvatting</b><p>Werk in een gedeeld document (bv. in Teams of OneDrive). Elk vat een deel samen. Vraag Copilot welke kernbegrippen ontbreken, maar laat niets herschrijven.</p></div>
+  <div><b>3. Groepswerk plannen</b><p>Laat Copilot een planning met tussenstappen voorstellen. Jullie verdelen zelf de taken en spreken af wie wat naleest.</p></div>
+  <div><b>4. Uitleggen aan elkaar</b><p>Eén iemand legt een begrip uit, de ander checkt met Copilot of de uitleg klopt. Bespreek daarna samen wat er anders was.</p></div>
+</div>
+
+<h3 class="ch3">Prompts om mee te starten</h3>
+<p class="cp">Vul de stukken tussen [ ] zelf in. Nooit namen van groepsgenoten of andere persoonsgegevens.</p>
+<div class="av-lagen twee">
+${SAMEN_PROMPTS.map((s,i)=>`<div><b>${s.t}</b><p style="font-style:italic">"${s.p}"</p><button type="button" class="sr-btn b" style="margin-top:10px" onclick="samenKopieer(${i}, this)">Kopieer prompt</button></div>`).join('')}
+</div>
+
+<h3 class="ch3">Een studiegids uit je eigen cursus</h3>
+<p class="cp">In Copilot Notebooks kan je je eigen cursus, notities of slides toevoegen. Copilot maakt er dan een studiegids van, met een samenvatting, flashcards en een quiz, op basis van jouw bestanden. Die functie is er vanaf 13 jaar en enkel als je school ze heeft aangezet. Zie je ze niet bij je schoolaccount? Werk dan met de prompts hierboven.</p>
+
+<div class="ib warn"><div class="ib-t">Afspraken als je samen met AI werkt</div><div class="ib-b">
+• Spreek vooraf af wat AI mag doen, volgens het AI-label van de opdracht.<br>
+• Gebruik Copilot met je schoolaccount en upload enkel cursusmateriaal dat je mag gebruiken.<br>
+• Geen namen, foto's of persoonlijke info van groepsgenoten in de chat.<br>
+• Controleer alles met de cursus: AI kan zich vergissen.<br>
+• Vermeld bij groepswerk hoe jullie AI gebruikten, met de AI-verantwoording bij <strong>Documenten</strong>.
+</div></div>
+
+<h3 class="ch3">Noteer hieronder hoe jullie samen studeerden</h3>
+<textarea class="sr-ta" id="m7samen_result" style="min-height:80px;" placeholder="We overhoorden elkaar over... Copilot hielp ons met... Wat we zelf deden:..."></textarea>
+
+<div class="nw">
+  <button class="sr-btn b" onclick="p7()">← Vorige</button>
+  <button class="sr-btn g" onclick="n7()">Volgende: afronden →</button>
+  <span class="nh">Stap 7/8</span>
+</div>`;
+  const ta = document.getElementById('m7samen_result');
+  ta.value = localStorage.getItem('sr_l_m7_samen_result') || '';
+  ta.oninput = ()=>localStorage.setItem('sr_l_m7_samen_result', ta.value);
+}
+
 function m7s6(c){
   c.innerHTML = `
-<div><span class="opt-badge">🎨 Optioneel</span><span class="s-badge">🎉 Stap 7 van 7 · Klaar!</span></div>
+<div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 7 van 7 · Klaar!</span></div>
 <h2 class="ch2">Je hebt <em>3 dingen</em> gemaakt!</h2>
 <p class="cp">Goed bezig — je hebt zelf een afbeelding, een tekst, en een studiehulpmiddel gemaakt met Copilot. Dat is precies hoe je AI-vaardig wordt: niet door erover te lezen, maar door het zelf te doen.</p>
 
-<div style="background: rgba(127,224,0,0.1); border-radius: 12px; padding: 20px; margin: 16px 0;">
-<p style="font-size: 14px; color: #3d4f8a; line-height: 1.9; margin: 0;">
-✅ Je logde veilig in met je schoolaccount<br>
-✅ Je maakte een AI-gegenereerd beeld<br>
-✅ Je schreef een creatieve tekst samen met AI<br>
-✅ Je personaliseerde Copilot naar jouw voorkeuren<br>
-✅ Je maakte een studiehulpmiddel
+<div style="background: rgba(149,214,0,0.1); border-radius: 12px; padding: 20px; margin: 16px 0;">
+<p style="font-size: 14px; color: #06038D; line-height: 1.9; margin: 0;">
+✓ Je logde veilig in met je schoolaccount<br>
+✓ Je maakte een AI-gegenereerd beeld<br>
+✓ Je schreef een creatieve tekst samen met AI<br>
+✓ Je personaliseerde Copilot naar jouw voorkeuren<br>
+✓ Je maakte een studiehulpmiddel<br>
+✓ Je ontdekte hoe je samen studeert met Copilot
 </p>
 </div>
 
 <div class="ib warn">
-  <div class="ib-t">🖼️ Bonustip: kunst als promptbron</div>
+  <div class="ib-t">Bonustip: kunst als promptbron</div>
   <div class="ib-b">Volgende keer dat je een beeld genereert: bekijk eerst een bestaand schilderij of foto die je mooi vindt, en beschrijf in woorden wat je daaraan opvalt — de kleuren, de compositie, de sfeer. Gebruik die beschrijving als basis voor je prompt. Kunst kijken traint je oog voor detail, en dat maakt je meteen een betere prompter.</div>
 </div>
 
-<h3 class="ch3">💭 Nog even nadenken</h3>
+<h3 class="ch3">Nog even nadenken</h3>
 <p class="cp">Je liet AI meehelpen bij iets creatiefs (de afbeelding of tekst uit deze module). Vind jij dat dit nog steeds "van jou" is, of verandert AI iets aan wat jij als "eigen werk" beschouwt? Er is geen fout antwoord — het is een vraag waar zelfs professionele kunstenaars vandaag mee worstelen.</p>
 
 <p class="cp">Je kan deze module altijd opnieuw doorlopen om verder te experimenteren — hoe meer je oefent, hoe beter je prompts worden!</p>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p7()">← Vorige</button>
-  <button class="sr-btn g" onclick="n7()">✅ Afronden →</button>
+  <button class="sr-btn g" onclick="n7()">✓ Afronden →</button>
   <span class="nh">Stap 7/7</span>
 </div>`;
 }
@@ -3146,9 +3459,9 @@ function rQuiz(con, qs, modN, sk, onComplete, pass){
 
   let prevBtnHtml = `<button class="sr-btn b" style="background:#cbd5e1; color:var(--blue); margin-right:auto;" onclick="p${modN}()">← Vorige stap</button>`;
 
-  wrap.innerHTML = '<div class="s-badge">📝 Kennischeck</div><h2 class="ch2">Test je <em>kennis</em></h2>';
+  wrap.innerHTML = '<div class="s-badge">Kennischeck</div><h2 class="ch2">Test je <em>kennis</em></h2>';
   const d = document.createElement('div'); d.className='qc';
-  let inner = '<div class="qh"><div class="qi">📝</div><div><div class="qt">Kennischeck</div><div class="qs">'+qs.length+' vragen · slaagdrempel '+pass+'%</div></div></div>';
+  let inner = '<div class="qh"><div class="qi"></div><div><div class="qt">Kennischeck</div><div class="qs">'+qs.length+' vragen · slaagdrempel '+pass+'%</div></div></div>';
   qs.forEach((q,qi)=>{
     inner += '<div class="qb"><div class="qq">'+(qi+1)+'. '+q.q+'</div><div class="opts">';
     q.o.forEach((opt,oi)=>{
@@ -3180,7 +3493,7 @@ function rQuiz(con, qs, modN, sk, onComplete, pass){
       });
       const f = document.getElementById(id+'-f'+qi);
       f.className = 'fb show '+(ok?'ok':'nok');
-      f.textContent = (ok?'✅ ':'❌ ')+q.f;
+      f.textContent = (ok?'✓ ':'✗ ')+q.f;
       if(st.ans.every(a=>a!==null)) document.getElementById(id+'-n').disabled = false;
     };
   });
@@ -3190,7 +3503,7 @@ function rQuiz(con, qs, modN, sk, onComplete, pass){
     const ok = sc >= pass;
     const r = document.getElementById(id+'-r');
     r.className = 'q-res show';
-    r.innerHTML = '<div class="q-score '+(ok?'pass':'fail')+'">'+sc+'%</div><div class="q-msg">'+(ok?'✅ Geslaagd!':'❌ Nog niet geslaagd.')+'</div>';
+    r.innerHTML = '<div class="q-score '+(ok?'pass':'fail')+'">'+sc+'%</div><div class="q-msg">'+(ok?'✓ Geslaagd!':'✗ Nog niet geslaagd.')+'</div>';
     S[sk].quizScore = sc; ss();
     const nb = document.getElementById(id+'-n');
     if(ok){ nb.textContent = 'Volgende stap →'; nb.onclick = ()=>onComplete(); }
@@ -3211,9 +3524,9 @@ function renderStellingenLeerling(containerId, groupKey, stellingen){
   stellingen.forEach((s,i)=>{
     const val = saved[i];
     html += `<div class="stelling-card" style="background:white;border-radius:8px;padding:16px;margin:12px 0;border-left:4px solid var(--blue);">
-      <div style="font-size:13px;color:#3d4f8a;font-weight:600;margin-bottom:10px;">${i+1}. ${s}</div>
+      <div style="font-size:13px;color:#06038D;font-weight:600;margin-bottom:10px;">${i+1}. ${s}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        ${['Sterk oneens','Oneens','Neutraal','Eens','Sterk eens'].map((lbl,vi)=>`<button class="stl-btn" data-i="${i}" data-v="${vi}" style="flex:1;min-width:90px;padding:8px 6px;border-radius:6px;border:2px solid ${val===vi?'var(--blue)':'#e0e4f5'};background:${val===vi?'var(--blue)':'white'};color:${val===vi?'white':'#3d4f8a'};font-size:11px;font-weight:700;cursor:pointer;">${lbl}</button>`).join('')}
+        ${['Sterk oneens','Oneens','Neutraal','Eens','Sterk eens'].map((lbl,vi)=>`<button class="stl-btn" data-i="${i}" data-v="${vi}" style="flex:1;min-width:90px;padding:8px 6px;border-radius:6px;border:2px solid ${val===vi?'var(--blue)':'#e0e4f5'};background:${val===vi?'var(--blue)':'white'};color:${val===vi?'white':'#06038D'};font-size:11px;font-weight:700;cursor:pointer;">${lbl}</button>`).join('')}
       </div>
     </div>`;
   });
@@ -3245,10 +3558,10 @@ function renderAiCards(){
   if(!g) return;
   items.forEach(it=>{
     const el = document.createElement('div'); el.className = 'ai-card';
-    el.innerHTML = '❓ '+it.n;
+    el.innerHTML = it.n;
     el.onclick = ()=>{
-      el.style.background = it.ai ? '#dcfce7' : '#fee2e2';
-      el.innerHTML = (it.ai?'🤖 ':'⬜ ')+it.n+' ('+it.w+')';
+      el.style.background = it.ai ? 'rgba(149,214,0,0.25)' : '#FFFFFF';
+      el.innerHTML = (it.ai?'AI · ':'Geen AI · ')+it.n+' ('+it.w+')';
     };
     g.appendChild(el);
   });
@@ -3286,7 +3599,7 @@ function renderMLTypeCards(){
         });
         const fb = document.getElementById('mlfb'+idx);
         fb.className = 'lm-fb show';
-        fb.textContent = (ok?'✅ Juist — ':'❌ Niet helemaal — het juiste antwoord is '+it.t+'. ')+it.e;
+        fb.textContent = (ok?'✓ Juist — ':'✗ Niet helemaal — het juiste antwoord is '+it.t+'. ')+it.e;
       };
     });
   });
@@ -3325,7 +3638,7 @@ function renderPromptCompareLeerling(){
         });
         const fb = document.getElementById('pcfb'+idx);
         fb.className = 'lm-fb show';
-        fb.textContent = ok ? '✅ Juist! Deze prompt is specifieker en geeft duidelijkere verwachtingen.' : '❌ Niet helemaal — prompt '+p.better.toUpperCase()+' is specifieker en geeft betere resultaten.';
+        fb.textContent = ok ? '✓ Juist! Deze prompt is specifieker en geeft duidelijkere verwachtingen.' : '✗ Niet helemaal — prompt '+p.better.toUpperCase()+' is specifieker en geeft betere resultaten.';
       };
     });
   });
@@ -3342,7 +3655,7 @@ function renderAIRealCheck(){
   if(!g) return;
   items.forEach((it,idx)=>{
     const card = document.createElement('div'); card.className='lm-card';
-    card.innerHTML = '<div class="lm-q">'+(idx+1)+'. '+it.d+'</div><div class="lm-opts"><button class="lm-btn" data-v="ai" style="width:auto;padding:0 16px">🤖 Waarschijnlijk AI</button><button class="lm-btn" data-v="echt" style="width:auto;padding:0 16px">👤 Waarschijnlijk echt</button></div><div class="lm-fb" id="arcfb'+idx+'"></div>';
+    card.innerHTML = '<div class="lm-q">'+(idx+1)+'. '+it.d+'</div><div class="lm-opts"><button class="lm-btn" data-v="ai" style="width:auto;padding:0 16px">Waarschijnlijk AI</button><button class="lm-btn" data-v="echt" style="width:auto;padding:0 16px">Waarschijnlijk echt</button></div><div class="lm-fb" id="arcfb'+idx+'"></div>';
     g.appendChild(card);
     card.querySelectorAll('.lm-btn').forEach(b=>{
       b.onclick = ()=>{
@@ -3358,7 +3671,7 @@ function renderAIRealCheck(){
         });
         const fb = document.getElementById('arcfb'+idx);
         fb.className = 'lm-fb show';
-        fb.textContent = (correct?'✅ Juist — ':'❌ Niet helemaal — ')+it.e;
+        fb.textContent = (correct?'✓ Juist — ':'✗ Niet helemaal — ')+it.e;
       };
     });
   });
@@ -3379,7 +3692,7 @@ function renderDeepfakeCheck(){
   if(!g) return;
   items.forEach((it,idx)=>{
     const card = document.createElement('div'); card.className='lm-card';
-    card.innerHTML = '<div class="lm-q">'+(idx+1)+'. '+it.d+'</div><div class="lm-opts"><button class="lm-btn" data-v="ja" style="width:auto;padding:0 16px">🚨 Verdacht signaal</button><button class="lm-btn" data-v="nee" style="width:auto;padding:0 16px">✅ Geen probleem</button></div><div class="lm-fb" id="dfcfb'+idx+'"></div>';
+    card.innerHTML = '<div class="lm-q">'+(idx+1)+'. '+it.d+'</div><div class="lm-opts"><button class="lm-btn" data-v="ja" style="width:auto;padding:0 16px">Verdacht signaal</button><button class="lm-btn" data-v="nee" style="width:auto;padding:0 16px">✓ Geen probleem</button></div><div class="lm-fb" id="dfcfb'+idx+'"></div>';
     g.appendChild(card);
     card.querySelectorAll('.lm-btn').forEach(b=>{
       b.onclick = ()=>{
@@ -3395,7 +3708,7 @@ function renderDeepfakeCheck(){
         });
         const fb = document.getElementById('dfcfb'+idx);
         fb.className = 'lm-fb show';
-        fb.textContent = (correct?'✅ Juist — ':'❌ Niet helemaal — ')+it.e;
+        fb.textContent = (correct?'✓ Juist — ':'✗ Niet helemaal — ')+it.e;
       };
     });
   });
@@ -3412,7 +3725,7 @@ function renderBiasCheck(){
   if(!g) return;
   items.forEach((it,idx)=>{
     const card = document.createElement('div'); card.className='lm-card';
-    card.innerHTML = '<div class="lm-q">'+(idx+1)+'. '+it.d+'</div><div class="lm-opts"><button class="lm-btn" data-v="ja" style="width:auto;padding:0 16px">⚠️ Mogelijke bias</button><button class="lm-btn" data-v="nee" style="width:auto;padding:0 16px">✅ Geen bias-signaal</button></div><div class="lm-fb" id="bcfb'+idx+'"></div>';
+    card.innerHTML = '<div class="lm-q">'+(idx+1)+'. '+it.d+'</div><div class="lm-opts"><button class="lm-btn" data-v="ja" style="width:auto;padding:0 16px">Mogelijke bias</button><button class="lm-btn" data-v="nee" style="width:auto;padding:0 16px">✓ Geen bias-signaal</button></div><div class="lm-fb" id="bcfb'+idx+'"></div>';
     g.appendChild(card);
     card.querySelectorAll('.lm-btn').forEach(b=>{
       b.onclick = ()=>{
@@ -3428,7 +3741,7 @@ function renderBiasCheck(){
         });
         const fb = document.getElementById('bcfb'+idx);
         fb.className = 'lm-fb show';
-        fb.textContent = (correct?'✅ Juist — ':'❌ Niet helemaal — ')+it.e;
+        fb.textContent = (correct?'✓ Juist — ':'✗ Niet helemaal — ')+it.e;
       };
     });
   });
@@ -3475,7 +3788,7 @@ function renderLabelMatchLeerling(){
         });
         const fb = document.getElementById('lmfb'+idx);
         fb.className = 'lm-fb show';
-        fb.textContent = ok ? '✅ Juist — label '+it.a+'.' : '❌ Niet helemaal — het juiste label is '+it.a+'.';
+        fb.textContent = ok ? '✓ Juist — label '+it.a+'.' : '✗ Niet helemaal — het juiste label is '+it.a+'.';
       };
     });
   });
@@ -3513,7 +3826,7 @@ function renderMagWelLeerling(){
   if(!g) return;
   items.forEach((it,idx)=>{
     const card = document.createElement('div'); card.className='lm-card';
-    card.innerHTML = '<div class="lm-q">'+(idx+1)+'. '+it.t+'</div><div class="lm-opts"><button class="lm-btn" data-v="ja" style="width:auto;padding:0 16px">✅ Mag wel</button><button class="lm-btn" data-v="nee" style="width:auto;padding:0 16px">❌ Mag niet</button></div><div class="lm-fb" id="mwfb'+idx+'"></div>';
+    card.innerHTML = '<div class="lm-q">'+(idx+1)+'. '+it.t+'</div><div class="lm-opts"><button class="lm-btn" data-v="ja" style="width:auto;padding:0 16px">✓ Mag wel</button><button class="lm-btn" data-v="nee" style="width:auto;padding:0 16px">✗ Mag niet</button></div><div class="lm-fb" id="mwfb'+idx+'"></div>';
     g.appendChild(card);
     card.querySelectorAll('.lm-btn').forEach(b=>{
       b.onclick = ()=>{
@@ -3529,7 +3842,7 @@ function renderMagWelLeerling(){
         });
         const fb = document.getElementById('mwfb'+idx);
         fb.className = 'lm-fb show';
-        fb.textContent = (correct?'✅ Juist — ':'❌ Niet helemaal — ')+it.e;
+        fb.textContent = (correct?'✓ Juist — ':'✗ Niet helemaal — ')+it.e;
       };
     });
   });

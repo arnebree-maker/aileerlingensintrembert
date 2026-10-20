@@ -2,16 +2,19 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI-Cursus — Scholengroep Sint-Rembert</title>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260928c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261015a">
+<link rel="stylesheet" href="huisstijl.css?v=20261020b">
 </head>
 <body>
 <div id="app">
 <aside id="sidebar">
   <div class="sb-logo">
-    <div class="sb-badge"><span>Sint-Rembert</span></div>
+    <div class="sb-kop"><img class="sb-logo-img" src="data:image/png;base64,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" alt="Logo Sint-Rembert scholengroep"><svg class="sb-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg></div>
     <div class="sb-title">AI-<em>Cursus</em><br>Leerlingen</div>
     <div class="sb-sub">Scholengroep Sint-Rembert · schooljaar 2026-2027</div>
   </div>
@@ -22,25 +25,25 @@
   </div>
   <div class="nav-sec">
     <div class="nav-lbl">Menu</div>
-    <div class="ni active" onclick="goHome()" id="nav-home"><div class="ni-icon">🏠</div><div class="ni-info"><div class="ni-title">Overzicht</div><div class="ni-sub">Startpagina</div></div></div>
-    <div class="ni available" onclick="sv('docs')" id="nav-docs"><div class="ni-icon">📁</div><div class="ni-info"><div class="ni-title">Documenten</div><div class="ni-sub">Bronnen & materiaal</div></div></div>
-    <div class="ni available" onclick="sv('news')" id="nav-news"><div class="ni-icon">📰</div><div class="ni-info"><div class="ni-title">Nieuws</div><div class="ni-sub">AI in de actualiteit</div></div></div>
+    <div class="ni active" onclick="goHome()" id="nav-home"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Overzicht</div><div class="ni-sub">Startpagina</div></div></div>
+    <div class="ni available" onclick="sv('docs')" id="nav-docs"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Documenten</div><div class="ni-sub">Bronnen & materiaal</div></div></div>
+    <div class="ni available" onclick="sv('news')" id="nav-news"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Nieuws</div><div class="ni-sub">AI in de actualiteit</div></div></div>
   </div>
   <div class="nav-sec">
     <div class="nav-lbl">Modules</div>
-    <div class="ni locked" onclick="sm(1)" id="nav-mod1"><div class="ni-icon">🤔</div><div class="ni-info"><div class="ni-title">Wat is AI?</div><div class="ni-sub">Module 1</div></div><span class="ni-badge" id="l1">🔒</span></div>
-    <div class="ni locked" onclick="sm(2)" id="nav-mod2"><div class="ni-icon">⚙️</div><div class="ni-info"><div class="ni-title">Hoe werkt AI?</div><div class="ni-sub">Module 2</div></div><span class="ni-badge" id="l2">🔒</span></div>
-    <div class="ni locked" onclick="sm(3)" id="nav-mod3"><div class="ni-icon">✨</div><div class="ni-info"><div class="ni-title">Generatieve AI</div><div class="ni-sub">Module 3</div></div><span class="ni-badge" id="l3">🔒</span></div>
-    <div class="ni locked" onclick="sm(4)" id="nav-mod4"><div class="ni-icon">⚠️</div><div class="ni-info"><div class="ni-title">Ethiek & Bias</div><div class="ni-sub">Module 4</div></div><span class="ni-badge" id="l4">🔒</span></div>
-    <div class="ni locked" onclick="sm(5)" id="nav-mod5"><div class="ni-icon">📚</div><div class="ni-info"><div class="ni-title">AI in School</div><div class="ni-sub">Module 5</div></div><span class="ni-badge" id="l5">🔒</span></div>
-    <div class="ni locked" onclick="sm(6)" id="nav-mod6"><div class="ni-icon">🌍</div><div class="ni-info"><div class="ni-title">AI in Maatschappij</div><div class="ni-sub">Module 6</div></div><span class="ni-badge" id="l6">🔒</span></div>
-    <div class="ni locked" onclick="tryC()" id="nav-cert"><div class="ni-icon">🏆</div><div class="ni-info"><div class="ni-title">Certificaat</div><div class="ni-sub">Na alle modules</div></div><span class="ni-badge" id="lc">🔒</span></div>
+    <div class="ni locked" onclick="sm(1)" id="nav-mod1"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Wat is AI?</div><div class="ni-sub">Module 1</div></div><span class="ni-badge" id="l1"></span></div>
+    <div class="ni locked" onclick="sm(2)" id="nav-mod2"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Hoe werkt AI?</div><div class="ni-sub">Module 2</div></div><span class="ni-badge" id="l2"></span></div>
+    <div class="ni locked" onclick="sm(3)" id="nav-mod3"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Generatieve AI</div><div class="ni-sub">Module 3</div></div><span class="ni-badge" id="l3"></span></div>
+    <div class="ni locked" onclick="sm(4)" id="nav-mod4"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Ethiek & Bias</div><div class="ni-sub">Module 4</div></div><span class="ni-badge" id="l4"></span></div>
+    <div class="ni locked" onclick="sm(5)" id="nav-mod5"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">AI in School</div><div class="ni-sub">Module 5</div></div><span class="ni-badge" id="l5"></span></div>
+    <div class="ni locked" onclick="sm(6)" id="nav-mod6"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">AI in Maatschappij</div><div class="ni-sub">Module 6</div></div><span class="ni-badge" id="l6"></span></div>
+    <div class="ni locked" onclick="tryC()" id="nav-cert"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Certificaat</div><div class="ni-sub">Na alle modules</div></div><span class="ni-badge" id="lc"></span></div>
   </div>
 
   <div class="nav-sec">
     <div class="nav-lbl">Optioneel · Verdieping</div>
-    <div class="ni available" onclick="sm(7)" id="nav-mod7"><div class="ni-icon">🎨</div><div class="ni-info"><div class="ni-title">Copilot Ontdekken</div><div class="ni-sub">Experimenteer vrij</div></div><span class="ni-badge" id="l7">›</span></div>
-    <div class="ni available" onclick="goKernkader()" id="nav-kernkader"><div class="ni-icon">🎯</div><div class="ni-info"><div class="ni-title">Wat moet ik kennen?</div><div class="ni-sub">Per graad</div></div></div>
+    <div class="ni available" onclick="sm(7)" id="nav-mod7"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Copilot Ontdekken</div><div class="ni-sub">Experimenteer vrij</div></div><span class="ni-badge" id="l7">›</span></div>
+    <div class="ni available" onclick="goKernkader()" id="nav-kernkader"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Wat moet ik kennen?</div><div class="ni-sub">Per graad</div></div></div>
   </div>
   <div class="sb-bot">
     <div class="uc">
@@ -63,116 +66,139 @@
 
 <!-- ════════ HOME ════════ -->
 <div class="view" id="view-home">
-  <div class="hero">
-    <div class="hero-ey"><span>Scholengroep Sint-Rembert × AI-Skills</span></div>
-    <h1 class="hero-h1">Leer AI <span class="g">Echt Begrijpen</span></h1>
-    <p class="hero-p">Je gebruikt ChatGPT misschien al. Maar weet je hoe het écht werkt? Deze 6 modules leren je AI van de grond af op begrijpen — kritisch, veilig en verantwoord. Elke module heeft video's, doe-opdrachten en een korte kennischeck. Aan het einde krijg je een certificaat!</p>
-    <div class="hero-stats">
-      <div class="hs"><div class="hs-num">🧪</div><div class="hs-lbl">Startest · 1 kans</div></div>
-      <div class="hs"><div class="hs-num">6</div><div class="hs-lbl">Modules</div></div>
-      <div class="hs"><div class="hs-num">4</div><div class="hs-lbl">AI-labels</div></div>
-      <div class="hs"><div class="hs-num">📹</div><div class="hs-lbl">Video's & quizzen</div></div>
-      <div class="hs"><div class="hs-num">🏆</div><div class="hs-lbl">Certificaat</div></div>
+<div class="lh">
+  <!-- HERO -->
+  <section class="lh-hero">
+    <div class="lh-hero-tekst">
+      <span class="lh-ey">AI-cursus voor leerlingen · Sint-Rembert</span>
+      <h1 class="lh-h1">Word <span>AI-slim</span></h1>
+      <p class="lh-lead">Je gebruikt AI misschien al elke dag. Maar weet je hoe het werkt, wanneer je het mag gebruiken en wanneer je beter zelf nadenkt? In zes modules leer je AI kritisch, veilig en eerlijk gebruiken.</p>
+      <div class="lh-acties">
+        <button class="hoofd lh-hoofd" id="lh-cta" onclick="goVerder()">Start de startest</button>
+        <a class="lh-tweede" href="#lh-regels" onclick="document.getElementById('lh-regels').scrollIntoView({behavior:'smooth'});return false;">Bekijk de spelregels</a>
+      </div>
     </div>
-  </div>
+    <div class="lh-hero-beeld"><svg class="lh-ill" viewBox="0 0 220 190" role="img" aria-label="Leerling met laptop en een vriendelijke AI-robot">
+  <circle cx="110" cy="96" r="88" fill="#FFFFFF" opacity=".08"/>
+  <rect x="118" y="34" width="78" height="60" rx="16" fill="#FFFFFF"/>
+  <rect x="127" y="43" width="60" height="42" rx="10" fill="#95D600"/>
+  <circle cx="146" cy="62" r="5" fill="#06038D"/><circle cx="168" cy="62" r="5" fill="#06038D"/>
+  <path d="M147 74 Q157 81 167 74" stroke="#06038D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M157 34 V20" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/><circle cx="157" cy="16" r="6" fill="#95D600"/>
+  <rect x="140" y="94" width="34" height="10" fill="#FFFFFF"/><rect x="128" y="104" width="58" height="10" rx="5" fill="#FFFFFF"/>
+  <circle cx="64" cy="70" r="20" fill="#FFFFFF"/>
+  <path d="M30 150 Q34 104 64 102 Q94 104 98 150 Z" fill="#95D600"/>
+  <rect x="34" y="132" width="96" height="10" rx="5" fill="#FFFFFF"/>
+  <path d="M50 132 L60 108 H118 L108 132 Z" fill="#FFFFFF"/><circle cx="89" cy="120" r="4" fill="#06038D"/>
+  <path d="M104 100 q10 -10 22 -6" stroke="#CCFF99" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 7"/>
+</svg></div>
+  </section>
 
-  <div class="sw">
-    <div class="sw-title">Waarom deze <em>cursus</em>?</div>
-    <div class="sw-sub">AI is overal — in TikTok, in je telefoon, op school. Dit leer je.</div>
-    <div class="vision-box">
-      <div class="vision-title">🎯 Wat ga je leren?</div>
-      <div class="vision-text">Je hoeft geen programmeur te worden, maar je moet wél begrijpen wat AI is, hoe het werkt, en waar de risico's zitten. Deze cursus maakt je <strong>AI-geletterd</strong>: je herkent AI, gebruikt het kritisch, en weet wanneer je het wel of niet mag inzetten op school.<br><br>
-      Zes modules, van basis tot verdieping: wat AI is, hoe het technisch werkt, wat generatieve AI (ChatGPT, DALL-E) bijzonder maakt, welke ethische risico's er zijn, wat de regels op school zijn, en wat AI betekent voor de maatschappij van morgen. Aan het einde ben je slimmer over AI dan de meeste volwassenen! 🚀</div>
-    </div>
+  <!-- VOORTGANG -->
+  <section class="lh-voortgang" aria-label="Jouw voortgang">
+    <div class="lh-vg-top"><b>Jouw voortgang</b><span id="lh-pct">0%</span></div>
+    <div class="lh-vg-track"><div class="lh-vg-bar" id="lh-bar"></div></div>
+    <p id="lh-txt">Begin met de startest: 10 korte vragen, gewoon om te peilen.</p>
+  </section>
 
-    <div class="sw-title" style="margin-top:28px">De <em>AI-Spelregels</em></div>
-    <div class="sw-sub">Geldend voor alle leerlingen van de scholengroep.</div>
-    <div class="sr-row">
-      <div class="sr-box wel">
-        <div class="sr-box-title">✅ Wat mag wel?</div>
-        <div class="sri"><div class="sr-chk">✓</div>AI gebruiken voor brainstorm en ideeën</div>
-        <div class="sri"><div class="sr-chk">✓</div>Feedback vragen op je eigen tekst</div>
-        <div class="sri"><div class="sr-chk">✓</div>Uitleg vragen over moeilijke onderwerpen</div>
-        <div class="sri"><div class="sr-chk">✓</div>AI gebruiken als het label dat toelaat</div>
-        <div class="sri"><div class="sr-chk">✓</div>Zeggen dat je AI hebt gebruikt (eerlijkheid!)</div>
-      </div>
-      <div class="sr-box niet">
-        <div class="sr-box-title">❌ Wat mag niet?</div>
-        <div class="sri sr-x-item"><div class="sr-x">✕</div>AI-tekst inleveren als eigen werk zonder het te zeggen</div>
-        <div class="sri sr-x-item"><div class="sr-x">✕</div>AI gebruiken tijdens een toets (tenzij het mag)</div>
-        <div class="sri sr-x-item"><div class="sr-x">✕</div>AI-output blindelings overnemen zonder controle</div>
-        <div class="sri sr-x-item"><div class="sr-x">✕</div>Persoonsgegevens van anderen in AI-tools invoeren</div>
-        <div class="sri sr-x-item"><div class="sr-x">✕</div>Een AI-label negeren dat je leerkracht heeft gegeven</div>
-      </div>
+  <!-- ZO WERKT HET -->
+  <section class="lh-blok">
+    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>Zo werkt het</h2></div>
+    <div class="lh-stappen">
+      <div class="lh-stap"><span>1</span><h3>Startest</h3><p>Tien vragen om te peilen wat je al weet. Er is geen slaagdrempel.</p></div>
+      <div class="lh-stap"><span>2</span><h3>Zes modules</h3><p>Video's, doe-opdrachten en telkens een korte kennischeck. Elke module opent de volgende.</p></div>
+      <div class="lh-stap"><span>3</span><h3>Certificaat</h3><p>Alle modules klaar? Dan download je je eigen certificaat.</p></div>
     </div>
+  </section>
 
-    <div class="sw-title" style="margin-top:28px">De <em>6 Modules</em></div>
-    <div class="sw-sub">Doorloop ze in volgorde — elke module ontgrendelt de volgende.</div>
-    <div class="mods-grid">
-      <div class="mc" id="cm1" onclick="sm(1)">
-        <div class="mc-badge">Module 1</div>
-        <div class="mc-icon">🤔</div>
-        <div class="mc-title">Wat is AI?</div>
-        <div class="mc-desc">AI is overal — ook al zie je het niet. Van simpele regels tot generatieve AI, hallucinaties en AI-agents.</div>
-        <button class="sr-btn g" id="bm1">▶ Start</button>
-        <div class="mc-stat" id="ps1">Nog niet gestart</div>
-      </div>
-      <div class="mc locked" id="cm2">
-        <div class="mc-badge">Module 2</div>
-        <div class="mc-icon">⚙️</div>
-        <div class="mc-title">Hoe Werkt AI?</div>
-        <div class="mc-desc">Machine learning, deep learning en neurale netwerken — de motor achter elke AI-tool.</div>
-        <button class="sr-btn" id="bm2" disabled>🔒 Vergrendeld</button>
-        <div class="mc-stat" id="ps2">Voltooi Module 1 eerst</div>
-      </div>
-      <div class="mc locked" id="cm3">
-        <div class="mc-badge">Module 3</div>
-        <div class="mc-icon">✨</div>
-        <div class="mc-title">Generatieve AI</div>
-        <div class="mc-desc">ChatGPT, DALL-E en prompting: hoe maak je AI aan het werk voor jou?</div>
-        <button class="sr-btn" id="bm3" disabled>🔒 Vergrendeld</button>
-        <div class="mc-stat" id="ps3">Voltooi Module 2 eerst</div>
-      </div>
-      <div class="mc locked" id="cm4">
-        <div class="mc-badge">Module 4</div>
-        <div class="mc-icon">⚠️</div>
-        <div class="mc-title">Ethiek & Bias</div>
-        <div class="mc-desc">Deepfakes, discriminatie, privacy en energieverbruik — de donkere kant van AI.</div>
-        <button class="sr-btn" id="bm4" disabled>🔒 Vergrendeld</button>
-        <div class="mc-stat" id="ps4">Voltooi Module 3 eerst</div>
-      </div>
-      <div class="mc locked" id="cm5">
-        <div class="mc-badge">Module 5</div>
-        <div class="mc-icon">📚</div>
-        <div class="mc-title">AI in School</div>
-        <div class="mc-desc">De 4 AI-labels van Sint-Rembert: wat mag wel, wat mag niet, en waarom.</div>
-        <button class="sr-btn" id="bm5" disabled>🔒 Vergrendeld</button>
-        <div class="mc-stat" id="ps5">Voltooi Module 4 eerst</div>
-      </div>
-      <div class="mc locked" id="cm6">
-        <div class="mc-badge">Module 6 · Finale</div>
-        <div class="mc-icon">🌍</div>
-        <div class="mc-title">AI in Maatschappij</div>
-        <div class="mc-desc">Jobs, toekomst, en jouw eigen visie op AI over 10 jaar.</div>
-        <button class="sr-btn" id="bm6" disabled>🔒 Vergrendeld</button>
-        <div class="mc-stat" id="ps6">Voltooi Module 5 eerst</div>
-      </div>
+  <!-- MODULES -->
+  <section class="lh-blok">
+    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>Jouw route</h2></div>
+    <div class="lh-mods mods-grid">
+      <article class="mc lh-mod" id="cm1" onclick="sm(1)">
+        <div class="lh-mod-kop"><span class="lh-nr">1</span><span class="mc-badge">Module 1</span></div>
+        <h3 class="mc-title">Wat is AI?</h3>
+        <p class="mc-desc">AI is overal, ook als je het niet ziet. Van simpele regels tot generatieve AI, hallucinaties en AI-agents.</p>
+        <div class="lh-mod-voet"><div class="mc-stat" id="ps1">Nog niet gestart</div><button class="sr-btn g" id="bm1">▶ Start</button></div>
+      </article>
+      <article class="mc lh-mod locked" id="cm2">
+        <div class="lh-mod-kop"><span class="lh-nr">2</span><span class="mc-badge">Module 2</span></div>
+        <h3 class="mc-title">Hoe werkt AI?</h3>
+        <p class="mc-desc">Machine learning, deep learning en neurale netwerken: de motor achter elke AI-tool.</p>
+        <div class="lh-mod-voet"><div class="mc-stat" id="ps2">Voltooi module 1 eerst</div><button class="sr-btn" id="bm2" disabled>Vergrendeld</button></div>
+      </article>
+      <article class="mc lh-mod locked" id="cm3">
+        <div class="lh-mod-kop"><span class="lh-nr">3</span><span class="mc-badge">Module 3</span></div>
+        <h3 class="mc-title">Generatieve AI</h3>
+        <p class="mc-desc">Chatbots, beeldgeneratoren en prompting: hoe laat je AI voor jou werken?</p>
+        <div class="lh-mod-voet"><div class="mc-stat" id="ps3">Voltooi module 2 eerst</div><button class="sr-btn" id="bm3" disabled>Vergrendeld</button></div>
+      </article>
+      <article class="mc lh-mod locked" id="cm4">
+        <div class="lh-mod-kop"><span class="lh-nr">4</span><span class="mc-badge">Module 4</span></div>
+        <h3 class="mc-title">Ethiek & bias</h3>
+        <p class="mc-desc">Deepfakes, discriminatie, privacy en energieverbruik: de schaduwkant van AI.</p>
+        <div class="lh-mod-voet"><div class="mc-stat" id="ps4">Voltooi module 3 eerst</div><button class="sr-btn" id="bm4" disabled>Vergrendeld</button></div>
+      </article>
+      <article class="mc lh-mod locked" id="cm5">
+        <div class="lh-mod-kop"><span class="lh-nr">5</span><span class="mc-badge">Module 5</span></div>
+        <h3 class="mc-title">AI op school</h3>
+        <p class="mc-desc">De vier AI-labels van Sint-Rembert: wat mag wel, wat mag niet, en waarom.</p>
+        <div class="lh-mod-voet"><div class="mc-stat" id="ps5">Voltooi module 4 eerst</div><button class="sr-btn" id="bm5" disabled>Vergrendeld</button></div>
+      </article>
+      <article class="mc lh-mod locked" id="cm6">
+        <div class="lh-mod-kop"><span class="lh-nr">6</span><span class="mc-badge">Module 6 · finale</span></div>
+        <h3 class="mc-title">AI in de maatschappij</h3>
+        <p class="mc-desc">Jobs, trends en hypes, de gevolgen van de gevolgen, en jouw eigen kijk op de toekomst.</p>
+        <div class="lh-mod-voet"><div class="mc-stat" id="ps6">Voltooi module 5 eerst</div><button class="sr-btn" id="bm6" disabled>Vergrendeld</button></div>
+      </article>
     </div>
+  </section>
 
-    <div class="sw-title" style="margin-top:32px">Optioneel · <em>Verdieping</em></div>
-    <div class="sw-sub">Altijd beschikbaar, geen voorwaarden — gewoon zelf experimenteren.</div>
-    <div class="mods-grid">
-      <div class="mc" id="cm7" onclick="sm(7)">
-        <div class="mc-badge">Optioneel</div>
-        <div class="mc-icon">🎨</div>
-        <div class="mc-title">Copilot Ontdekken</div>
-        <div class="mc-desc">Ga zelf aan de slag met Copilot: schrijf, teken, ontwerp — leer door te doen.</div>
-        <button class="sr-btn g" id="bm7">▶ Start</button>
-        <div class="mc-stat" id="ps7">Altijd beschikbaar</div>
-      </div>
+  <!-- SPELREGELS -->
+  <section class="lh-blok" id="lh-regels">
+    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>De AI-spelregels</h2></div>
+    <div class="lh-regels">
+      <article class="lh-kaart groen"><h3>✓ Dit mag</h3><ul>
+        <li>AI gebruiken voor brainstorm en ideeën, als het label dat toelaat</li>
+        <li>Feedback vragen op je eigen tekst</li>
+        <li>Uitleg vragen over moeilijke leerstof</li>
+        <li>Eerlijk zeggen dat en hoe je AI gebruikte</li></ul></article>
+      <article class="lh-kaart niet"><h3>✗ Dit mag niet</h3><ul>
+        <li>AI-tekst inleveren als eigen werk</li>
+        <li>AI gebruiken tijdens een toets, tenzij het mag</li>
+        <li>AI-antwoorden overnemen zonder te controleren</li>
+        <li>Persoonsgegevens of foto's van anderen in een AI-tool zetten</li></ul></article>
     </div>
-  </div>
+    <h3 class="lh-sub">De vier AI-labels</h3>
+    <p class="lh-p">Bij elke opdracht zegt je leerkracht met een label hoeveel AI mag. Twijfel je? Vraag het. Hoe je je AI-gebruik vermeldt, lees je bij <a href="#" onclick="sv('docs');setTimeout(()=>document.getElementById('ai-vermelden').scrollIntoView({behavior:'smooth'}),50);return false;" style="color:var(--groen);font-weight:700">AI-gebruik vermelden</a>.</p>
+    <div class="lh-labels">
+      <div class="lh-label l1"><span>1</span><b>Verboden</b><p>Geen AI. Je maakt alles zelf.</p></div>
+      <div class="lh-label l2"><span>2</span><b>Als inspiratie</b><p>AI enkel voor ideeën. Het werk maak je zelf.</p></div>
+      <div class="lh-label l3"><span>3</span><b>Als ondersteuning</b><p>AI mag helpen tijdens het proces. Je zegt wat je liet doen.</p></div>
+      <div class="lh-label l4"><span>4</span><b>Toegestaan</b><p>AI mag volop, zolang je eerlijk bent over je gebruik.</p></div>
+    </div>
+  </section>
+
+  <!-- VERDIEPING -->
+  <section class="lh-blok">
+    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>Extra · altijd open</h2></div>
+    <div class="lh-mods mods-grid">
+      <article class="mc lh-mod lh-extra" id="cm7" onclick="sm(7)">
+        <div class="lh-mod-kop"><span class="lh-nr">+</span><span class="mc-badge">Optioneel</span></div>
+        <h3 class="mc-title">Copilot ontdekken</h3>
+        <p class="mc-desc">Ga zelf aan de slag met Copilot via je schoolaccount: schrijven, ontwerpen en leren door te doen.</p>
+        <div class="lh-mod-voet"><div class="mc-stat" id="ps7">Altijd beschikbaar</div><button class="sr-btn g" id="bm7">▶ Start</button></div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="lh-voet">
+    <div><strong>Meerwaarde</strong><p>Gebruik AI enkel als het je echt helpt om beter te leren.</p></div>
+    <div><strong>Transparantie</strong><p>Jij blijft verantwoordelijk voor je werk en zegt eerlijk wat AI deed.</p></div>
+  </footer>
 </div>
+</div>
+
 
 <!-- ════════ DOCUMENTEN ════════ -->
 <div class="view" id="view-docs">
@@ -182,44 +208,48 @@
   </div>
   <div class="mc-content" style="padding: 20px;">
 
-    <h2>📄 Downloadbaar materiaal</h2>
+    <h2 id="ai-vermelden" style="margin-top:0;">AI-gebruik vermelden</h2>
+    <p class="cp">Gebruikte je AI bij een opdracht? Zeg dan eerlijk hoe. Kies je graad, vul in en kopieer de tekst onder je werk. In de 3e graad maak je een volledige AI-verantwoording, met een APA-bronvermelding als je iets letterlijk overneemt, zoals in het hoger onderwijs.</p>
+    <div id="av-docs" class="avg"></div>
+
+    <h2 style="margin-top:32px;">Downloadbaar materiaal</h2>
     <p class="cp">Hier vind je het lesmateriaal en de papieren versie van deze cursus, om te printen of offline te gebruiken.</p>
     <div class="ib warn">
-      <div class="ib-t">📘 Invulcursus (papieren versie)</div>
+      <div class="ib-t">Invulcursus (papieren versie)</div>
       <div class="ib-b">Een afdrukbare versie van deze volledige cursus met invulvakken, voor wie liever op papier werkt of geen toegang heeft tot een computer. Vraag dit document aan je leerkracht, of download het hier: <a href="invulcursus-ai-leerlingen.pdf" target="_blank">invulcursus-ai-leerlingen.pdf</a></div>
     </div>
 
-    <h2 style="margin-top:32px;">🎬 Video's & lesmateriaal (EDUbox)</h2>
+    <h2 style="margin-top:32px;">Video's & lesmateriaal (EDUbox)</h2>
     <p class="cp">Deze cursus is grotendeels gebaseerd op de EDUbox "Artificiële Intelligentie", een samenwerking tussen VRT, imec, Mediawijs, Kenniscentrum Data & Maatschappij, Brightlab, am/ai en BENEDMO.</p>
 
-    <h2 style="margin-top:32px;">🔍 Deepfakes & factchecken</h2>
-    <ul style="font-size: 13px; color: #3d4f8a; line-height: 2.2; padding-left: 22px;">
+    <h2 style="margin-top:32px;">Deepfakes & factchecken</h2>
+    <ul style="font-size: 13px; color: #06038D; line-height: 2.2; padding-left: 22px;">
       <li><a href="https://www.vrt.be/vrtnws/nl/kijk/2023/05/11/fast-ddt-how-to-factcheck-deepfakes-arvato-57297239/" target="_blank">Hoe factcheck je deepfakes?</a> — VRT NWS</li>
       <li><a href="https://www.vrt.be/vrtnws/nl/kijk/2023/03/29/ddt-how-to-factcheck-ai-gegenereerde-fotos-arvato-56386080" target="_blank">Hoe factcheck je AI-gegenereerde foto's?</a> — VRT NWS</li>
       <li><a href="https://www.vrt.be/vrtnws/nl/2024/03/15/klaar-artificiele-intelligentie/" target="_blank">KLAAR — Artificiële Intelligentie</a> — VRT NWS project voor jongeren</li>
     </ul>
 
-    <h2 style="margin-top:32px;">🎓 Verdieping & colleges</h2>
-    <ul style="font-size: 13px; color: #3d4f8a; line-height: 2.2; padding-left: 22px;">
+    <h2 style="margin-top:32px;">Verdieping & colleges</h2>
+    <ul style="font-size: 13px; color: #06038D; line-height: 2.2; padding-left: 22px;">
       <li><a href="https://www.universiteitvanvlaanderen.be" target="_blank">Universiteit van Vlaanderen</a> — korte colleges o.a. over AI en de wereld, en AI in de Tour de France</li>
       <li><a href="https://www.elementsofai.com/" target="_blank">Elements of AI</a> — gratis online cursus (Universiteit van Helsinki, TU Delft)</li>
       <li><a href="https://www.vrt.be/vrtmax/a-z/het-digitale-dilemma/" target="_blank">Het Digitale Dilemma</a> — Tim Verheyden (VRT MAX, gratis account nodig)</li>
     </ul>
 
-    <h2 style="margin-top:32px;">🔬 Zelf experimenteren</h2>
-    <ul style="font-size: 13px; color: #3d4f8a; line-height: 2.2; padding-left: 22px;">
+    <h2 style="margin-top:32px;">Zelf experimenteren</h2>
+    <ul style="font-size: 13px; color: #06038D; line-height: 2.2; padding-left: 22px;">
       <li><a href="https://scratch.mit.edu" target="_blank">Scratch</a> — leer spelenderwijs een neuraal netwerk cijfers herkennen</li>
       <li><a href="https://notebooklm.google.com" target="_blank">NotebookLM</a> — jouw AI-studiehulp (zie Module 2)</li>
     </ul>
 
-    <h2 style="margin-top:32px;">📜 Sint-Rembert beleid</h2>
+    <h2 style="margin-top:32px;">Sint-Rembert beleid</h2>
     <p class="cp">Het volledige AI-beleid en de 4 AI-labels van Scholengroep Sint-Rembert (naar het model van Lut De Jaegher, Sint-Jozefscollege Torhout) vind je terug in het schoolreglement. Vraag dit na bij je leerkracht als je het niet kan terugvinden.</p>
 
     <div style="text-align:center; margin: 32px 0;">
-      <button class="sr-btn g" onclick="goHome()" style="font-size:15px; padding:14px 28px;">🏠 Terug naar de cursus →</button>
+      <button class="sr-btn g" onclick="goHome()" style="font-size:15px; padding:14px 28px;">Terug naar de cursus →</button>
     </div>
 
-    <footer style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 11px; color: #999;">
+    <footer style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 11px; color:#06038D;">
       Deze cursus is ontwikkeld met inspiratie van pedagogische frameworks en onderwijs-best practices, waaronder de EDUbox Artificiële Intelligentie (VRT, imec, Mediawijs, Kenniscentrum Data & Maatschappij, Brightlab, am/ai, BENEDMO — mede gefinancierd door de Europese Unie), Elements of AI, Schoolmakers AI-gebruiksschaal (Leon Furze), Microsoft Responsible AI frameworks, de EU AI Act (2024), en het Sint-Rembert Beleidskader AI.
     </footer>
 
@@ -234,44 +264,44 @@
   </div>
   <div class="mc-content" style="padding: 20px;">
 
-    <h2>📰 Blijf op de hoogte</h2>
+    <h2>Blijf op de hoogte</h2>
     <p class="cp">AI evolueert razendsnel. Op deze pagina verzamelt je school af en toe interessante nieuwsberichten, tips en updates rond artificiële intelligentie — zowel voor in de klas als daarbuiten.</p>
 
     <div class="ib warn">
-      <div class="ib-t">🔔 Deze pagina wordt regelmatig bijgewerkt</div>
+      <div class="ib-t">Deze pagina wordt regelmatig bijgewerkt</div>
       <div class="ib-b">Je leerkrachten vullen dit overzicht aan met relevante nieuwtjes. Mis je iets, of zag je zelf interessant AI-nieuws? Meld het gerust aan je leerkracht.</div>
     </div>
 
-    <h2 style="margin-top:32px;">🗞️ Recente berichten</h2>
+    <h2 style="margin-top:32px;">Recente berichten</h2>
 
     <div style="background: white; border-left: 4px solid var(--blue); border-radius: 8px; padding: 16px; margin: 16px 0;">
-      <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">📅 Schooljaar 2026-2027</div>
+      <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">Schooljaar 2026-2027</div>
       <h3 style="margin:0 0 8px 0; font-size:16px;">Sint-Rembert lanceert vernieuwde AI-Skills cursus</h3>
-      <p style="font-size:13px;color:#3d4f8a;line-height:1.7;margin:0;">Deze volledig herwerkte cursus, gebaseerd op de EDUbox Artificiële Intelligentie (VRT/imec/Mediawijs), leert je stap voor stap wat AI is, hoe het werkt, en hoe je er verantwoord mee omgaat op school. Je bent er nu middenin bezig!</p>
+      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">Deze volledig herwerkte cursus, gebaseerd op de EDUbox Artificiële Intelligentie (VRT/imec/Mediawijs), leert je stap voor stap wat AI is, hoe het werkt, en hoe je er verantwoord mee omgaat op school. Je bent er nu middenin bezig!</p>
     </div>
 
     <div style="background: white; border-left: 4px solid var(--orange); border-radius: 8px; padding: 16px; margin: 16px 0;">
-      <div style="font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:6px;">⚖️ EU AI Act</div>
+      <div style="font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:6px;">EU AI Act</div>
       <h3 style="margin:0 0 8px 0; font-size:16px;">Europese AI-wetgeving stap voor stap in werking</h3>
-      <p style="font-size:13px;color:#3d4f8a;line-height:1.7;margin:0;">De EU AI Act (zie Module 6) treedt gefaseerd in werking. Een van de verplichtingen: organisaties die AI gebruiken — ook scholen — moeten zorgen dat hun personeel en leerlingen voldoende "AI-geletterd" zijn. Precies daarom bestaat deze cursus.</p>
+      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">De EU AI Act (zie Module 6) treedt gefaseerd in werking. Een van de verplichtingen: organisaties die AI gebruiken — ook scholen — moeten zorgen dat hun personeel en leerlingen voldoende "AI-geletterd" zijn. Precies daarom bestaat deze cursus.</p>
     </div>
 
     <div style="background: white; border-left: 4px solid var(--green); border-radius: 8px; padding: 16px; margin: 16px 0;">
-      <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:6px;">💡 Tip van de maand</div>
+      <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:6px;">Tip van de maand</div>
       <h3 style="margin:0 0 8px 0; font-size:16px;">Twijfel je aan een video of foto? Check de bron</h3>
-      <p style="font-size:13px;color:#3d4f8a;line-height:1.7;margin:0;">Deepfakes worden steeds overtuigender (zie Module 4). De beste vuistregel blijft: kijk niet enkel naar het beeld zelf, maar check wie het deelde. VRT NWS maakte hierover korte, handige filmpjes — te vinden bij Documenten.</p>
+      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">Deepfakes worden steeds overtuigender (zie Module 4). De beste vuistregel blijft: kijk niet enkel naar het beeld zelf, maar check wie het deelde. VRT NWS maakte hierover korte, handige filmpjes — te vinden bij Documenten.</p>
     </div>
 
-    <div style="background: white; border-left: 4px solid #9C27B0; border-radius: 8px; padding: 16px; margin: 16px 0;">
-      <div style="font-size:11px;font-weight:700;color:#9C27B0;text-transform:uppercase;margin-bottom:6px;">🔬 Tool-update</div>
+    <div style="background: white; border-left: 4px solid #06038D; border-radius: 8px; padding: 16px; margin: 16px 0;">
+      <div style="font-size:11px;font-weight:700;color:#06038D;text-transform:uppercase;margin-bottom:6px;">Tool-update</div>
       <h3 style="margin:0 0 8px 0; font-size:16px;">NotebookLM breidt functies verder uit</h3>
-      <p style="font-size:13px;color:#3d4f8a;line-height:1.7;margin:0;">Google werkt voortdurend aan NotebookLM (zie Module 2), met nieuwe manieren om je eigen cursusmateriaal te doorzoeken en samen te vatten. Zeker het proberen waard als studiehulp!</p>
+      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">Google werkt voortdurend aan NotebookLM (zie Module 2), met nieuwe manieren om je eigen cursusmateriaal te doorzoeken en samen te vatten. Zeker het proberen waard als studiehulp!</p>
     </div>
 
-    <p class="cp" style="margin-top: 24px; font-size: 12px; color: #999; font-style: italic;">Laatst bijgewerkt: september 2026</p>
+    <p class="cp" style="margin-top: 24px; font-size: 12px; color:#06038D; font-style: italic;">Laatst bijgewerkt: september 2026</p>
 
     <div style="text-align:center; margin: 32px 0;">
-      <button class="sr-btn g" onclick="goHome()" style="font-size:15px; padding:14px 28px;">🏠 Terug naar de cursus →</button>
+      <button class="sr-btn g" onclick="goHome()" style="font-size:15px; padding:14px 28px;">Terug naar de cursus →</button>
     </div>
 
   </div>
@@ -360,16 +390,16 @@
 <div id="cert-view">
   <div class="cert-wrap">
     <div class="cert-intro">
-      <div class="cert-fire">🎉</div>
+      <div class="cert-fire"></div>
       <h2 style="font-family:'Archivo Black',sans-serif;font-size:26px;color:var(--blue);text-transform:uppercase;margin-bottom:7px">Gefeliciteerd!</h2>
       <p style="color:var(--muted);font-weight:700;margin-bottom:28px">Je hebt alle 6 modules voltooid. Download hieronder je certificaat.</p>
     </div>
 
     <div class="ss-box" style="text-align:left;margin-bottom:20px">
-      <div class="ss-title">📤 Hoe download ik mijn certificaat?</div>
+      <div class="ss-title">Hoe download ik mijn certificaat?</div>
       <div class="ss-steps">
         <div class="ss-step"><div class="ss-step-num">1</div><div class="ss-step-text">Controleer dat <strong>je naam correct ingevuld is</strong> (links onderaan in de zijbalk). Die komt op het certificaat.</div></div>
-        <div class="ss-step"><div class="ss-step-num">2</div><div class="ss-step-text">Klik op <strong>"🖨️ Download certificaat (PDF)"</strong> hieronder.</div></div>
+        <div class="ss-step"><div class="ss-step-num">2</div><div class="ss-step-text">Klik op <strong>"Download certificaat (PDF)"</strong> hieronder.</div></div>
         <div class="ss-step"><div class="ss-step-num">3</div><div class="ss-step-text">Kies in het afdrukvenster <strong>"Opslaan als PDF"</strong> (niet een echte printer!) en bewaar het bestand.</div></div>
         <div class="ss-step"><div class="ss-step-num">4</div><div class="ss-step-text">Lever het certificaat in bij je leerkracht zoals gevraagd.</div></div>
       </div>
@@ -403,16 +433,16 @@
 
     <div id="cert-dl-info"></div>
     <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-      <button class="print-btn" id="print-cert-btn" onclick="doCertPrint()">🖨️ Download certificaat + antwoorden (PDF)</button>
+      <button class="print-btn" id="print-cert-btn" onclick="doCertPrint()">Download certificaat + antwoorden (PDF)</button>
     </div>
-    <div class="cert-warn">✅ Je certificaat is gereed! Eén PDF met je certificaat én al je antwoorden. Kies in het afdrukvenster "Opslaan als PDF".</div>
+    <div class="cert-warn">✓ Je certificaat is gereed! Eén PDF met je certificaat én al je antwoorden. Kies in het afdrukvenster "Opslaan als PDF".</div>
   </div>
 
   <!-- Onzichtbaar tenzij printen: volledig antwoordenoverzicht, komt na het certificaat in de PDF -->
   <div id="cert-answers-print" style="display:none;"></div>
 </div>
 
-<footer style="font-size: 11px; color: #666; margin-top: 60px; padding: 30px 20px; border-top: 1px solid #ddd; background: #f9f9f9; line-height: 1.8;">
+<footer style="font-size: 11px; color:#06038D; margin-top: 60px; padding: 30px 20px; border-top: 1px solid #ddd; background: #FFFFFF; line-height: 1.8;">
   <div style="max-width: 1200px; margin: 0 auto;">
     <p style="margin: 0 0 12px 0;"><strong>Over deze cursus</strong></p>
     <p style="margin: 0 0 8px 0;">
@@ -424,7 +454,7 @@
     <p style="margin: 0;">
       Deze cursus is ontwikkeld met inspiratie van pedagogische frameworks en onderwijs-best practices, waaronder:<br>
       <br>
-      • <strong>Elements of AI</strong> (Universiteit van Helsinki, TU Delft, Reaktor) | <a href="https://www.elementsofai.com/" target="_blank" style="color: #0066cc;">elementsofai.com</a><br>
+      • <strong>Elements of AI</strong> (Universiteit van Helsinki, TU Delft, Reaktor) | <a href="https://www.elementsofai.com/" target="_blank" style="color: #06038D;">elementsofai.com</a><br>
       • EDUbox Artificiële Intelligentie (VRT NWS)<br>
       • Schoolmakers AI-gebruiksschaal (Leon Furze, Universiteit Melbourne)<br>
       • Microsoft Responsible AI frameworks<br>
@@ -433,7 +463,7 @@
       • Kennisnet, Digisprong, Vernieuwenderwijs
     </p>
 
-    <p style="margin: 12px 0 0 0; font-style: italic; color: #999;">
+    <p style="margin: 12px 0 0 0; font-style: italic; color:#06038D;">
       Certificaten downloadbaar als PDF
     </p>
   </div>
@@ -441,16 +471,16 @@
 
 </main>
 </div>
-<script src="leerlingen.js?v=20260928c"></script>
+<script src="leerlingen.js?v=20261020b"></script>
 
 <!-- ════════ HELPDESK BUTTON ════════ -->
 <a href="mailto:informaticadienst.pedagogisch@sint-rembert.be?subject=Vraag%20over%20de%20AI-cursus" 
    id="helpdesk-btn" 
    title="Vragen? Mail de pedagogische ICT-dienst"
-   style="position:fixed; bottom:24px; right:24px; z-index:9998; background:var(--blue); color:white; height:52px; min-width:52px; border-radius:26px; display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 4px 16px rgba(10,31,168,0.35); transition:all 0.25s ease; overflow:hidden; padding:0;"
+   style="position:fixed; bottom:24px; right:24px; z-index:9998; background:var(--blue); color:white; height:52px; min-width:52px; border-radius:26px; display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 4px 16px rgba(6,3,141,0.35); transition:all 0.25s ease; overflow:hidden; padding:0;"
    onmouseover="this.style.minWidth='250px'; this.style.paddingLeft='18px'; this.style.paddingRight='20px'; this.style.justifyContent='flex-start'; document.getElementById('helpdesk-text').style.maxWidth='200px'; document.getElementById('helpdesk-text').style.marginLeft='10px';"
    onmouseout="this.style.minWidth='52px'; this.style.paddingLeft='0'; this.style.paddingRight='0'; this.style.justifyContent='center'; document.getElementById('helpdesk-text').style.maxWidth='0'; document.getElementById('helpdesk-text').style.marginLeft='0';">
-  <span style="font-size:22px; flex-shrink:0; line-height:1;">💬</span>
+  <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink:0"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H10l-4 3v-3H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" fill="none" stroke="#06038D" stroke-width="2.4" stroke-linejoin="round"/></svg>
   <span id="helpdesk-text" style="font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; max-width:0; transition:max-width 0.25s ease, margin-left 0.25s ease; display:inline-block;">Vragen? Mail ons</span>
 </a>
 
@@ -465,5 +495,6 @@
   <span id="reset-text" style="font-size:12px; font-weight:700; white-space:nowrap; overflow:hidden; max-width:0; transition:max-width 0.25s ease, margin-left 0.25s ease; display:inline-block;">Opnieuw beginnen</span>
 </button>
 
+<script>document.addEventListener("DOMContentLoaded",()=>{try{avRender("av-docs")}catch(e){}});</script>
 </body>
 </html>
