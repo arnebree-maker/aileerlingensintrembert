@@ -912,6 +912,8 @@ function m1s0(c){
 </p>
 </div>
 
+<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/6bvIyaGYGSM" allowfullscreen loading="lazy" title="Het Klokhuis over AI: Niet-kunstmatige intelligentie"></iframe></div>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> Het Klokhuis over AI: Niet-kunstmatige intelligentie. Een ober die verdacht veel weet over zijn klanten: zo werkt AI die je gedrag volgt.</p>
 <div class="nw">
   <button class="sr-btn g" onclick="n1()">Volgende: wat is AI precies? →</button>
   <span class="nh">Stap 1/12</span>
@@ -1092,6 +1094,8 @@ function m1s7(c){
 
 <p class="cp">Onthoud dit: extreme doemscenario's (AI die "de wereld overneemt") krijgen veel clicks, maar de échte, actuele uitdagingen zijn vaak minder spectaculair — denk aan misinformatie, energieverbruik, en bias. Daar leer je in de volgende modules meer over.</p>
 
+<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/IiFNxziXjX8" allowfullscreen loading="lazy" title="Kun je ChatGPT het nieuws vragen? (Het Klokhuis over AI #1)"></iframe></div>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> Kun je ChatGPT het nieuws vragen? (Het Klokhuis over AI #1). Waar haalt een chatbot zijn nieuws vandaan, en kan je dat vertrouwen?</p>
 <div class="nw">
   <button class="sr-btn b" onclick="p1()">← Vorige</button>
   <button class="sr-btn g" onclick="n1()">Volgende: AI in jouw wereld →</button>
@@ -1482,23 +1486,55 @@ function m2s8(c){
   c.innerHTML = `
 <div class="s-badge">Stap 9 van 12 · NotebookLM ontdekken</div>
 <h2 class="ch2">Google <em>NotebookLM</em>: jouw AI-studiehulp</h2>
-<p class="cp">NotebookLM is een gratis AI-tool van Google die speciaal ontworpen is om je te helpen studeren. In tegenstelling tot een chatbot die "uit het hele internet" antwoordt, baseert NotebookLM zich <strong>enkel op documenten die JIJ zelf uploadt</strong> — dus veel minder kans op verzonnen informatie.</p>
+<p class="cp">NotebookLM is een AI-tool van Google die speciaal gemaakt is om te studeren. Een gewone chatbot antwoordt "uit het hele internet" en kan dingen verzinnen. NotebookLM werkt <strong>enkel met de bronnen die jij toevoegt</strong>, en toont bij elk antwoord met een nummertje waar het staat. Zo kan je alles meteen nakijken in je eigen cursus. Daardoor maakt het veel minder fouten, al blijft nakijken nodig: ook NotebookLM kan iets verkeerd samenvatten.</p>
 
-<h3 class="ch3">Stap voor stap: hoe gebruik je NotebookLM?</h3>
+<div class="ib warn"><div class="ib-t">Eerst Copilot, en NotebookLM als je leerkracht het voorstelt</div><div class="ib-b">Op school gebruik je in de eerste plaats <strong>Copilot met je schoolaccount</strong>: daar mag je je cursus en schooldocumenten in gebruiken. NotebookLM staat ook op de lijst van toegelaten tools, maar je hebt er een Google-account voor nodig (vanaf 13 jaar). Gebruik het enkel als je leerkracht het voorstelt, voeg enkel toe wat je leerkracht vrijgeeft of je eigen notities, en zet er nooit namen of andere persoonsgegevens in.</div></div>
+
+<h3 class="ch3">Het dashboard van NotebookLM</h3>
+<p class="cp">Zo ziet een notebook eruit. Klik op de afbeelding om ze groter te bekijken.</p>
+<img src="img/notebooklm-dashboard.jpg" alt="Het dashboard van NotebookLM met links de bronnen, in het midden de chat en rechts de Studio" style="width:100%;max-width:680px;display:block;margin:16px auto;border-radius:20px;border:2px solid #D9D9D9;cursor:zoom-in;">
+<div class="av-lagen">
+  <div><b>1. Bronnen (links)</b><p>Hier voeg je toe waarmee NotebookLM mag werken: een pdf, je notities, een website of een YouTube-video. Met de vinkjes kies je welke bronnen meetellen. Je kan ook op het web laten zoeken naar nieuwe bronnen, maar controleer die dan zelf.</p></div>
+  <div><b>2. Chat (midden)</b><p>Stel hier je vragen. De kleine nummertjes in het antwoord zijn verwijzingen: klik erop en je ziet precies welk stuk uit je bron gebruikt werd. Een goed antwoord bewaar je met <em>Opslaan in notitie</em>.</p></div>
+  <div><b>3. Studio (rechts)</b><p>Hier maak je studiemateriaal uit je bronnen. Alles wat je maakte, verschijnt eronder in een lijst, zodat je het later opnieuw kan openen.</p></div>
+</div>
+
+<h3 class="ch3">Wat kan je maken in de Studio?</h3>
+<div class="av-tabel"><table>
+<tr><th>Knop</th><th>Wat krijg je?</th><th>Zo leer je ermee</th></tr>
+<tr><td>Audio-overzicht</td><td>Een gesprek in podcastvorm over je bronnen</td><td>Luister op de bus, en noteer daarna zelf de 3 belangrijkste punten</td></tr>
+<tr><td>Video-overzicht</td><td>Een korte uitlegvideo met beelden</td><td>Bekijk hem na je eerste leesronde, als herhaling</td></tr>
+<tr><td>Diapresentatie</td><td>Dia's met de kern van je bronnen</td><td>Gebruik ze om jezelf of elkaar te overhoren, niet als je eigen presentatie</td></tr>
+<tr><td>Mindmap</td><td>Een schema van alle onderwerpen en hoe ze samenhangen</td><td>Dek een tak af en probeer zelf te vertellen wat eronder hoort</td></tr>
+<tr><td>Rapporten</td><td>Een samenvatting of studiegids als tekst</td><td>Vergelijk met je eigen samenvatting: wat had jij gemist?</td></tr>
+<tr><td>Flashcards</td><td>Kaartjes met een vraag en een antwoord</td><td>Zeg eerst hardop je antwoord, draai dan pas om</td></tr>
+<tr><td>Quiz</td><td>Meerkeuzevragen met uitleg</td><td>Maak de quiz zonder je cursus, kijk daarna waar je fout zat</td></tr>
+<tr><td>Infographic</td><td>Een poster met de kern in beeld</td><td>Handig om te herhalen; teken hem daarna zelf na uit je hoofd</td></tr>
+<tr><td>Gegevenstabel</td><td>Een tabel met begrippen, data of cijfers</td><td>Vul de tabel eerst zelf in en vergelijk dan</td></tr>
+</table></div>
+
+<h3 class="ch3">Stap voor stap</h3>
 <div style="background: white; border-left: 4px solid var(--blue); border-radius: 8px; padding: 16px; margin: 16px 0;">
 <p style="font-size: 13px; color: #06038D; line-height: 2; margin: 0;">
 <strong>Stap 1:</strong> Ga naar <strong>notebooklm.google.com</strong> en log in met een Google-account.<br>
-<strong>Stap 2:</strong> Klik op "Nieuwe notebook" en geef die een naam (bijv. "Geschiedenis — Hoofdstuk 4").<br>
-<strong>Stap 3:</strong> Upload je bronnen: een PDF van je cursus, je eigen nota's, of een link naar een artikel.<br>
-<strong>Stap 4:</strong> NotebookLM leest alles en maakt automatisch een samenvatting.<br>
-<strong>Stap 5:</strong> Stel vragen in de chat. Het antwoord komt <strong>met bronvermelding</strong> naar de exacte pagina in je document!<br>
-<strong>Stap 6:</strong> Gebruik de extra's: laat een studiegids of quizvragen genereren van je cursus.
+<strong>Stap 2:</strong> Klik op "Notebook maken" en geef het een duidelijke naam (bv. "Economie – Thema 1").<br>
+<strong>Stap 3:</strong> Voeg je bronnen toe: je eigen notities, of materiaal dat je leerkracht vrijgeeft voor NotebookLM.<br>
+<strong>Stap 4:</strong> Stel vragen in de chat en klik op de nummertjes om na te kijken waar het antwoord staat.<br>
+<strong>Stap 5:</strong> Maak in de Studio flashcards of een quiz, en oefen tot je alles zelf kan uitleggen.
 </p>
 </div>
 
+<div class="ib warn"><div class="ib-t">Leren, niet overschrijven</div><div class="ib-b">Een rapport of samenvatting van NotebookLM is geen taak die je mag indienen. Gebruik het om te <strong>oefenen</strong>: laat je overhoren, test jezelf, en leg het daarna in je eigen woorden uit. Gebruikte je NotebookLM bij een opdracht? Vermeld het in je AI-vermelding (zie Documenten).</div></div>
+
+<h3 class="ch3">Bekijk het in actie</h3>
+<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/9j0q4mof4tw" allowfullscreen loading="lazy" title="NotebookLM uitgelegd (Nederlands)"></iframe></div>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> NotebookLM uitgelegd (Nederlands). Wat NotebookLM is, hoe het werkt en wat je ermee kunt.</p>
+<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/lejgVBR6dYs" allowfullscreen loading="lazy" title="Podcast laten genereren met NotebookLM: perfect voor studeren"></iframe></div>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> Podcast laten genereren met NotebookLM: perfect voor studeren. Hoe je van een tekst of video een audio-overzicht maakt.</p>
+
 <div class="nw">
   <button class="sr-btn b" onclick="p2()">← Vorige</button>
-  <button class="sr-btn g" onclick="n2()">Volgende: probeer het zelf →</button>
+  <button class="sr-btn g" onclick="n2()">Volgende →</button>
   <span class="nh">Stap 9/12</span>
 </div>`;
 }
@@ -1714,6 +1750,8 @@ Bij élke stap berekent het model kansen voor duizenden mogelijke volgende woord
   <div class="ib-b">Deze video toont hoe generatieve AI de stem van dj Imane kon nabootsen voor "dj ImAIne" (zie Module 1) — een concreet voorbeeld van tekst én stem die woord voor woord/klank voor klank gegenereerd worden.</div>
 </div>
 
+<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/YwDFFGYf2kw" allowfullscreen loading="lazy" title="Kun je AI-antwoorden vertrouwen? (Het Klokhuis over AI #5)"></iframe></div>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> Kun je AI-antwoorden vertrouwen? (Het Klokhuis over AI #5). Waarom niet alle antwoorden van AI kloppen.</p>
 <div class="nw">
   <button class="sr-btn b" onclick="p3()">← Vorige</button>
   <button class="sr-btn g" onclick="n3()">Volgende: hallucinaties →</button>
@@ -2140,6 +2178,8 @@ function m4s4(c){
 
 <p class="cp">Wil je meer weten over hoe je deepfakes herkent? VRT NWS maakte enkele korte filmpjes met tips om zelf te leren factchecken: <a href="https://www.vrt.be/vrtnws/nl/kijk/2023/05/11/fast-ddt-how-to-factcheck-deepfakes-arvato-57297239/" target="_blank">Hoe factcheck je deepfakes?</a> en <a href="https://www.vrt.be/vrtnws/nl/kijk/2023/03/29/ddt-how-to-factcheck-ai-gegenereerde-fotos-arvato-56386080" target="_blank">Hoe factcheck je AI-gegenereerde foto's?</a></p>
 
+<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/fQgoTz3-8qM" allowfullscreen loading="lazy" title="Mag AI mijn gezicht gebruiken?"></iframe></div>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> Mag AI mijn gezicht gebruiken?. Hoe AI beelden en stemmen namaakt, en wat daarbij mag.</p>
 <div class="nw">
   <button class="sr-btn b" onclick="p4()">← Vorige</button>
   <button class="sr-btn g" onclick="n4()">Volgende: privacy →</button>
@@ -2167,6 +2207,8 @@ function m4s5(c){
   <div class="ib-b">Dat is waarom de school kiest voor Microsoft Copilot met je schoolaccount: die gegevens blijven binnen de beveiligde schoolomgeving en worden niet gebruikt om AI-modellen te trainen. Meer hierover in Module 5.</div>
 </div>
 
+<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/LhoMwD0Dk4o" allowfullscreen loading="lazy" title="Is het gevaarlijk om te chatten met ChatGPT? (Het Klokhuis over AI #3)"></iframe></div>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> Is het gevaarlijk om te chatten met ChatGPT? (Het Klokhuis over AI #3). Wat gebeurt er met wat je deelt in een chatbot?</p>
 <div class="nw">
   <button class="sr-btn b" onclick="p4()">← Vorige</button>
   <button class="sr-btn g" onclick="n4()">Volgende: video →</button>
@@ -3160,7 +3202,7 @@ function m6s10(c){
    Geen AI-label nodig — dit is een oefenzone, geen schoolopdracht.
    ════════════════════════════════════════════ */
 
-const m7 = [m7s0, m7s1, m7s2, m7s3, m7s4, m7s5, m7s_samen, m7s6];
+const m7 = [m7s0, m7s1, m7s2, m7s3, m7s4, m7s5, m7s_agent, m7s_samen, m7s6];
 
 function rm7(){ const c=document.getElementById('m7c'); c.innerHTML=''; rDots(7,m7.length,S.mod7.step); m7[S.mod7.step](c); fixStepBadge(c,S.mod7.step,m7.length); lockNextButtons(c); }
 function n7(){ S.mod7.step++; ss(); S.mod7.step>=m7.length ? d7() : rm7(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); }
@@ -3222,12 +3264,16 @@ function m7s2(c){
 <li>Een uitnodiging voor een verjaardag of activiteit</li>
 <li>Gewoon iets grappigs of creatiefs dat je zelf verzint</li>
 </ul>
+<img src="img/copilot-create-overzicht.png" alt="Overzicht van Create in Copilot: kies wat je wil maken" style="width:100%;max-width:680px;display:block;margin:16px auto;border-radius:20px;border:2px solid #D9D9D9;cursor:zoom-in;">
+<p class="cp">Beschrijf wat je nodig hebt en kies daarna een stijl uit de galerij, van fotorealistisch tot tekening:</p>
+<img src="img/copilot-create-stijlen.png" alt="Stijlgalerij in Copilot Create" style="width:100%;max-width:680px;display:block;margin:16px auto;border-radius:20px;border:2px solid #D9D9D9;cursor:zoom-in;">
 <p class="cp">Probeer minstens 2 keer een andere prompt of stijl, en kies je favoriete resultaat.</p>
 
 <div class="ib warn">
   <div class="ib-t">Let op tekst in het beeld</div>
-  <div class="ib-b">Staat er tekst op je afbeelding? AI maakt daar vaak spelfouten in. Gebruik de "Edit Text"-optie om dit zelf te corrigeren.</div>
+  <div class="ib-b">Staat er tekst op je afbeelding? AI maakt daar vaak spelfouten in. Gebruik de "Edit Text"-optie om dit zelf te corrigeren, zoals hieronder.</div>
 </div>
+<img src="img/copilot-beeld-bewerken.png" alt="Tekst in een AI-beeld aanpassen met Edit Text" style="width:100%;max-width:680px;display:block;margin:16px auto;border-radius:20px;border:2px solid #D9D9D9;cursor:zoom-in;">
 
 <h3 class="ch3">Noteer hieronder wat je maakte</h3>
 <p class="cp"><strong>Welke prompt gebruikte je (uiteindelijke versie)?</strong></p>
@@ -3293,7 +3339,8 @@ function m7s4(c){
 <div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 5 van 7 · Copilot op jouw maat</span></div>
 <h2 class="ch2">Personaliseer <em>Copilot</em></h2>
 <p class="cp">Wist je dat je Copilot kan vragen om voortaan rekening te houden met jouw voorkeuren? Via <strong>Instellingen → Personalisation → Custom instructions</strong> kan je bijvoorbeeld vragen: "Antwoord voortaan altijd kort en bondig" of "Leg dingen uit alsof ik 14 jaar ben, met concrete voorbeelden."</p>
-<p class="cp">Eén keer instellen, en elk volgend gesprek houdt daar automatisch rekening mee — handig als je Copilot regelmatig gebruikt om te studeren.</p>
+<img src="img/copilot-personalisatie.png" alt="Personalisatie-instellingen in Copilot" style="width:100%;max-width:680px;display:block;margin:16px auto;border-radius:20px;border:2px solid #D9D9D9;cursor:zoom-in;">
+<p class="cp">Eén keer instellen, en elk volgend gesprek houdt daar automatisch rekening mee — handig als je Copilot regelmatig gebruikt om te studeren. Een goede instructie om te leren: "Geef me niet meteen het antwoord, maar help me met vragen en hints."</p>
 
 <h3 class="ch3">Probeer het uit</h3>
 <p class="cp">Stel minstens 1 custom instruction in, en test even of Copilot zich er echt aan houdt in een nieuw gesprek.</p>
@@ -3323,7 +3370,7 @@ function m7s5(c){
 
 <div class="nw">
   <button class="sr-btn b" onclick="p7()">← Vorige</button>
-  <button class="sr-btn g" id="m7study_btn" onclick="sM7Study()">Volgende: samen studeren →</button>
+  <button class="sr-btn g" id="m7study_btn" onclick="sM7Study()">Volgende: leren met een agent →</button>
   <span class="nh">Stap 6/7</span>
 </div>`;
   const ta = document.getElementById('m7study_result');
@@ -3335,6 +3382,70 @@ function sM7Study(){
   const v = (document.getElementById('m7study_result').value||'').trim();
   if(v.length < 10){ alert('Vul dit veld in — probeer het écht zelf uit voor je verdergaat!'); return; }
   n7();
+}
+
+/* ---- Leren met een agent: Study and Learn in Copilot ---- */
+const SL_PROMPTS = [
+  {t:'Overhoor me', p:'Overhoor me over [onderwerp of hoofdstuk]. Stel telkens één vraag, wacht op mijn antwoord en geef dan feedback. Begin makkelijk en maak het stilaan moeilijker.'},
+  {t:'Eerst kijken wat ik al weet', p:'Ik wil [begrip] begrijpen. Stel me eerst drie vragen om te zien wat ik al weet, en leg daarna enkel uit wat ik nog niet begrijp.'},
+  {t:'Feedback, geen nieuwe tekst', p:'Hier is mijn samenvatting van [onderwerp]. Zeg wat juist is, wat ontbreekt en wat onduidelijk is. Herschrijf mijn tekst niet: ik verbeter hem zelf.'},
+  {t:'Oefenen voor de toets', p:'Maak flashcards van de kernbegrippen uit dit document, en daarna een quiz van 10 vragen met uitleg bij elk antwoord.'}
+];
+function slKopieer(i, btn){
+  const tx = SL_PROMPTS[i].p;
+  const ok = () => { btn.textContent='✓ Gekopieerd'; setTimeout(()=>btn.textContent='Kopieer prompt',1800); };
+  if(navigator.clipboard) navigator.clipboard.writeText(tx).then(ok).catch(()=>alert(tx)); else alert(tx);
+}
+function m7s_agent(c){
+  c.innerHTML = `
+<div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 7 van 9 · Leren met een agent</span></div>
+<h2 class="ch2">Leren met een <em>AI-agent</em>, niet overschrijven</h2>
+<p class="cp">Een gewone chatbot geeft je meteen het antwoord. Handig, maar dan leer je weinig. Daarom bestaat er in Copilot een agent die speciaal gemaakt is om te leren: <strong>Study and Learn</strong>. Microsoft omschrijft het zo: jij doet het denkwerk, en de agent coacht je daarbij. Hij stelt vragen, geeft hints en laat je oefenen, in plaats van het werk voor jou te doen.</p>
+
+<div class="av-tabel"><table>
+<tr><th>Overschrijven</th><th>Leren met de agent</th></tr>
+<tr><td>"Maak een samenvatting van hoofdstuk 3."</td><td>"Overhoor me over hoofdstuk 3, één vraag per keer."</td></tr>
+<tr><td>"Schrijf mijn tekst."</td><td>"Geef feedback op mijn tekst, zonder hem te herschrijven."</td></tr>
+<tr><td>"Wat is het antwoord op oefening 5?"</td><td>"Ik zit vast bij oefening 5. Geef me een hint."</td></tr>
+</table></div>
+
+<h3 class="ch3">Wat kan Study and Learn?</h3>
+<div class="av-lagen twee">
+  <div><b>Stap voor stap uitleggen</b><p>De agent begint met vragen en bouwt je begrip stap voor stap op.</p></div>
+  <div><b>Oefenen</b><p>Flashcards, quizzen met uitleg, begrippen koppelen en invuloefeningen.</p></div>
+  <div><b>Met jouw cursus</b><p>Je kan je eigen cursus, slides of pdf's toevoegen. De agent toont waar hij zijn informatie haalt.</p></div>
+  <div><b>Schrijven begeleiden</b><p>Hij helpt je bij het schrijfproces, zonder de tekst voor jou te schrijven.</p></div>
+</div>
+
+<h3 class="ch3">Zo vind je de agent</h3>
+<div style="background: white; border-left: 4px solid var(--blue); border-radius: 8px; padding: 16px; margin: 16px 0;">
+<p style="font-size: 13px; color: #06038D; line-height: 2; margin: 0;">
+<strong>Stap 1:</strong> Open de Microsoft 365 Copilot-app op het web of op je laptop, en log in met je <strong>schoolaccount</strong>.<br>
+<strong>Stap 2:</strong> Kies links <strong>Study and Learn</strong>, of ga naar <a href="https://aka.ms/studyandlearn" target="_blank" rel="noopener">aka.ms/studyandlearn</a>.<br>
+<strong>Stap 3:</strong> Zeg wat je wil leren, of voeg je cursus toe.<br>
+<strong>Stap 4:</strong> Antwoord zelf op de vragen van de agent. Daar leer je van.
+</p>
+</div>
+<p class="cp" style="font-size:14px;">De agent is er voor leerlingen vanaf 13 jaar, en werkt ook in het Nederlands. Je school moet Copilot voor leerlingen hebben aangezet. Zie je de agent niet? Vraag het aan je ICT-coördinator, en gebruik intussen de prompts hieronder in gewone Copilot.</p>
+
+<h3 class="ch3">Prompts om te leren in plaats van over te schrijven</h3>
+<div class="av-lagen twee">
+${SL_PROMPTS.map((s,i)=>`<div><b>${s.t}</b><p style="font-style:italic">"${s.p}"</p><button type="button" class="sr-btn b" style="margin-top:10px" onclick="slKopieer(${i}, this)">Kopieer prompt</button></div>`).join('')}
+</div>
+
+<h3 class="ch3">Bekijk het in actie</h3>
+<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/mkKXpZN8mqI" allowfullscreen loading="lazy" title="How to use the Study and Learn agent in Copilot (Engelstalig)"></iframe></div>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> How to use the Study and Learn agent in Copilot (Engelstalig). Een volledige rondleiding door de agent.</p>
+
+<div class="ib warn"><div class="ib-t">Onthoud</div><div class="ib-b">Ook een leeragent kan zich vergissen: kijk na in je cursus. Gebruik hem enkel binnen het AI-label van je opdracht, en vermeld het in je AI-vermelding als hij een rol speelde bij een taak.</div></div>
+
+<p style="font-size:12.5px;margin-top:14px;">Bron: <a href="https://support.microsoft.com/en-us/education/copilot/study-learn-agent" target="_blank" rel="noopener">Microsoft Support – Study and Learn Agent overview</a></p>
+
+<div class="nw">
+  <button class="sr-btn b" onclick="p7()">← Vorige</button>
+  <button class="sr-btn g" onclick="n7()">Volgende →</button>
+  <span class="nh">Stap 7/9</span>
+</div>`;
 }
 
 /* ---- Samen studeren met Copilot ---- */
@@ -3411,6 +3522,7 @@ function m7s6(c){
 ✓ Je schreef een creatieve tekst samen met AI<br>
 ✓ Je personaliseerde Copilot naar jouw voorkeuren<br>
 ✓ Je maakte een studiehulpmiddel<br>
+✓ Je leerde studeren met de Study and Learn-agent<br>
 ✓ Je ontdekte hoe je samen studeert met Copilot
 </p>
 </div>
@@ -3526,7 +3638,7 @@ function renderStellingenLeerling(containerId, groupKey, stellingen){
     html += `<div class="stelling-card" style="background:white;border-radius:8px;padding:16px;margin:12px 0;border-left:4px solid var(--blue);">
       <div style="font-size:13px;color:#06038D;font-weight:600;margin-bottom:10px;">${i+1}. ${s}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        ${['Sterk oneens','Oneens','Neutraal','Eens','Sterk eens'].map((lbl,vi)=>`<button class="stl-btn" data-i="${i}" data-v="${vi}" style="flex:1;min-width:90px;padding:8px 6px;border-radius:6px;border:2px solid ${val===vi?'var(--blue)':'#e0e4f5'};background:${val===vi?'var(--blue)':'white'};color:${val===vi?'white':'#06038D'};font-size:11px;font-weight:700;cursor:pointer;">${lbl}</button>`).join('')}
+        ${['Sterk oneens','Oneens','Neutraal','Eens','Sterk eens'].map((lbl,vi)=>`<button class="stl-btn${val===vi?' active':''}" data-i="${i}" data-v="${vi}" aria-pressed="${val===vi}" style="flex:1;min-width:90px;padding:8px 6px;border-radius:6px;border:2px solid ${val===vi?'var(--blue)':'#e0e4f5'};background:${val===vi?'var(--blue)':'white'};color:${val===vi?'white':'#06038D'};font-size:11px;font-weight:700;cursor:pointer;">${lbl}</button>`).join('')}
       </div>
     </div>`;
   });
