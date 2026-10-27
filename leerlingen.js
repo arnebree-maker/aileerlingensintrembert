@@ -1477,24 +1477,24 @@ function m2s7(c){
 
 <div class="nw">
   <button class="sr-btn b" onclick="p2()">← Vorige</button>
-  <button class="sr-btn g" onclick="n2()">Volgende: NotebookLM →</button>
+  <button class="sr-btn g" onclick="n2()">Volgende: Gemini Notebook →</button>
   <span class="nh">Stap 8/12</span>
 </div>`;
 }
 
 function m2s8(c){
   c.innerHTML = `
-<div class="s-badge">Stap 9 van 12 · NotebookLM ontdekken</div>
-<h2 class="ch2">Google <em>NotebookLM</em>: jouw AI-studiehulp</h2>
-<p class="cp">NotebookLM is een AI-tool van Google die speciaal gemaakt is om te studeren. Een gewone chatbot antwoordt "uit het hele internet" en kan dingen verzinnen. NotebookLM werkt <strong>enkel met de bronnen die jij toevoegt</strong>, en toont bij elk antwoord met een nummertje waar het staat. Zo kan je alles meteen nakijken in je eigen cursus. Daardoor maakt het veel minder fouten, al blijft nakijken nodig: ook NotebookLM kan iets verkeerd samenvatten.</p>
+<div class="s-badge">Stap 9 van 12 · Gemini Notebook ontdekken</div>
+<h2 class="ch2">Google <em>Gemini Notebook</em>: jouw AI-studiehulp</h2>
+<p class="cp">Gemini Notebook (vroeger NotebookLM) is een AI-tool van Google die speciaal gemaakt is om te studeren. Een gewone chatbot antwoordt "uit het hele internet" en kan dingen verzinnen. Gemini Notebook werkt <strong>enkel met de bronnen die jij toevoegt</strong>, en toont bij elk antwoord met een nummertje waar het staat. Zo kan je alles meteen nakijken in je eigen cursus. Daardoor maakt het veel minder fouten, al blijft nakijken nodig: ook Gemini Notebook kan iets verkeerd samenvatten.</p>
 
-<div class="ib warn"><div class="ib-t">Eerst Copilot, en NotebookLM als je leerkracht het voorstelt</div><div class="ib-b">Op school gebruik je in de eerste plaats <strong>Copilot met je schoolaccount</strong>: daar mag je je cursus en schooldocumenten in gebruiken. NotebookLM staat ook op de lijst van toegelaten tools, maar je hebt er een Google-account voor nodig (vanaf 13 jaar). Gebruik het enkel als je leerkracht het voorstelt, voeg enkel toe wat je leerkracht vrijgeeft of je eigen notities, en zet er nooit namen of andere persoonsgegevens in.</div></div>
+<div class="ib warn"><div class="ib-t">Eerst Copilot, en Gemini Notebook als je leerkracht het voorstelt</div><div class="ib-b">Op school gebruik je in de eerste plaats <strong>Copilot met je schoolaccount</strong>: daar mag je je cursus en schooldocumenten in gebruiken. Gemini Notebook staat ook op de lijst van toegelaten tools, maar je hebt er een Google-account voor nodig (vanaf 13 jaar). Gebruik het enkel als je leerkracht het voorstelt, voeg enkel toe wat je leerkracht vrijgeeft of je eigen notities, en zet er nooit namen of andere persoonsgegevens in.</div></div>
 
-<h3 class="ch3">Het dashboard van NotebookLM</h3>
+<h3 class="ch3">Het dashboard van Gemini Notebook</h3>
 <p class="cp">Zo ziet een notebook eruit. Klik op de afbeelding om ze groter te bekijken.</p>
-<img src="img/notebooklm-dashboard.jpg" alt="Het dashboard van NotebookLM met links de bronnen, in het midden de chat en rechts de Studio" style="width:100%;max-width:680px;display:block;margin:16px auto;border-radius:20px;border:2px solid #D9D9D9;cursor:zoom-in;">
+<img src="img/notebooklm-dashboard.jpg" alt="Het dashboard van Gemini Notebook met links de bronnen, in het midden de chat en rechts de Studio" style="width:100%;max-width:680px;display:block;margin:16px auto;border-radius:20px;border:2px solid #D9D9D9;cursor:zoom-in;">
 <div class="av-lagen">
-  <div><b>1. Bronnen (links)</b><p>Hier voeg je toe waarmee NotebookLM mag werken: een pdf, je notities, een website of een YouTube-video. Met de vinkjes kies je welke bronnen meetellen. Je kan ook op het web laten zoeken naar nieuwe bronnen, maar controleer die dan zelf.</p></div>
+  <div><b>1. Bronnen (links)</b><p>Hier voeg je toe waarmee Gemini Notebook mag werken: een pdf, je notities, een website of een YouTube-video. Met de vinkjes kies je welke bronnen meetellen. Je kan ook op het web laten zoeken naar nieuwe bronnen, maar controleer die dan zelf.</p></div>
   <div><b>2. Chat (midden)</b><p>Stel hier je vragen. De kleine nummertjes in het antwoord zijn verwijzingen: klik erop en je ziet precies welk stuk uit je bron gebruikt werd. Een goed antwoord bewaar je met <em>Opslaan in notitie</em>.</p></div>
   <div><b>3. Studio (rechts)</b><p>Hier maak je studiemateriaal uit je bronnen. Alles wat je maakte, verschijnt eronder in een lijst, zodat je het later opnieuw kan openen.</p></div>
 </div>
@@ -1516,21 +1516,21 @@ function m2s8(c){
 <h3 class="ch3">Stap voor stap</h3>
 <div style="background: white; border-left: 4px solid var(--blue); border-radius: 8px; padding: 16px; margin: 16px 0;">
 <p style="font-size: 13px; color: #06038D; line-height: 2; margin: 0;">
-<strong>Stap 1:</strong> Ga naar <strong>notebooklm.google.com</strong> en log in met een Google-account.<br>
+<strong>Stap 1:</strong> Ga naar <strong>notebooklm.google.com</strong> (dat adres blijft werken) en log in met een Google-account.<br>
 <strong>Stap 2:</strong> Klik op "Notebook maken" en geef het een duidelijke naam (bv. "Economie – Thema 1").<br>
-<strong>Stap 3:</strong> Voeg je bronnen toe: je eigen notities, of materiaal dat je leerkracht vrijgeeft voor NotebookLM.<br>
+<strong>Stap 3:</strong> Voeg je bronnen toe: je eigen notities, of materiaal dat je leerkracht vrijgeeft voor Gemini Notebook.<br>
 <strong>Stap 4:</strong> Stel vragen in de chat en klik op de nummertjes om na te kijken waar het antwoord staat.<br>
 <strong>Stap 5:</strong> Maak in de Studio flashcards of een quiz, en oefen tot je alles zelf kan uitleggen.
 </p>
 </div>
 
-<div class="ib warn"><div class="ib-t">Leren, niet overschrijven</div><div class="ib-b">Een rapport of samenvatting van NotebookLM is geen taak die je mag indienen. Gebruik het om te <strong>oefenen</strong>: laat je overhoren, test jezelf, en leg het daarna in je eigen woorden uit. Gebruikte je NotebookLM bij een opdracht? Vermeld het in je AI-vermelding (zie Documenten).</div></div>
+<div class="ib warn"><div class="ib-t">Leren, niet overschrijven</div><div class="ib-b">Een rapport of samenvatting van Gemini Notebook is geen taak die je mag indienen. Gebruik het om te <strong>oefenen</strong>: laat je overhoren, test jezelf, en leg het daarna in je eigen woorden uit. Gebruikte je Gemini Notebook bij een opdracht? Vermeld het in je AI-vermelding (zie Documenten).</div></div>
 
 <h3 class="ch3">Bekijk het in actie</h3>
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/9j0q4mof4tw" allowfullscreen loading="lazy" title="NotebookLM uitgelegd (Nederlands)"></iframe></div>
-<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> NotebookLM uitgelegd (Nederlands). Wat NotebookLM is, hoe het werkt en wat je ermee kunt.</p>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> NotebookLM uitgelegd (Nederlands). De video gebruikt nog de oude naam NotebookLM. Wat Gemini Notebook is, hoe het werkt en wat je ermee kunt.</p>
 <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/lejgVBR6dYs" allowfullscreen loading="lazy" title="Podcast laten genereren met NotebookLM: perfect voor studeren"></iframe></div>
-<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> Podcast laten genereren met NotebookLM: perfect voor studeren. Hoe je van een tekst of video een audio-overzicht maakt.</p>
+<p class="cp" style="font-size:14px;margin-top:6px;"><strong>Video:</strong> Podcast laten genereren met NotebookLM (nu Gemini Notebook): perfect voor studeren. Hoe je van een tekst of video een audio-overzicht maakt.</p>
 
 <div class="nw">
   <button class="sr-btn b" onclick="p2()">← Vorige</button>
@@ -1596,7 +1596,7 @@ function m2s9(c){
   c.innerHTML = `
 <div class="s-badge">Stap 10 van 12 · Doe-opdracht: aan de slag!</div>
 <h2 class="ch2">Probeer het <em>zelf</em>: jouw eerste prompt</h2>
-<p class="cp">Tijd om zelf te experimenteren! Open in een nieuw tabblad <strong>Copilot</strong> (met je schoolaccount), <strong>NotebookLM</strong>, of een andere toegestane AI-tool.</p>
+<p class="cp">Tijd om zelf te experimenteren! Open in een nieuw tabblad <strong>Copilot</strong> (met je schoolaccount), <strong>Gemini Notebook</strong>, of een andere toegestane AI-tool.</p>
 
 <div class="ib warn">
   <div class="ib-t">Vergeet dit niet!</div>
@@ -1607,7 +1607,7 @@ function m2s9(c){
 <p class="cp">Kies één van deze twee taken en probeer ze uit:</p>
 <ul style="font-size: 13px; color: #06038D; line-height: 1.8; padding-left: 20px;">
 <li><strong>Optie A:</strong> Laat AI een vak-onderwerp uitleggen dat je lastig vindt, in maximaal 5 zinnen, met een voorbeeld erbij.</li>
-<li><strong>Optie B:</strong> Als je NotebookLM gebruikt: upload een korte tekst of je nota's, en stel er een vraag over.</li>
+<li><strong>Optie B:</strong> Als je Gemini Notebook gebruikt: upload een korte tekst of je nota's, en stel er een vraag over.</li>
 </ul>
 
 <h3 class="ch3">Noteer hieronder wat er gebeurde</h3>
@@ -1650,7 +1650,7 @@ function m2s10(c){
     {graad:1, q: 'Wat betekent de "black box" bij machine learning?', o: ['Een fysieke, afgesloten doos waarin de computer letterlijk zit','Je krijgt een resultaat zonder dat de machine toont hoe ze daar precies toe kwam','Een streng beveiligingssysteem dat computers tegen hackers beschermt','Een foutmelding die verschijnt wanneer de machine crasht'], a: 1, f: 'Data gaat erin (input), er gebeuren berekeningen, en je krijgt een resultaat (output) — zonder inzicht in het precieze proces.' },
     {graad:2, q: 'Bij gesuperviseerd leren (zoals de zombie/mens-kaartjes met label): wat is kenmerkend?', o: ['De computer krijgt data mét labels om een categorie te leren voorspellen', 'De computer krijgt bij deze methode eigenlijk nooit enige voorbeelden te zien','Dit is in de praktijk exact hetzelfde als versterkend leren','Er is bij deze aanpak geen enkele menselijke input nodig'], a: 0, f: 'Bij gesuperviseerd leren geef je gelabelde voorbeelden, zodat de computer leert categorieën te herkennen.' },
     {graad:3, q: 'Bij Spotify- of Netflix-aanbevelingen: welk soort leren is meestal aan het werk?', o: ['Versterkend leren, waarbij het systeem stap voor stap beloond wordt in een spelomgeving', 'Ongesuperviseerd leren: de computer groepeert gebruikers/content zelf, zonder vaste labels','Procedurele AI die simpelweg een lijst van vaste IF-THEN regels volgt','Dit gebeurt in werkelijkheid volledig zonder enige vorm van AI of algoritme'], a: 1, f: 'De computer ontdekt zelf patronen en groepen in kijk-/luistergedrag, zonder dat iemand die groepen vooraf benoemde.' },
-    {graad:1, q: 'Waarom is NotebookLM vaak betrouwbaarder dan een gewone chatbot voor studeren?', o: ['Het genereert doorgaans gewoon sneller een antwoord op elke gestelde vraag','Het baseert antwoorden enkel op de documenten die jij zelf uploadt, met bronvermelding','Het is volledig gratis, terwijl vergelijkbare studietools altijd geld kosten','Er bestaat tussen de twee soorten tools eigenlijk geen enkel praktisch verschil'], a: 1, f: 'Omdat het antwoordt op basis van jouw eigen bronnen in plaats van het hele internet, is de kans op verzonnen informatie veel kleiner.' },
+    {graad:1, q: 'Waarom is Gemini Notebook vaak betrouwbaarder dan een gewone chatbot voor studeren?', o: ['Het genereert doorgaans gewoon sneller een antwoord op elke gestelde vraag','Het baseert antwoorden enkel op de documenten die jij zelf uploadt, met bronvermelding','Het is volledig gratis, terwijl vergelijkbare studietools altijd geld kosten','Er bestaat tussen de twee soorten tools eigenlijk geen enkel praktisch verschil'], a: 1, f: 'Omdat het antwoordt op basis van jouw eigen bronnen in plaats van het hele internet, is de kans op verzonnen informatie veel kleiner.' },
     {graad:3, q: 'De video bij "black box" toonde een neuraal netwerk. Wat combineert dit soort netwerk, zoals je in de video zag?', o: ['Enkel losse getallen zonder enige onderlinge samenhang of structuur', 'Veel kleinere lagen/knopen die samen tot één complex eindresultaat komen', 'Uitsluitend tekst, nooit beelden of andere soorten data', 'Alleen menselijke input, zonder enige vorm van berekening'], a: 1, f: 'Een neuraal netwerk verwerkt data via lagen van kleine "knopen" die stap voor stap samen tot een resultaat komen — precies wat de video visueel toonde.' },
     {graad:3, q: 'In de video bij deep learning (Isaak Vandermaesen) ging het over:', o: ['Uitsluitend de geschiedenis van computers vóór het jaar 1950', 'Concrete, indrukwekkende toepassingen van AI en generatieve AI', 'Enkel en alleen de juridische regels rond dataopslag in Europa', 'De biologische werking van menselijke hersenen in detail'], a: 1, f: 'Isaak Vandermaesen (Scivil) toonde concrete, verrassende toepassingen van AI — een mooie brug naar wat je in Module 3 over generatieve AI leert.' }
   ].filter(q => q.graad <= (S.graad || 3));
@@ -1678,7 +1678,7 @@ function m2s11(c){
   const ta = document.getElementById('ref2');
   ta.value = localStorage.getItem('sr_l_ref2') || '';
   ta.oninput = ()=>localStorage.setItem('sr_l_ref2', ta.value);
-  renderStellingenLeerling('stl-m2', 'l_m2', ['NotebookLM lijkt mij nuttiger om voor te studeren dan gewoon ChatGPT gebruiken.','Ik zou zelf vaker AI willen gebruiken om moeilijke onderwerpen uitgelegd te krijgen.']);
+  renderStellingenLeerling('stl-m2', 'l_m2', ['Gemini Notebook lijkt mij nuttiger om voor te studeren dan gewoon ChatGPT gebruiken.','Ik zou zelf vaker AI willen gebruiken om moeilijke onderwerpen uitgelegd te krijgen.']);
 }
 
 function sRef2(){
@@ -2473,7 +2473,7 @@ function m5s4(c){
     <div class="lijst-h-ok">✓ Toegestane AI-toepassingen</div>
     <div>→ Microsoft Copilot for M365 (eerste keuze, met schoolaccount)</div>
     <div>→ Microsoft Copilot Chat</div>
-    <div>→ NotebookLM (zie Module 2)</div>
+    <div>→ Gemini Notebook (zie Module 2)</div>
     <div>→ Bookwidgets AI</div>
     <div>→ ChatGPT</div>
     <div>→ Claude.ai</div>
@@ -2587,7 +2587,7 @@ const AV_TOOLS = [
   {n:'ChatGPT', titel:'ChatGPT', dev:'OpenAI'},
   {n:'Claude', titel:'Claude', dev:'Anthropic'},
   {n:'Gemini', titel:'Gemini', dev:'Google'},
-  {n:'NotebookLM', titel:'NotebookLM', dev:'Google'},
+  {n:'Gemini Notebook', titel:'Gemini Notebook', dev:'Google'},
   {n:'BookWidgets AI', titel:'BookWidgets AI', dev:'BookWidgets'},
   {n:'Gamma', titel:'Gamma', dev:'Gamma'}
 ];
@@ -2699,6 +2699,7 @@ ${derde}
 <h3 class="ch3">Doe-opdracht: maak je eigen ${g===1?'AI-zin':(g===2?'AI-vermelding':'AI-verantwoording')}</h3>
 <p class="cp">Denk aan een opdracht waarbij je AI gebruikte (of zou gebruiken). Vul in, en kopieer de tekst onder je werk. Je vindt dit hulpmiddel ook altijd terug bij <strong>Documenten</strong>.</p>
 <div id="av-m5" class="avg"></div>
+<p style="margin-top:6px"><a class="dl-knop hoofd" href="AI-verantwoording-sjabloon.docx" download>Download het sjabloon (Word)</a> <span style="font-size:14px">om op papier of in Word in te vullen.</span></p>
 <div class="nw">
   <button class="sr-btn b" onclick="p5()">← Vorige</button>
   <button class="sr-btn g" onclick="n5()">Volgende: klascharter →</button>
@@ -3202,9 +3203,203 @@ function m6s10(c){
    Geen AI-label nodig — dit is een oefenzone, geen schoolopdracht.
    ════════════════════════════════════════════ */
 
-const m7 = [m7s0, m7s1, m7s2, m7s3, m7s4, m7s5, m7s_agent, m7s_samen, m7s6];
+/* ════════════════════════════════════════════
+   LEREN MET COPILOT (geïnspireerd op de cursus van AI Voor Leerlingen, toegepast op Copilot met je schoolaccount)
+   ════════════════════════════════════════════ */
+const LEER = {
+  manier: {
+    badge:'Leer op jouw manier', titel:'Leer met Copilot <em>op jouw manier</em>',
+    intro:'Je hebt niet altijd dezelfde hulp nodig. Soms wil je snel oefenen voor een toets, soms blijf je hangen bij één begrip, en soms wil je juist een moeilijkere uitdaging. Kies wat jij nu nodig hebt.',
+    vraag:'Wat heb je nu nodig?',
+    keuzes:[
+      {t:'Morgen een toets', s:'Een kwartier gericht oefenen', vak:'Aardrijkskunde · de waterkringloop',
+       ai:'Op een warme dag droogt een plas water snel op. Welke stap van de waterkringloop zie je hier, en waarom gaat het sneller als het warm is?',
+       p:{doel:'Help mij een kwartier oefenen voor mijn toets aardrijkskunde over de waterkringloop.',
+          context:'Ik zit in het [jaar] secundair. Stel vragen op mijn niveau. Ken je mijn niveau niet, vraag het dan eerst.',
+          bronnen:'Gebruik enkel mijn bijlage Samenvatting-waterkringloop.pdf als leerstof. Kan je de bijlage niet lezen, vraag me dan om ze opnieuw te uploaden en wacht. Voeg geen andere leerstof toe.',
+          werkwijze:'Stel één vraag per keer en geef het antwoord niet. Wacht op mijn antwoord. Geef korte feedback en leg een fout uit. Vraag na vijf vragen of ik wil doorgaan of de moeilijke vragen wil herhalen.'}},
+      {t:'Ik blijf ergens hangen', s:'Eén begrip echt snappen', vak:'Wiskunde · procenten',
+       ai:'Voor we beginnen: als een trui van 40 euro 25% korting heeft, hoe zou jij de korting berekenen? Probeer het eerst, ook als je twijfelt.',
+       p:{doel:'Help mij procenten berekenen echt te begrijpen.',
+          context:'Ik zit in het [jaar] secundair. Ik raak in de war bij korting en btw.',
+          bronnen:'Gebruik de uitleg en de oefeningen uit mijn cursus in de bijlage. Gebruik dezelfde werkwijze als in mijn cursus.',
+          werkwijze:'Vraag eerst wat ik al weet. Leg daarna uit in kleine stappen, met één voorbeeld uit het dagelijkse leven. Controleer na elke stap met een korte vraag of ik het snap voor je verdergaat.'}},
+      {t:'Dit snap ik al', s:'Een stap moeilijker oefenen', vak:'Nederlands · argumenten herkennen',
+       ai:'Hier is een nieuwe tekst die je nog niet kent. Welke argumenten gebruikt de schrijver, en welk argument vind jij het zwakst? Leg uit waarom.',
+       p:{doel:'Daag mij uit met moeilijkere oefeningen over argumenten herkennen.',
+          context:'Ik ken de soorten argumenten al uit de les. Ik wil ze kunnen toepassen in nieuwe teksten.',
+          bronnen:'Gebruik de begrippen uit mijn cursus in de bijlage. Gebruik je een begrip dat er niet in staat, zeg dat dan.',
+          werkwijze:'Geef me telkens een korte nieuwe tekst. Laat mij eerst de argumenten benoemen en beoordelen. Geef pas daarna feedback, en maak de volgende tekst iets moeilijker.'}}
+    ],
+    tip:'“Dit snap ik nog niet” is ook een goed antwoord. Vraag om een kleiner stapje, een ander voorbeeld of een moeilijkere oefening.'
+  },
+  niveau: {
+    badge:'Uitleg op jouw niveau', titel:'Uitleg op <em>jouw niveau en tempo</em>',
+    intro:'Dezelfde leerstof kan je op verschillende manieren laten uitleggen. Kies hoe je de uitleg wil krijgen. Je eigen cursus blijft altijd de basis.',
+    vraag:'Hoe wil je de uitleg krijgen?',
+    keuzes:[
+      {t:'Kort en krachtig', s:'Eerst de kern en één voorbeeld', vak:'Economie · vraag en aanbod',
+       ai:'De kern: als veel mensen iets willen en er is weinig van, stijgt de prijs. Denk aan concerttickets voor een populaire artiest. Wat verwacht jij dat er met de prijs gebeurt als er een extra concert bij komt?',
+       p:{doel:'Help mij vraag en aanbod begrijpen voor mijn toets economie.',context:'Ik zit in het [jaar] secundair. Vraag eerst naar mijn jaar als je het niet weet.',bronnen:'Gebruik de begrippen uit mijn cursus in de bijlage. Wijkt je uitleg af van mijn cursus, zeg dat dan.',werkwijze:'Geef eerst de kern in maximaal 100 woorden, met één voorbeeld uit het dagelijkse leven. Stel daarna één vraag waarin ik het moet toepassen, en wacht op mijn antwoord.'}},
+      {t:'In kleine stappen', s:'Eén stap, dan pas de volgende', vak:'Economie · vraag en aanbod',
+       ai:'Stap 1: wat is “vraag” volgens jou? Probeer het in één zin uit te leggen. Daarna gaan we naar het aanbod.',
+       p:{doel:'Help mij vraag en aanbod begrijpen voor mijn toets economie.',context:'Ik vind dit moeilijk en wil het rustig opbouwen.',bronnen:'Gebruik de begrippen uit mijn cursus in de bijlage.',werkwijze:'Leg telkens maar één stap uit. Stel na elke stap één korte vraag en ga pas verder als ik het juist heb. Gebruik eenvoudige woorden.'}},
+      {t:'Meer uitdaging', s:'Zelf een nieuwe situatie verklaren', vak:'Economie · vraag en aanbod',
+       ai:'Na een strenge winter stijgt de prijs van verwarmingshout sterk. Verklaar dat met vraag en aanbod, en bedenk wat er volgend jaar kan gebeuren.',
+       p:{doel:'Daag mij uit om vraag en aanbod toe te passen in nieuwe situaties.',context:'Ik ken de basis al.',bronnen:'Gebruik de begrippen uit mijn cursus in de bijlage.',werkwijze:'Geef me een nieuwe situatie uit het nieuws of het dagelijkse leven. Laat mij eerst verklaren wat er gebeurt. Geef daarna feedback, en een moeilijkere situatie.'}}
+    ],
+    tip:'Bijsturen kan met één zin, in dezelfde chat: “Leg alleen die tweede stap nog eens uit.”'
+  },
+  visueel: {
+    badge:'Maak het visueel', titel:'Maak je leerstof <em>visueel</em>',
+    intro:'Soms snap je iets beter als je het ziet. Laat Copilot een schema, een tijdlijn of een vergelijkingstabel maken van je leerstof. Kijk daarna altijd na of alle begrippen en getallen kloppen met je cursus.',
+    vraag:'Welke vorm past bij je leerstof?',
+    keuzes:[
+      {t:'Een schema', s:'Voor een proces of verband', vak:'Biologie · fotosynthese',
+       ai:'Hier is een schema met pijlen: zonlicht + water + CO₂ → in het blad → glucose + zuurstof. Welke stof komt er vrij in de lucht, en waar komt het water vandaan?',
+       p:{doel:'Maak een duidelijk schema van de fotosynthese zodat ik het proces kan leren.',context:'Ik zit in het [jaar] secundair.',bronnen:'Gebruik enkel de begrippen uit mijn cursus in de bijlage.',werkwijze:'Maak een schema met pijlen van wat erin gaat, wat er gebeurt en wat eruit komt. Stel daarna twee vragen over het schema.'}},
+      {t:'Een tijdlijn', s:'Voor gebeurtenissen na elkaar', vak:'Geschiedenis · Eerste Wereldoorlog',
+       ai:'Ik zette de belangrijkste gebeurtenissen uit je cursus op een tijdlijn. Welke gebeurtenis vond in 1914 plaats, en wat was het gevolg ervan?',
+       p:{doel:'Maak een tijdlijn van de Eerste Wereldoorlog voor mijn toets geschiedenis.',context:'Ik moet vooral de oorzaken en gevolgen kennen.',bronnen:'Gebruik enkel de jaartallen en gebeurtenissen uit mijn cursus in de bijlage. Voeg niets toe dat er niet in staat.',werkwijze:'Zet de gebeurtenissen in een tabel met jaar, gebeurtenis en gevolg. Stel daarna drie vragen over de volgorde.'}},
+      {t:'Een vergelijkingstabel', s:'Voor dingen die op elkaar lijken', vak:'Frans · passé composé en imparfait',
+       ai:'In de tabel zie je wanneer je welke tijd gebruikt, met telkens een voorbeeldzin. Welke tijd gebruik je voor “Il faisait beau quand je suis arrivé”, en waarom twee verschillende?',
+       p:{doel:'Maak een vergelijkingstabel van de passé composé en de imparfait.',context:'Ik haal ze vaak door elkaar.',bronnen:'Gebruik de regels uit mijn cursus Frans in de bijlage.',werkwijze:'Maak een tabel met: wanneer gebruik je het, signaalwoorden en een voorbeeldzin. Laat me daarna vijf zinnen invullen en verbeter ze.'}}
+    ],
+    extra:'<p class="cp">In de Copilot-app kan je bij <strong>Create</strong> ook een infographic of poster laten maken van je leerstof:</p><img src="img/copilot-create-overzicht.png" alt="Overzicht van Create in Copilot" style="width:100%;max-width:680px;display:block;margin:12px auto;border-radius:20px;border:2px solid #D9D9D9;cursor:zoom-in;">',
+    tip:'Een mooi beeld is pas nuttig als het klopt. Vergelijk elk begrip en elk getal met je cursus.'
+  },
+  hardop: {
+    badge:'Oefen hardop', titel:'Oefen <em>hardop</em> met Copilot',
+    intro:'Wat je hardop uitlegt, onthoud je beter. In Copilot kan je met je stem werken: klik op de microfoon om je vraag of antwoord in te spreken. In de Copilot-app op je gsm kan je zelfs een gesprek voeren.',
+    vraag:'Wat wil je hardop oefenen?',
+    keuzes:[
+      {t:'Een mondeling in een taal', s:'Frans, Engels of Duits', vak:'Frans · over je vakantie',
+       ai:'Bonjour ! Où es-tu allé en vacances cet été ?',
+       p:{doel:'Help mij mijn mondeling Frans oefenen over mijn vakantie.',context:'Ik zit in het [jaar] secundair en spreek nog eenvoudig Frans.',bronnen:'Gebruik de woordenschat uit mijn cursus in de bijlage.',werkwijze:'Stel me één vraag in eenvoudig Frans en wacht op mijn antwoord. Verbeter maximaal twee fouten, leg ze kort uit in het Nederlands, en stel dan een nieuwe vraag.'}},
+      {t:'Een begrip uitleggen', s:'Leg het uit alsof je lesgeeft', vak:'Fysica · snelheid',
+       ai:'Leg me eens uit, alsof ik in het eerste jaar zit: wat is het verschil tussen snelheid en versnelling?',
+       p:{doel:'Help mij controleren of ik een begrip echt snap door het zelf uit te leggen.',context:'Ik leer voor mijn toets fysica over snelheid en versnelling.',bronnen:'Gebruik mijn cursus in de bijlage om mijn uitleg te controleren.',werkwijze:'Vraag mij een begrip uit te leggen. Zeg daarna wat juist was, wat ontbrak en wat niet klopte volgens mijn cursus. Stel dan een vervolgvraag.'}},
+      {t:'Een presentatie oefenen', s:'Je spreekbeurt of GIP-voorstelling', vak:'Elk vak · je presentatie',
+       ai:'Je presentatie duurde ongeveer drie minuten. Je inleiding was duidelijk. Wat wil je dat je publiek na je presentatie onthoudt?',
+       p:{doel:'Help mij mijn presentatie oefenen.',context:'Mijn presentatie duurt [aantal] minuten en gaat over [onderwerp].',bronnen:'Gebruik de beoordelingscriteria van mijn leerkracht in de bijlage.',werkwijze:'Ik spreek mijn presentatie in. Geef daarna feedback op opbouw, duidelijkheid en tijd, volgens de criteria. Stel me twee vragen die mijn publiek zou kunnen stellen.'}}
+    ],
+    tip:'Spreek nooit namen of persoonlijke informatie in over jezelf of anderen.'
+  },
+  toets: {
+    badge:'Je eigen oefentoets', titel:'Maak je eigen <em>oefentoets</em>',
+    intro:'Met Copilot kan je van je samenvatting een oefentoets maken in Microsoft Forms. Zo test je jezelf, en kan je hem ook delen met klasgenoten om samen te oefenen.',
+    vraag:'Hoe wil je oefenen?',
+    keuzes:[
+      {t:'Meerkeuzevragen', s:'Snel testen wat je kent', vak:'Elk vak · je hoofdstuk',
+       ai:'Ik maakte 8 meerkeuzevragen over je hoofdstuk, met bij elk juist antwoord een korte uitleg. Wil je ze eerst nakijken voor je de toets maakt?',
+       p:{doel:'Maak een oefentoets van 8 meerkeuzevragen over [hoofdstuk].',context:'Het is voor mezelf, om te oefenen voor mijn toets.',bronnen:'Gebruik enkel mijn samenvatting in de bijlage.',werkwijze:'Maak 8 meerkeuzevragen met telkens vier mogelijke antwoorden. Zet bij het juiste antwoord een korte uitleg. Wissel makkelijke en moeilijke vragen af.'}},
+      {t:'Open vragen', s:'Zelf formuleren', vak:'Elk vak · je hoofdstuk',
+       ai:'Hier zijn vijf open vragen. Probeer ze eerst zelf te beantwoorden. Daarna kan je mij je antwoorden geven, en dan krijg je feedback.',
+       p:{doel:'Maak vijf open vragen over [hoofdstuk] zodat ik kan oefenen.',context:'Op de toets krijg ik ook open vragen.',bronnen:'Gebruik enkel mijn samenvatting in de bijlage.',werkwijze:'Geef enkel de vragen, zonder antwoorden. Als ik mijn antwoorden geef, vergelijk ze dan met mijn samenvatting en geef feedback.'}}
+    ],
+    extra:'<div style="background:white;border-left:4px solid var(--blue);border-radius:8px;padding:16px;margin:16px 0;"><p style="font-size:13px;color:#06038D;line-height:2;margin:0;"><strong>Stap 1:</strong> Open de Copilot-app met je schoolaccount en kies <strong>Create</strong>.<br><strong>Stap 2:</strong> Kies een formulier of quiz, en beschrijf wat je wil (gebruik de prompt hieronder).<br><strong>Stap 3:</strong> Voeg je samenvatting toe.<br><strong>Stap 4:</strong> Kijk alle vragen en antwoorden na met je cursus.<br><strong>Stap 5:</strong> Open de toets in Forms en maak hem zelf.</p></div>',
+    tip:'Kijk de vragen altijd eerst na: een fout in een oefentoets leer je anders vanbuiten.'
+  }
+};
+function leerPromptTekst(p){ return 'Doel\n'+p.doel+'\n\nContext en voorwaarden\n'+p.context+'\n\nBronnen\n'+p.bronnen+'\n\nWerkwijze\n'+p.werkwijze; }
+function leerKies(key,i){
+  const L=LEER[key], k=L.keuzes[i], box=document.getElementById('leer-'+key); if(!box) return;
+  document.querySelectorAll('#leer-knoppen-'+key+' button').forEach((b,j)=>b.setAttribute('aria-pressed', j===i));
+  box.innerHTML=`
+    <p class="leer-vak">${k.vak}</p>
+    <div class="leer-chat"><span>Copilot vraagt</span><p>${k.ai}</p></div>
+    <h3 class="ch3">Start zo in Copilot</h3>
+    <div class="leer-prompt">
+      <div><b>Doel</b><p>${k.p.doel}</p></div>
+      <div><b>Context en voorwaarden</b><p>${k.p.context}</p></div>
+      <div><b>Bronnen</b><p>${k.p.bronnen}</p></div>
+      <div><b>Werkwijze</b><p>${k.p.werkwijze}</p></div>
+    </div>
+    <p style="margin-top:10px"><button type="button" class="sr-btn g" onclick="leerKopieer('${key}',${i},this)">Kopieer de prompt</button> <span style="font-size:14px">Voeg je eigen samenvatting of cursus toe in dezelfde chat, en pas de stukken tussen [ ] aan.</span></p>`;
+}
+function leerKopieer(key,i,btn){
+  const t=leerPromptTekst(LEER[key].keuzes[i].p);
+  const ok=()=>{ btn.textContent='✓ Gekopieerd'; setTimeout(()=>btn.textContent='Kopieer de prompt',1800); };
+  if(navigator.clipboard) navigator.clipboard.writeText(t).then(ok).catch(()=>alert(t)); else alert(t);
+}
+function leerStap(c,key){
+  const L=LEER[key];
+  c.innerHTML=`
+<div><span class="opt-badge">Leren met Copilot</span><span class="s-badge">Stap 1 van 1 · ${L.badge}</span></div>
+<h2 class="ch2">${L.titel}</h2>
+<p class="cp">${L.intro}</p>
+${L.extra||''}
+<h3 class="ch3">${L.vraag}</h3>
+<div class="leer-knoppen" id="leer-knoppen-${key}">${L.keuzes.map((k,i)=>`<button type="button" aria-pressed="false" onclick="leerKies('${key}',${i})"><b>${k.t}</b><small>${k.s}</small></button>`).join('')}</div>
+<div id="leer-${key}" class="leer-uitleg"></div>
+<div class="ib warn"><div class="ib-t">Tip</div><div class="ib-b">${L.tip}</div></div>
+<div class="nw">
+  <button class="sr-btn b" onclick="p7()">← Vorige</button>
+  <button class="sr-btn g" onclick="n7()">Volgende →</button>
+  <span class="nh">Stap 1/1</span>
+</div>`;
+  leerKies(key,0);
+}
+function m7_manier(c){ leerStap(c,'manier'); }
+function m7_niveau(c){ leerStap(c,'niveau'); }
+function m7_visueel(c){ leerStap(c,'visueel'); }
+function m7_hardop(c){ leerStap(c,'hardop'); }
+function m7_toets(c){ leerStap(c,'toets'); }
 
-function rm7(){ const c=document.getElementById('m7c'); c.innerHTML=''; rDots(7,m7.length,S.mod7.step); m7[S.mod7.step](c); fixStepBadge(c,S.mod7.step,m7.length); lockNextButtons(c); }
+function m7_notebook(c){
+  const P=[
+    ['Overzicht van je leerstof','Maak een overzicht van de kernbegrippen in dit notebook. Geef bij elk begrip een korte uitleg in eenvoudige woorden, en zeg in welk document het staat.'],
+    ['Overhoor me','Overhoor me over de leerstof in dit notebook. Stel één vraag per keer, wacht op mijn antwoord en geef feedback. Gebruik enkel de documenten in dit notebook.'],
+    ['Wat snap ik nog niet?','Ik leg nu uit wat ik onthouden heb over [onderwerp]. Vergelijk mijn uitleg met de documenten in dit notebook en zeg wat ontbreekt of niet klopt.'],
+    ['Instructie voor je notebook','Gedraag je als een tutor. Geef me hints en vragen, geen volledige antwoorden. Gebruik enkel de documenten in dit notebook, en zeg het als iets er niet in staat.']
+  ];
+  c.innerHTML=`
+<div><span class="opt-badge">Leren met Copilot</span><span class="s-badge">Stap 1 van 1 · Je notebook in Copilot</span></div>
+<h2 class="ch2">Leer met <em>je eigen bronnen</em> in een Copilot-notebook</h2>
+<p class="cp">In een <strong>Copilot-notebook</strong> verzamel je alles voor één vak of één toets: je cursus, je samenvatting, je notities. Copilot geeft dan antwoorden die gebaseerd zijn op <strong>jouw documenten</strong>, en niet op het hele internet. Dat is ideaal om te leren.</p>
+<h3 class="ch3">Zo maak je een notebook</h3>
+<div style="background:white;border-left:4px solid var(--blue);border-radius:8px;padding:16px;margin:16px 0;"><p style="font-size:13px;color:#06038D;line-height:2;margin:0;">
+<strong>Stap 1:</strong> Ga naar <a href="https://m365.cloud.microsoft" target="_blank" rel="noopener">m365.cloud.microsoft</a> en meld je aan met je <strong>schoolaccount</strong>.<br>
+<strong>Stap 2:</strong> Kies links <strong>Notebooks</strong> en dan <strong>Nieuw notebook</strong>. Zie je het niet? Open het menu met de negen puntjes bovenaan links.<br>
+<strong>Stap 3:</strong> Geef je notebook een duidelijke naam, bv. “Aardrijkskunde – toets waterkringloop”.<br>
+<strong>Stap 4:</strong> Voeg je bronnen toe: upload je cursus of samenvatting, kies een bestand uit OneDrive, of sleep het in het venster.<br>
+<strong>Stap 5:</strong> Klik op <strong>Maken</strong> en stel je eerste vraag.
+</p></div>
+<div class="av-lagen twee">
+  <div><b>Vragen over je bronnen</b><p>Copilot zoekt het antwoord in jouw documenten.</p></div>
+  <div><b>Een mindmap</b><p>Zie in één beeld hoe de onderwerpen samenhangen.</p></div>
+  <div><b>Een infographic</b><p>De kern van je leerstof als overzichtelijk beeld.</p></div>
+  <div><b>Een audio-overzicht</b><p>Luister naar je leerstof, bv. op de bus.</p></div>
+</div>
+<p class="cp" style="font-size:14px">Je kan ook <strong>instructies</strong> aan je notebook geven, zodat Copilot zich in dat notebook altijd als tutor gedraagt. Sommige functies komen gefaseerd beschikbaar en zijn er pas als je school ze heeft aangezet. Zie je Notebooks niet? Vraag het aan je ICT-coördinator.</p>
+<h3 class="ch3">Prompts om mee te leren</h3>
+<div class="av-lagen twee">${P.map((x,i)=>`<div><b>${x[0]}</b><p style="font-style:italic">“${x[1]}”</p><button type="button" class="sr-btn b" style="margin-top:10px" onclick="nbKopieer(${i},this)">Kopieer prompt</button></div>`).join('')}</div>
+<div class="ib warn"><div class="ib-t">Gemini Notebook of een Copilot-notebook?</div><div class="ib-b">Op school gebruik je in de eerste plaats een <strong>Copilot-notebook</strong> met je schoolaccount: daar mag je je cursus en schooldocumenten in zetten. Gemini Notebook gebruik je enkel als je leerkracht het voorstelt.</div></div>
+<p style="font-size:12.5px;margin-top:14px">Bron: <a href="https://support.microsoft.com/en-gb/microsoft-365-copilot/get-started-with-microsoft-365-copilot-notebooks" target="_blank" rel="noopener">Microsoft Support – Get started with Microsoft Copilot Notebooks</a></p>
+<div class="nw">
+  <button class="sr-btn b" onclick="p7()">← Vorige</button>
+  <button class="sr-btn g" onclick="n7()">Volgende →</button>
+  <span class="nh">Stap 1/1</span>
+</div>`;
+  window.NB_PROMPTS=P;
+}
+function nbKopieer(i,btn){ const t=window.NB_PROMPTS[i][1]; const ok=()=>{ btn.textContent='✓ Gekopieerd'; setTimeout(()=>btn.textContent='Kopieer prompt',1800); }; if(navigator.clipboard) navigator.clipboard.writeText(t).then(ok).catch(()=>alert(t)); else alert(t); }
+
+/* volgende-knoppen in module 7 automatisch benoemen */
+const M7_LABELS = new Map();
+function m7Labels(){
+  if(M7_LABELS.size) return;
+  [[m7s0,'welkom'],[m7s1,'goed prompten'],[m7_manier,'leer op jouw manier'],[m7_niveau,'uitleg op jouw niveau'],[m7_visueel,'maak het visueel'],[m7_hardop,'oefen hardop'],[m7_toets,'je eigen oefentoets'],[m7_notebook,'je notebook in Copilot'],[m7s_agent,'leren met een agent'],[m7s_samen,'samen studeren'],[m7s4,'Copilot als tutor instellen'],[m7s5,'aan de slag'],[m7s6,'afronden']].forEach(([f,l])=>M7_LABELS.set(f,l));
+}
+function m7Volgende(c){
+  m7Labels();
+  const volgende=m7[S.mod7.step+1];
+  c.querySelectorAll('.nw .sr-btn.g').forEach(b=>{ if(volgende && /Volgende/.test(b.textContent)) b.textContent='Volgende: '+(M7_LABELS.get(volgende)||'')+' →'; });
+}
+
+const m7 = [m7s0, m7s1, m7_manier, m7_niveau, m7_visueel, m7_hardop, m7_toets, m7_notebook, m7s_agent, m7s_samen, m7s4, m7s5, m7s6];
+
+function rm7(){ const c=document.getElementById('m7c'); c.innerHTML=''; rDots(7,m7.length,S.mod7.step); m7[S.mod7.step](c); fixStepBadge(c,S.mod7.step,m7.length); m7Volgende(c); lockNextButtons(c); }
 function n7(){ S.mod7.step++; ss(); S.mod7.step>=m7.length ? d7() : rm7(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); }
 function p7(){ if(S.mod7.step > 0){ S.mod7.step--; ss(); rm7(); document.getElementById('main').scrollTo({top:0, behavior:'smooth'}); } }
 function d7(){ S.mod7.done=true; S.mod7.step=0; ss(); up(); rmc(); sv('home'); setTimeout(()=>alert('Copilot Ontdekken voltooid! Je kan dit altijd herhalen om verder te experimenteren.'),300); }
@@ -3212,17 +3407,18 @@ function d7(){ S.mod7.done=true; S.mod7.step=0; ss(); up(); rmc(); sv('home'); s
 function m7s0(c){
   c.innerHTML = `
 <div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 1 van 7 · Welkom</span></div>
-<h2 class="ch2">Copilot: <em>ontdek het zelf</em></h2>
-<p class="cp">Je hebt nu geleerd wat AI is, hoe het werkt, en wat de regels op school zijn. Tijd om zelf aan de slag te gaan! In deze module ga je écht dingen <strong>maken</strong> met Copilot: een afbeelding, een tekst, een studiehulpmiddel — jij kiest.</p>
+<h2 class="ch2">Leren met <em>Copilot</em></h2>
+<p class="cp">Je hebt nu geleerd wat AI is, hoe het werkt, en wat de regels op school zijn. Nu leer je hoe Copilot je helpt om <strong>beter te leren</strong>, niet om het werk voor jou te doen. Je oefent op jouw manier en jouw niveau, maakt je leerstof visueel, oefent hardop, maakt je eigen oefentoets en leert met je eigen bronnen in een notebook. Altijd met Copilot en je schoolaccount. een afbeelding, een tekst, een studiehulpmiddel — jij kiest.</p>
 
 <div class="ib warn">
-  <div class="ib-t">Dit is een vrije oefenzone</div>
+  <div class="ib-t">Een oefenzone om te leren</div>
   <div class="ib-b">In tegenstelling tot een echte schoolopdracht hoort hier <strong>geen AI-label</strong> bij (zie Module 5) — dit is bedoeld om vrij te experimenteren en de tool te leren kennen. Gebruik wat je hier maakt gerust voor jezelf, maar lever het niet zomaar in als een "echte" opdracht zonder dat je leerkracht dat heeft goedgekeurd.</div>
 </div>
 
 <h3 class="ch3">Voor je begint: log veilig in</h3>
 <p class="cp">Open Copilot via je schoolaccount (bijvoorbeeld via office.com of de Copilot-app). Check bovenaan het scherm of je een klein <strong>schild-icoon</strong> ziet — dat betekent dat je binnen de beveiligde schoolomgeving werkt en je gegevens niet gebruikt worden om het AI-model te trainen. Zie je geen schild? Meld je dan opnieuw aan met je schoolaccount.</p>
 
+<p style="font-size:12.5px;margin:10px 0 0">De leerstappen in deze module zijn geïnspireerd op de cursus van <a href="https://aivoorleerlingen.nl" target="_blank" rel="noopener">AI Voor Leerlingen</a>, en toegepast op Copilot met je schoolaccount.</p>
 <div class="nw">
   <button class="sr-btn g" onclick="n7()">Volgende: goed prompten →</button>
   <span class="nh">Stap 1/7</span>
@@ -3512,7 +3708,7 @@ ${SAMEN_PROMPTS.map((s,i)=>`<div><b>${s.t}</b><p style="font-style:italic">"${s.
 function m7s6(c){
   c.innerHTML = `
 <div><span class="opt-badge">Optioneel</span><span class="s-badge">Stap 7 van 7 · Klaar!</span></div>
-<h2 class="ch2">Je hebt <em>3 dingen</em> gemaakt!</h2>
+<h2 class="ch2">Je leert nu <em>slim met Copilot</em></h2>
 <p class="cp">Goed bezig — je hebt zelf een afbeelding, een tekst, en een studiehulpmiddel gemaakt met Copilot. Dat is precies hoe je AI-vaardig wordt: niet door erover te lezen, maar door het zelf te doen.</p>
 
 <div style="background: rgba(149,214,0,0.1); border-radius: 12px; padding: 20px; margin: 16px 0;">
@@ -3992,3 +4188,19 @@ function renderJobCheck(){
     };
   });
 }
+
+/* ---- Herhaal na de video: kernboodschap + denkvraag onder elke video ---- */
+const VIDEO_RECAP = {"sosmC2h4LLE": {"o": ["AI zit al in veel apps die je elke dag gebruikt.", "AI leert uit heel veel voorbeelden (data) en zoekt daarin patronen."], "v": "Noem twee apps die jij gebruikt waarin AI zit."}, "w_msvsySbcM": {"o": ["AI kan je helpen studeren, maar als AI het werk doet, leer jij het niet.", "Op een toets sta je er alleen voor: oefen dus zelf."], "v": "Wanneer helpt AI je echt bij het studeren, en wanneer niet?"}, "JL1UrrQPOfk": {"o": ["Een chatbot is geen mens en geen hulpverlener.", "Zit je ergens mee? Praat met iemand die je vertrouwt, zoals de leerlingbegeleiding."], "v": "Waarom kan een chatbot een echte vriend of hulpverlener niet vervangen?"}, "-zmnRz81CNQ": {"o": ["Een neuraal netwerk leert door veel voorbeelden te bekijken en zichzelf telkens bij te sturen.", "Het herkent patronen, maar begrijpt niet zoals een mens."], "v": "Leg in één zin uit hoe een neuraal netwerk leert."}, "fZ_r7LXsMHs": {"o": ["AI wordt gebruikt in zorg, verkeer, muziek, winkels en meer.", "Elke toepassing heeft voordelen én risico's."], "v": "Welke toepassing vind jij het nuttigst, en welke het riskantst?"}, "UD0a-i2EBdE": {"o": ["AI kan stemmen en presentaties nabootsen.", "Mensen hebben het recht om te weten dat iets met AI gemaakt is."], "v": "Zou jij merken dat een AI-stem je programma presenteert?"}, "ctCj3yYuSW4": {"o": ["AI is niet meer weg te denken op school.", "Daarom zijn duidelijke afspraken nodig, zoals de AI-labels."], "v": "Welke afspraak over AI vind jij het belangrijkst?"}, "YvbibGLIJzo": {"o": ["AI kan niet zelf afwegen wat juist of fout is.", "Waarden en normen blijven een keuze van mensen."], "v": "Wie moet beslissen wat een zelfrijdende auto doet bij een ongeluk?"}, "Yft4D4TdPxQ": {"o": ["AI leert uit data van mensen en neemt zo ook vooroordelen (bias) over.", "Kijk na of een resultaat eerlijk is voor iedereen."], "v": "Geef een voorbeeld van bias in AI."}, "0RXV8Omf6pg": {"o": ["Wie AI laat denken in zijn plaats, oefent zelf minder.", "Gebruik AI als oefenpartner, niet als vervanger."], "v": "Bij welke taak laat jij AI soms te veel denkwerk doen?"}, "2bHH6U0UtnA": {"o": ["AI-detectors zijn niet betrouwbaar. Daarom gebruikt Sint-Rembert ze niet.", "Je leerkracht vraagt je liever om je werk uit te leggen."], "v": "Hoe kan jij tonen dat je werk echt van jou is?"}, "-WDdSiVjBhg": {"o": ["Over AI bestaan grote beloftes en grote angsten.", "Kijk kritisch naar wie iets zegt over de toekomst van AI, en waarom."], "v": "Is wat je zag eerder een trend of een hype?"}, "Rswv6FuAZug": {"o": ["AI biedt kansen en heeft risico's.", "Wij beslissen mee hoe we AI gebruiken, bv. met regels zoals de EU AI Act."], "v": "Welk risico van AI vind jij het grootst?"}, "6bvIyaGYGSM": {"o": ["Apps verzamelen veel gegevens over je gedrag om te voorspellen wat je wil.", "Hoe meer je deelt, hoe meer een systeem over je weet."], "v": "Welke gegevens geef jij elke dag weg zonder erbij na te denken?"}, "IiFNxziXjX8": {"o": ["Een chatbot is geen nieuwsbron.", "Check nieuws altijd bij betrouwbare media en kijk naar de datum."], "v": "Waar check jij of een nieuwsbericht klopt?"}, "YwDFFGYf2kw": {"o": ["AI klinkt zeker, ook als het fout is.", "Controleer een antwoord in je cursus of in een betrouwbare bron."], "v": "Hoe controleer jij een antwoord van AI?"}, "fQgoTz3-8qM": {"o": ["AI kan beelden en stemmen namaken (deepfakes).", "Zet nooit foto's van anderen in een AI-tool."], "v": "Waaraan kan je een deepfake herkennen?"}, "LhoMwD0Dk4o": {"o": ["Wat je in een chatbot typt, kan bewaard worden.", "Deel nooit persoonlijke gegevens van jezelf of van anderen."], "v": "Welke informatie deel jij nooit met een chatbot?"}, "9j0q4mof4tw": {"o": ["Gemini Notebook werkt met jouw bronnen en toont waar een antwoord staat.", "Klik op de nummertjes om het na te kijken in je bron."], "v": "Wat is het verschil tussen Gemini Notebook en een gewone chatbot?"}, "lejgVBR6dYs": {"o": ["Een audio-overzicht is handig om te herhalen.", "Noteer daarna zelf de kern: zo onthoud je het beter."], "v": "Wanneer zou jij een audio-overzicht gebruiken om te leren?"}, "mkKXpZN8mqI": {"o": ["De Study and Learn-agent stelt vragen en laat jou denken.", "Antwoord eerst zelf voor je om hulp vraagt."], "v": "Welke prompt uit deze stap probeer jij eerst?"}};
+function voegVideoRecapsToe(root){
+  (root||document).querySelectorAll('.yt-wrap iframe').forEach(fr=>{
+    const m=(fr.getAttribute('src')||'').match(/embed\/([A-Za-z0-9_-]+)/); if(!m) return;
+    const r=VIDEO_RECAP[m[1]]; const wrap=fr.closest('.yt-wrap');
+    if(!r||!wrap||wrap.dataset.recap) return; wrap.dataset.recap='1';
+    const d=document.createElement('div'); d.className='video-recap';
+    d.innerHTML='<b>Herhaal na de video</b><ul>'+r.o.map(x=>'<li>'+x+'</li>').join('')+'</ul><p><strong>Denkvraag:</strong> '+r.v+'</p>';
+    let na=wrap; const volg=wrap.nextElementSibling;
+    if(volg && /Video:|Waar gaat dit over/.test(volg.textContent||'') ) na=volg;
+    na.after(d);
+  });
+}
+(function(){ try{ const ob=new MutationObserver(()=>voegVideoRecapsToe(document)); ob.observe(document.documentElement,{childList:true,subtree:true}); }catch(e){} document.addEventListener('DOMContentLoaded',()=>voegVideoRecapsToe(document)); })();

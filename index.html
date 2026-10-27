@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=20261015a">
-<link rel="stylesheet" href="huisstijl.css?v=20261020c">
+<link rel="stylesheet" href="huisstijl.css?v=20261026a">
 </head>
 <body>
 <div id="app">
@@ -42,7 +42,7 @@
 
   <div class="nav-sec">
     <div class="nav-lbl">Optioneel · Verdieping</div>
-    <div class="ni available" onclick="sm(7)" id="nav-mod7"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Copilot Ontdekken</div><div class="ni-sub">Experimenteer vrij</div></div><span class="ni-badge" id="l7">›</span></div>
+    <div class="ni available" onclick="sm(7)" id="nav-mod7"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Leren met Copilot</div><div class="ni-sub">Leren, niet overschrijven</div></div><span class="ni-badge" id="l7">›</span></div>
     <div class="ni available" onclick="goKernkader()" id="nav-kernkader"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Wat moet ik kennen?</div><div class="ni-sub">Per graad</div></div></div>
   </div>
   <div class="sb-bot">
@@ -177,6 +177,7 @@
       <div class="lh-label l3"><span>3</span><b>Als ondersteuning</b><p>AI mag helpen tijdens het proces. Je zegt wat je liet doen.</p></div>
       <div class="lh-label l4"><span>4</span><b>Toegestaan</b><p>AI mag volop, zolang je eerlijk bent over je gebruik.</p></div>
     </div>
+  <p style="margin-top:16px"><a class="dl-knop hoofd" href="AI-verantwoording-sjabloon.docx" download>Download het AI-sjabloon</a> <a class="dl-knop" style="background:transparent;color:#fff!important;border-color:#fff" href="AI-labels-poster%20(1).png" target="_blank" rel="noopener">Bekijk de klasposter</a></p>
   </section>
 
   <!-- VERDIEPING -->
@@ -184,9 +185,9 @@
     <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>Extra · altijd open</h2></div>
     <div class="lh-mods mods-grid">
       <article class="mc lh-mod lh-extra" id="cm7" onclick="sm(7)">
-        <div class="lh-mod-kop"><span class="lh-nr">+</span><span class="mc-badge">Optioneel</span></div>
-        <h3 class="mc-title">Copilot ontdekken</h3>
-        <p class="mc-desc">Ga zelf aan de slag met Copilot via je schoolaccount: schrijven, ontwerpen en leren door te doen.</p>
+        <div class="lh-mod-kop"><span class="lh-nr">+</span><span class="mc-badge">Aanrader</span></div>
+        <h3 class="mc-title">Leren met Copilot</h3>
+        <p class="mc-desc">Oefen op jouw manier en niveau, maak je leerstof visueel, oefen hardop, maak je eigen oefentoets en leer met je eigen bronnen. Altijd met je schoolaccount.</p>
         <div class="lh-mod-voet"><div class="mc-stat" id="ps7">Altijd beschikbaar</div><button class="sr-btn g" id="bm7">▶ Start</button></div>
       </article>
     </div>
@@ -207,6 +208,14 @@
     <div class="mh-info"><div class="mh-num">Bronnen</div><div class="mh-title">Documenten & Materiaal</div></div>
   </div>
   <div class="mc-content" style="padding: 20px;">
+
+    <div class="dl-paneel">
+  <div class="dl-kop"><span class="dl-ey">Downloads</span><h3>Het AI-sjabloon</h3><p>Gebruikte je AI bij een taak? Download het sjabloon, vul het in en voeg het toe aan je werk. Of gebruik het invulhulpmiddel hieronder.</p></div>
+  <div class="dl-rij">
+    <div class="dl-item"><b>Sjabloon AI-verantwoording</b><p>Korte vermelding (1e en 2e graad) en volledige verantwoording met APA (3e graad).</p><div><a class="dl-knop hoofd" href="AI-verantwoording-sjabloon.docx" download target="_blank" rel="noopener">Download (Word)</a></div></div>
+    <div class="dl-item"><b>Klasposter AI-labels</b><p>De vier labels: wat mag bij welke opdracht?</p><div><a class="dl-knop hoofd" href="AI-labels-poster%20(1).png" target="_blank" rel="noopener">Bekijk de poster</a></div></div>
+  </div>
+</div>
 
     <h2 id="ai-vermelden" style="margin-top:0;">AI-gebruik vermelden</h2>
     <p class="cp">Gebruikte je AI bij een opdracht? Zeg dan eerlijk hoe. Kies je graad, vul in en kopieer de tekst onder je werk. In de 3e graad maak je een volledige AI-verantwoording, met een APA-bronvermelding als je iets letterlijk overneemt, zoals in het hoger onderwijs.</p>
@@ -239,7 +248,7 @@
     <h2 style="margin-top:32px;">Zelf experimenteren</h2>
     <ul style="font-size: 13px; color: #06038D; line-height: 2.2; padding-left: 22px;">
       <li><a href="https://scratch.mit.edu" target="_blank">Scratch</a> — leer spelenderwijs een neuraal netwerk cijfers herkennen</li>
-      <li><a href="https://notebooklm.google.com" target="_blank">NotebookLM</a> — jouw AI-studiehulp (zie Module 2)</li>
+      <li><a href="https://notebooklm.google.com" target="_blank">Gemini Notebook</a> (vroeger NotebookLM) — jouw AI-studiehulp (zie Module 2)</li>
     </ul>
 
     <h2 style="margin-top:32px;">Sint-Rembert beleid</h2>
@@ -294,8 +303,8 @@
 
     <div style="background: white; border-left: 4px solid #06038D; border-radius: 8px; padding: 16px; margin: 16px 0;">
       <div style="font-size:11px;font-weight:700;color:#06038D;text-transform:uppercase;margin-bottom:6px;">Tool-update</div>
-      <h3 style="margin:0 0 8px 0; font-size:16px;">NotebookLM breidt functies verder uit</h3>
-      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">Google werkt voortdurend aan NotebookLM (zie Module 2), met nieuwe manieren om je eigen cursusmateriaal te doorzoeken en samen te vatten. Zeker het proberen waard als studiehulp!</p>
+      <h3 style="margin:0 0 8px 0; font-size:16px;">Gemini Notebook breidt functies verder uit</h3>
+      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">Google werkt voortdurend aan Gemini Notebook (zie Module 2), met nieuwe manieren om je eigen cursusmateriaal te doorzoeken en samen te vatten. Zeker het proberen waard als studiehulp!</p>
     </div>
 
     <p class="cp" style="margin-top: 24px; font-size: 12px; color:#06038D; font-style: italic;">Laatst bijgewerkt: september 2026</p>
@@ -471,7 +480,7 @@
 
 </main>
 </div>
-<script src="leerlingen.js?v=20261020c"></script>
+<script src="leerlingen.js?v=20261026a"></script>
 
 <!-- ════════ HELPDESK BUTTON ════════ -->
 <a href="mailto:informaticadienst.pedagogisch@sint-rembert.be?subject=Vraag%20over%20de%20AI-cursus" 
