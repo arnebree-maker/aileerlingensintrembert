@@ -28,6 +28,8 @@
     <div class="ni active" onclick="goHome()" id="nav-home"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Overzicht</div><div class="ni-sub">Startpagina</div></div></div>
     <div class="ni available" onclick="sv('docs')" id="nav-docs"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Documenten</div><div class="ni-sub">Bronnen & materiaal</div></div></div>
     <div class="ni available" onclick="sv('news')" id="nav-news"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Nieuws</div><div class="ni-sub">AI in de actualiteit</div></div></div>
+    <div class="ni available" onclick="location.href='les.html'" id="nav-les"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Les in de klas</div><div class="ni-sub">Met code of als leerkracht</div></div></div>
+    <div class="ni available" onclick="location.href='ai-vermelden.html'" id="nav-vermelden"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">AI vermelden</div><div class="ni-sub">Stap voor stap</div></div></div>
   </div>
   <div class="nav-sec">
     <div class="nav-lbl">Modules</div>
@@ -61,6 +63,12 @@
 
 <!-- ════════ STARTTEST ════════ -->
 <div class="view active" id="view-starttest">
+  <div class="klas-balk" style="max-width:860px;margin:16px auto 0;width:calc(100% - 48px);display:flex;flex-wrap:wrap;gap:10px;align-items:center;border:2px solid rgba(255,255,255,.45);border-radius:20px;padding:12px 16px;color:#fff;font-family:Poppins,sans-serif">
+    <b style="margin-right:auto">Les in de klas?</b>
+    <a href="les.html#klas" style="background:#95D600;color:#06038D;border-radius:999px;padding:8px 16px;font-weight:800;text-decoration:none">Ik heb een klascode</a>
+    <a href="les.html#leerkracht" style="background:#fff;color:#06038D;border-radius:999px;padding:8px 16px;font-weight:800;text-decoration:none">Ik ben leerkracht</a>
+    <a href="ai-vermelden.html" style="color:#95D600;font-weight:800;text-decoration:none">AI vermelden →</a>
+  </div>
   <div class="mc-content" id="st-content"></div>
 </div>
 
@@ -92,6 +100,18 @@
   <path d="M50 132 L60 108 H118 L108 132 Z" fill="#FFFFFF"/><circle cx="89" cy="120" r="4" fill="#06038D"/>
   <path d="M104 100 q10 -10 22 -6" stroke="#CCFF99" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 7"/>
 </svg></div>
+  </section>
+
+
+  <!-- HOE WIL JE WERKEN? -->
+  <section class="lh-blok" style="margin-top:28px">
+    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>Hoe wil je werken?</h2></div>
+    <div class="lh-stappen">
+      <div class="lh-stap"><span>1</span><h3>Zelf, op je eigen tempo</h3><p>Je doorloopt de volledige cursus alleen: startest, zes modules en je certificaat.</p><p style="margin-top:12px"><button class="hoofd lh-hoofd" style="font-size:14px;padding:10px 18px" onclick="goVerder()">Start zelf</button></p></div>
+      <div class="lh-stap"><span>2</span><h3>Met je klas</h3><p>Je leerkracht geeft de les op het bord en geeft je een code. Jij doet mee op je laptop.</p><p style="margin-top:12px"><a class="hoofd lh-hoofd" style="font-size:14px;padding:10px 18px;display:inline-block;text-decoration:none" href="les.html#klas">Ik heb een code</a></p></div>
+      <div class="lh-stap"><span>3</span><h3>Ik ben leerkracht</h3><p>Kies welke modules je geeft en geef de les interactief, met klasmomenten en 3D-bouwen.</p><p style="margin-top:12px"><a class="hoofd lh-hoofd" style="font-size:14px;padding:10px 18px;display:inline-block;text-decoration:none" href="les.html#leerkracht">Geef een les</a></p></div>
+    </div>
+    <p style="margin:14px 0 0;font-weight:600">Hoe vermeld je AI bij je taak? <a href="ai-vermelden.html" style="color:#95D600;font-weight:800">AI vermelden, stap voor stap →</a></p>
   </section>
 
   <!-- VOORTGANG -->
@@ -211,7 +231,7 @@
 
     <div class="dl-paneel">
   <div class="dl-kop"><span class="dl-ey">Downloads</span><h3>Het AI-sjabloon</h3><p>Gebruikte je AI bij een taak? Download het sjabloon, vul het in en voeg het toe aan je werk. Of gebruik het invulhulpmiddel hieronder.</p></div>
-  <div class="dl-rij">
+  <div class="dl-rij"><div class="dl-item"><b>Blad 1e graad · 2de jaar</b><p>Oefenblad AI-verantwoording.</p><div><a class="dl-knop hoofd" href="AI-verantwoording-1e-graad-2de-jaar.docx" download>Download (Word)</a></div></div><div class="dl-item"><b>Blad 2e graad</b><p>Korte AI-vermelding met blad.</p><div><a class="dl-knop hoofd" href="AI-verantwoording-2e-graad.docx" download>Download (Word)</a></div></div><div class="dl-item"><b>Transparantieverklaring 3e graad</b><p>Volledige AI-verantwoording, met AI-labels per fase.</p><div><a class="dl-knop hoofd" href="AI-verantwoording-3e-graad.docx" download>Download (Word)</a></div></div><div class="dl-item"><b>AI vermelden, stap voor stap</b><p>Kies je graad en je label, en zie meteen wat je moet doen.</p><div><a class="dl-knop hoofd" href="ai-vermelden.html">Open</a></div></div>
     <div class="dl-item"><b>Sjabloon AI-verantwoording</b><p>Korte vermelding (1e en 2e graad) en volledige verantwoording met APA (3e graad).</p><div><a class="dl-knop hoofd" href="AI-verantwoording-sjabloon.docx" download target="_blank" rel="noopener">Download (Word)</a></div></div>
     <div class="dl-item"><b>Klasposter AI-labels</b><p>De vier labels: wat mag bij welke opdracht?</p><div><a class="dl-knop hoofd" href="AI-labels-poster%20(1).png" target="_blank" rel="noopener">Bekijk de poster</a></div></div>
   </div>
@@ -481,6 +501,20 @@
 </main>
 </div>
 <script src="leerlingen.js?v=20261026a"></script>
+<script>
+/* Klasversie: ook in de graadkeuze meteen tonen dat je met de klas of als leerkracht kan werken */
+(function(){
+  var orig=window.showGraadGate;
+  window.showGraadGate=function(){
+    orig.apply(this,arguments);
+    var m=document.getElementById('graad-modal'); if(!m||m.querySelector('.klas-keuze')) return;
+    var kaart=m.firstElementChild; var d=document.createElement('div'); d.className='klas-keuze';
+    d.style.cssText='display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 18px;padding:0 0 16px;border-bottom:2px solid #D9D9D9';
+    d.innerHTML='<p style="width:100%;margin:0 0 4px;font-weight:700;color:#06038D">Les in de klas?</p><a href="les.html#klas" style="background:#95D600;color:#06038D;border-radius:999px;padding:9px 16px;font-weight:800;text-decoration:none">Ik heb een klascode</a><a href="les.html#leerkracht" style="background:#06038D;color:#fff;border-radius:999px;padding:9px 16px;font-weight:800;text-decoration:none">Ik ben leerkracht</a>';
+    kaart.insertBefore(d,kaart.firstChild);
+  };
+})();
+</script>
 
 <!-- ════════ HELPDESK BUTTON ════════ -->
 <a href="mailto:informaticadienst.pedagogisch@sint-rembert.be?subject=Vraag%20over%20de%20AI-cursus" 
