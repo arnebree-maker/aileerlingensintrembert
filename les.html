@@ -51,6 +51,20 @@ header{margin-bottom:1.25rem}
 .ddw span:nth-child(2){background:#95D600;color:#06038D}
 .bordvraag{font-size:clamp(1.1rem,2.4vw,1.4rem);font-weight:800;line-height:1.35;margin:.2rem 0 .5rem}
 .lk .antw li{opacity:.95}
+/* live */
+.livebalk{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;background:#FFFFFF;color:#06038D;border:4px solid #95D600;border-radius:20px;padding:.6rem 1rem;margin:0 0 .8rem}
+.livebalk .tweede{border-color:#06038D;color:#06038D;padding:.4rem .9rem}
+.lb-punt{width:12px;height:12px;border-radius:50%;background:#95D600;box-shadow:0 0 0 4px #CCFF99!important;animation:lbp 1.6s infinite}
+@keyframes lbp{50%{opacity:.35}}
+.lb-status{font-weight:700}
+.lb-namen summary{cursor:pointer;font-weight:700;text-decoration:underline}
+.lb-naam{display:inline-block;border:2px solid #D9D9D9;border-radius:999px;padding:.1rem .6rem;margin:.15rem;opacity:.55}
+.lb-naam.aan{border-color:#95D600;opacity:1}
+.lb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.7rem;margin-top:.6rem}
+.lb-kaart{cursor:pointer;display:flex;flex-direction:column;gap:.2rem;text-align:left;background:#FFFFFF;border:2px solid #D9D9D9;border-radius:16px;padding:.5rem;color:#06038D;font:inherit}
+.lb-kaart:hover{border-color:#95D600}
+.lb-kaart img{width:100%;border-radius:10px;background:#EEF1FF}
+.lb-kaart span{font-size:.85rem}
 .kaart.groen .hoofd{background:var(--blauw);border-color:var(--blauw);color:var(--wit)}
 .tweede{background:transparent;border-color:var(--wit);color:var(--wit);font-weight:700}
 .kaart .tweede{border-color:var(--blauw);color:var(--blauw)}
@@ -507,8 +521,11 @@ function toonCode(c){
    '<div class="kaart groen" style="text-align:center"><p>Leerlingen gaan naar deze cursus, kiezen "Ik ben leerling" en geven in:</p><div class="grote-code">'+c+'</div></div>'+
    '<div class="kaart"><h3>'+info.graad+'e graad · modules in deze code</h3><ul>'+info.mods.map(function(m){return '<li>'+esc(m.titel)+'</li>';}).join('')+'</ul>'+
    '<p class="klein">Het overzicht van wat elke leerling deed, krijg je via het leerlingrapport in de uploadzone, op het einde van elke module.</p></div>'+
-   '<div class="knoprij"><button class="hoofd" id="les">Start de les</button><button class="tweede" id="terug">← Mijn klassen</button></div>';
-  document.getElementById('les').onclick=function(){openKlas(c);};
+   '<div class="knoprij">'+(LIVE_KLAAR?'<button class="hoofd" id="live">● Start live les</button>':'')+'<button class="'+(LIVE_KLAAR?'tweede':'hoofd')+'" id="les">Start de les'+(LIVE_KLAAR?' (zonder live)':'')+'</button><button class="tweede" id="terug">← Mijn klassen</button></div>'+
+   (LIVE_KLAAR?'':'<div class="kaart twijfel"><p><b>Live les nog niet ingesteld.</b> De IT-dienst moet dit eerst koppelen aan Microsoft 365. Wil je het al uitproberen? <button class="tweede" id="demo" style="margin-left:.4rem">Live demo op dit toestel</button></p><p class="klein">Demo: open de les in een tweede tabblad als leerling met dezelfde code. Werkt enkel binnen deze browser.</p></div>');
+  document.getElementById('les').onclick=function(){liveStop();openKlas(c);};
+  var lv=document.getElementById('live');if(lv)lv.onclick=function(){liveStartLeerkracht(c,GraphBackend);};
+  var dm=document.getElementById('demo');if(dm)dm.onclick=function(){liveStartLeerkracht(c,DemoBackend);};
   document.getElementById('terug').onclick=leerkrachtStart;
 }
 function openKlas(c){
@@ -558,7 +575,9 @@ function leerlingCode(){
     if(deel[1]&&deel[1].length>=2){var mi=parseInt(deel[1][0],36),si=parseInt(deel[1].slice(1),36);
       if(mi<info.mods.length&&si>=0){if(mi>d.mi||(mi===d.mi&&si>d.si)){d.mi=mi;d.si=si;lBewaar(d);}}}
     S.mi=Math.min(d.mi,info.mods.length-1);S.si=d.si;
-    if(S.mi>0||S.si>0) welkomTerug(); else moduleIntro();
+    if(LIVE_KLAAR) liveKeuzeLeerling(GraphBackend);
+    else if(DemoBackend.bestaat(S.code)) liveKeuzeLeerling(DemoBackend);
+    else if(S.mi>0||S.si>0) welkomTerug(); else moduleIntro();
   }
 }
 function welkomTerug(){
@@ -575,7 +594,8 @@ function moduleKeuze(){
   app.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){S.mi=+b.dataset.m;S.si=0;bewaarPos();moduleIntro();};});
 }
 function moduleIntro(){
-  var m=S.mods[S.mi];
+  var m=S.mods[S.mi];huidigeStap=null;
+  if(Live.aan&&Live.rol==='lk')livePubliceer(S.mi,-1);
   if(!m.klaar){app.innerHTML='<h2>'+esc(m.titel)+'</h2><div class="kaart twijfel"><p>Deze module volgt binnenkort.</p></div><div class="knoprij"><button class="tweede" id="ov">← Je modules</button></div>';document.getElementById('ov').onclick=S.rol==='lk'?leerkrachtStart:moduleKeuze;return;}
   app.innerHTML='<div class="topbalk"><span class="badge">'+(S.rol==='lk'?'Lesmodus':'Module '+(S.mi+1))+'</span><span class="badge rand">'+(S.zelf?'Zelfstandig':S.code)+'</span></div>'+
    '<h2>'+esc(m.titel)+'</h2><div class="kaart"><h3>Na deze les kan ik:</h3><ul>'+(DOELEN[m.id]||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul><p class="klein">'+(S.zelf?'Volledige module · '+stappenVan(m.id).length+' stappen':'Klasversie: de volledige module met extra klasmomenten · '+stappenVan(m.id).length+' schermen')+'</p></div>'+
@@ -598,10 +618,12 @@ function toonStap(){
     if(S.zelf) h+='<div class="klasmoment"><span class="badge">Denkmoment</span><p><b>Je werkt alleen. Doe de opdracht en denk na over de vragen onderaan.</b> Bespreek het gerust later met een klasgenoot.</p></div>';
     else h+='<div class="klasmoment"><span class="badge">Klasmoment</span><p><b>'+(S.rol==='lk'?'Hier praat de klas samen.':'Doe de opdracht, praat met je buur en wacht op je leerkracht.')+'</b></p></div>';
   }
+  huidigeStap=stap;h=liveBalkLk(stap)+liveBalkLl()+h;
   h+=(stap.titel?'<h2>'+esc(stap.titel)+'</h2>':'')+'<div id="inhoud"></div>';
   if(S.rol==='lk'&&stap.lk) h+='<details class="lk"'+(window.__lkOpen?' open':'')+'><summary><b>Voor de leerkracht · '+esc(stap.lk.tijd)+'</b> <span class="klein">(niet zichtbaar voor leerlingen tot je opent)</span></summary>'+(stap.lk.vragen.length?'<p><b>Gespreksvragen</b></p><ol>'+stap.lk.vragen.map(function(v){return '<li>'+esc(v)+'</li>';}).join('')+'</ol>':'')+(stap.lk.antw&&stap.lk.antw.length?'<p><b>Mogelijke antwoorden</b></p><ul class="antw">'+stap.lk.antw.map(function(v){return '<li>'+esc(v)+'</li>';}).join('')+'</ul>':'')+'<p class="klein">'+esc(stap.lk.tip)+'</p><div class="knoprij"><button class="tweede" id="timer">Start timer</button><span id="tijd" style="font-weight:800;font-size:1.3rem"></span></div></details>';
   if(S.zelf&&stap.lk&&stap.lk.vragen.length) h+='<div class="kaart twijfel"><h3>Denk hierover na</h3><ol>'+stap.lk.vragen.map(function(v){return '<li>'+esc(v)+'</li>';}).join('')+'</ol></div>';
-  h+='<div class="knoprij"><button class="tweede" id="vorige"'+(S.si===0?' disabled':'')+'>← Vorige</button>'+
+  if(Live.aan&&Live.rol==='ll'&&Live.volg) h+='<div class="knoprij" style="display:none"><button id="vorige"></button><button id="pauze"></button></div><p class="klein" style="margin-top:1rem">Je leerkracht bepaalt de slide.</p>';
+  else h+='<div class="knoprij"><button class="tweede" id="vorige"'+(S.si===0?' disabled':'')+'>← Vorige</button>'+
      (stap.type==='rapport'?'':'<button class="hoofd" id="volgende">Volgende →</button>')+
      '<button class="tweede" id="pauze">'+(S.rol==='lk'?'Stop de les':'Pauze')+'</button></div>';
   app.innerHTML=h;
@@ -613,11 +635,13 @@ function toonStap(){
     if(stap.bijVerlaten)stap.bijVerlaten();S.si++;bewaarPos();toonStap();top();};
   document.getElementById('pauze').onclick=function(){
     if(stap.bijVerlaten)stap.bijVerlaten();
-    if(S.rol==='lk'){lkBewaar();leerkrachtStart();}
+    if(S.rol==='lk'){if(Live.aan)Live.timers.forEach(clearInterval),Live.timers=[],Live.aan=false;lkBewaar();leerkrachtStart();}
     else pauzeScherm();};
   var lkd=app.querySelector('details.lk');if(lkd)lkd.addEventListener('toggle',function(){window.__lkOpen=lkd.open;});
   var t=document.getElementById('timer');
   if(t) t.onclick=function(){startTimer(stap.lk.tijd);};
+  if(Live.aan&&Live.rol==='lk'){livePubliceer(S.mi,S.si);document.getElementById('lb-stop').onclick=liveSluit;liveVernieuwLk();}
+  var los=document.getElementById('lb-los');if(los)los.onclick=function(){liveStop();toonStap();};
 }
 var timerId=null;
 function startTimer(txt){
@@ -649,6 +673,149 @@ function toonPagina(k,terug){
   document.getElementById('pterug').onclick=terug||window.__cursusThuis;
   window.scrollTo({top:0});
 }
+/* ════════════ LIVE LES (Microsoft 365) ════════════
+   IT vult LIVE_CONFIG in. Leeg = live niet ingesteld (enkel demo op één toestel).
+   Gegevens: enkel voornaam, klascode, slide en ingediende bouwwerken. "Sluit de live les" wist alles. */
+var LIVE_CONFIG={
+  clientId:'',          // Application (client) ID van de app-registratie
+  tenantId:'',          // Directory (tenant) ID van de scholengroep
+  siteId:'',            // Graph-id van de SharePoint-site, bv. sintrembert.sharepoint.com,xxxx,yyyy
+  lijstLessen:'',       // id van de lijst "Lessen"
+  lijstDeelnemers:'',   // id van de lijst "Deelnemers"
+  lijstInzendingen:'',  // id van de lijst "Inzendingen"
+  map:'Bouwwerken',     // map in de documentbibliotheek van de site
+  scopes:['Sites.ReadWrite.All']
+};
+var LIVE_KLAAR=!!(LIVE_CONFIG.clientId&&LIVE_CONFIG.tenantId&&LIVE_CONFIG.siteId&&LIVE_CONFIG.lijstLessen&&LIVE_CONFIG.lijstDeelnemers&&LIVE_CONFIG.lijstInzendingen);
+var ACTIEF_MS=30000;
+
+/* --- Demo: gedeelde opslag in deze browser (meerdere tabbladen) --- */
+var DemoBackend={
+  naam:'demo',
+  _l:function(c){return lees('srk_live_'+c,{les:null,dn:{},inz:[]});},_s:function(c,d){schrijf('srk_live_'+c,d);},
+  init:function(){return Promise.resolve(null);},
+  lesZetten:function(c,mi,si){var d=this._l(c);d.les={mi:mi,si:si,t:Date.now()};this._s(c,d);return Promise.resolve();},
+  lesLezen:function(c){return Promise.resolve(this._l(c).les);},
+  deelnemen:function(c,naam){var d=this._l(c),id='d'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);d.dn[id]={naam:naam,laatst:Date.now()};this._s(c,d);return Promise.resolve(id);},
+  hartslag:function(c,id,mi,si){var d=this._l(c);if(d.dn[id]){d.dn[id].laatst=Date.now();d.dn[id].mi=mi;d.dn[id].si=si;this._s(c,d);}return Promise.resolve();},
+  deelnemersLezen:function(c){var d=this._l(c);return Promise.resolve(Object.keys(d.dn).map(function(k){var x=d.dn[k];return {id:k,naam:x.naam,laatst:x.laatst};}));},
+  indienen:function(c,o){var self=this;return new Promise(function(ok){var r=new FileReader();r.onload=function(){var d=self._l(c);d.inz.push({id:'i'+Date.now(),naam:o.naam,titel:o.titel,gevoel:o.gevoel,stap:o.stap,img:r.result});try{self._s(c,d);}catch(e){}ok();};r.readAsDataURL(o.blob);});},
+  inzendingenLezen:function(c,stap){return Promise.resolve(this._l(c).inz.filter(function(x){return x.stap===stap;}));},
+  afsluiten:function(c){try{localStorage.removeItem('srk_live_'+c);}catch(e){}return Promise.resolve();},
+  bestaat:function(c){try{return !!localStorage.getItem('srk_live_'+c);}catch(e){return false;}}
+};
+
+/* --- Microsoft 365: Graph + SharePoint-lijsten --- */
+var GraphBackend={
+  naam:'graph',_app:null,_cache:{},
+  _laadMsal:function(){return window.msal?Promise.resolve():new Promise(function(ok,nok){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.3/lib/msal-browser.min.js';s.onload=ok;s.onerror=function(){nok(new Error('Aanmelden kon niet laden'));};document.head.appendChild(s);});},
+  init:function(){var self=this;return this._laadMsal().then(function(){
+      self._app=new msal.PublicClientApplication({auth:{clientId:LIVE_CONFIG.clientId,authority:'https://login.microsoftonline.com/'+LIVE_CONFIG.tenantId,redirectUri:location.origin+location.pathname},cache:{cacheLocation:'sessionStorage'}});
+      var acc=self._app.getAllAccounts()[0];
+      return acc?acc:self._app.loginPopup({scopes:LIVE_CONFIG.scopes}).then(function(r){return r.account;});
+    }).then(function(acc){self._acc=acc;return ((acc&&acc.name)||'').split(' ')[0]||'Leerling';});},
+  _token:function(){var self=this,req={scopes:LIVE_CONFIG.scopes,account:this._acc};return this._app.acquireTokenSilent(req).catch(function(){return self._app.acquireTokenPopup(req);}).then(function(r){return r.accessToken;});},
+  _g:function(method,pad,body,ct,blob){return this._token().then(function(tk){var h={Authorization:'Bearer '+tk,Prefer:'HonorNonIndexedQueriesWarningMayFailRandomly'};if(body!=null)h['Content-Type']=ct||'application/json';
+      return fetch('https://graph.microsoft.com/v1.0'+pad,{method:method,headers:h,body:body==null?undefined:(ct?body:JSON.stringify(body))});}).then(function(r){if(!r.ok)throw new Error('Microsoft 365 antwoordde met '+r.status);if(r.status===204)return null;return blob?r.blob():r.json();});},
+  _lijst:function(l){return '/sites/'+LIVE_CONFIG.siteId+'/lists/'+l;},
+  _items:function(l,c){return this._g('GET',this._lijst(l)+"/items?$expand=fields&$top=200&$filter=fields/Title eq '"+c+"'").then(function(r){return r.value||[];});},
+  lesZetten:function(c,mi,si){var self=this;return this._items(LIVE_CONFIG.lijstLessen,c).then(function(v){var f={Title:c,Module:mi,Slide:si};
+      return v.length?self._g('PATCH',self._lijst(LIVE_CONFIG.lijstLessen)+'/items/'+v[0].id+'/fields',f):self._g('POST',self._lijst(LIVE_CONFIG.lijstLessen)+'/items',{fields:f});});},
+  lesLezen:function(c){return this._items(LIVE_CONFIG.lijstLessen,c).then(function(v){return v.length?{mi:v[0].fields.Module,si:v[0].fields.Slide}:null;});},
+  deelnemen:function(c,naam){return this._g('POST',this._lijst(LIVE_CONFIG.lijstDeelnemers)+'/items',{fields:{Title:c,Naam:naam,Laatst:new Date().toISOString()}}).then(function(r){return r.id;});},
+  hartslag:function(c,id,mi,si){return this._g('PATCH',this._lijst(LIVE_CONFIG.lijstDeelnemers)+'/items/'+id+'/fields',{Laatst:new Date().toISOString(),Module:mi,Slide:si});},
+  deelnemersLezen:function(c){return this._items(LIVE_CONFIG.lijstDeelnemers,c).then(function(v){return v.map(function(x){return {id:x.id,naam:x.fields.Naam,laatst:Date.parse(x.fields.Laatst)||0};});});},
+  indienen:function(c,o){var self=this,f=Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.jpg';
+    return this._g('PUT','/sites/'+LIVE_CONFIG.siteId+'/drive/root:/'+encodeURIComponent(LIVE_CONFIG.map)+'/'+encodeURIComponent(c)+'/'+f+':/content',o.blob,'image/jpeg').then(function(it){
+      return self._g('POST',self._lijst(LIVE_CONFIG.lijstInzendingen)+'/items',{fields:{Title:c,Naam:o.naam,Bouwtitel:o.titel||'',Gevoel:o.gevoel||'',Stap:o.stap,BestandId:it.id}});});},
+  inzendingenLezen:function(c,stap){var self=this;return this._items(LIVE_CONFIG.lijstInzendingen,c).then(function(v){
+      return Promise.all(v.filter(function(x){return x.fields.Stap===stap;}).map(function(x){var b=x.fields.BestandId;
+        var p=self._cache[b]?Promise.resolve(self._cache[b]):self._g('GET','/sites/'+LIVE_CONFIG.siteId+'/drive/items/'+b+'/content',null,null,true).then(function(bl){return self._cache[b]=URL.createObjectURL(bl);});
+        return p.then(function(u){return {id:x.id,naam:x.fields.Naam,titel:x.fields.Bouwtitel,gevoel:x.fields.Gevoel,img:u};}).catch(function(){return null;});})).then(function(a){return a.filter(Boolean);});});},
+  afsluiten:function(c){var self=this,L=[LIVE_CONFIG.lijstLessen,LIVE_CONFIG.lijstDeelnemers,LIVE_CONFIG.lijstInzendingen];
+    return Promise.all(L.map(function(l){return self._items(l,c).then(function(v){return Promise.all(v.map(function(x){return self._g('DELETE',self._lijst(l)+'/items/'+x.id);}));});}))
+      .then(function(){return self._g('DELETE','/sites/'+LIVE_CONFIG.siteId+'/drive/root:/'+encodeURIComponent(LIVE_CONFIG.map)+'/'+encodeURIComponent(c)).catch(function(){});});}
+};
+
+var Live={aan:false,be:null,rol:null,naam:'',id:null,pos:null,timers:[],volg:false};
+function liveStop(){Live.timers.forEach(clearInterval);Live.timers=[];Live.aan=false;Live.volg=false;}
+function liveFout(e){var b=document.getElementById('livebalk');if(b)b.querySelector('.lb-status').textContent='Verbinding mislukt: '+(e&&e.message||e);console.warn(e);}
+
+/* Leerkracht start live */
+function liveStartLeerkracht(code,be){
+  liveStop();Live.be=be;Live.rol='lk';
+  return be.init().then(function(){Live.aan=true;openKlas(code);
+    Live.timers.push(setInterval(liveVernieuwLk,4000));}).catch(function(e){alert('Live starten lukte niet: '+(e.message||e));});
+}
+function livePubliceer(mi,si){if(!Live.aan||Live.rol!=='lk')return;var k=mi+'/'+si;if(Live.pos===k)return;Live.pos=k;Live.be.lesZetten(S.code,mi,si).catch(liveFout);}
+function liveBalkLk(stap){
+  if(!Live.aan||Live.rol!=='lk')return '';
+  return '<div class="livebalk" id="livebalk"><span class="lb-punt"></span><b>Live</b><span class="lb-status">verbinden …</span>'+
+    '<details class="lb-namen"><summary>Wie is er?</summary><div id="lb-lijst" class="klein"></div></details>'+
+    '<button class="tweede" id="lb-stop" style="margin-left:auto">Sluit de live les</button></div>'+
+    (stap&&stap.type==='bouw3d'?'<div class="kaart" id="lb-galerij"><h3>Ingediende bouwwerken</h3><p class="klein">Nog geen inzendingen. Leerlingen klikken op "Dien in bij mijn leerkracht".</p></div>':'');
+}
+function liveVernieuwLk(){
+  if(!Live.aan||Live.rol!=='lk')return;
+  Live.be.deelnemersLezen(S.code).then(function(d){var b=document.getElementById('livebalk');if(!b)return;
+    var nu=Date.now(),act=d.filter(function(x){return nu-x.laatst<ACTIEF_MS;});
+    b.querySelector('.lb-status').textContent=d.length+' in de klas · '+act.length+' actief';
+    var l=document.getElementById('lb-lijst');if(l)l.innerHTML=d.map(function(x){return '<span class="lb-naam'+(nu-x.laatst<ACTIEF_MS?' aan':'')+'">'+esc(x.naam)+'</span>';}).join(' ')||'Nog niemand.';}).catch(liveFout);
+  var g=document.getElementById('lb-galerij'),stap=huidigeStap;
+  if(g&&stap) Live.be.inzendingenLezen(S.code,stap.id).then(function(v){
+    if(String(v.length)===g.dataset.n)return;g.dataset.n=v.length;
+    g.innerHTML='<h3>Ingediende bouwwerken ('+v.length+')</h3>'+(v.length?'<div class="lb-grid">'+v.map(function(x,i){return '<button class="lb-kaart" data-i="'+i+'"><img src="'+x.img+'" alt=""><b>'+esc(x.titel||'Zonder titel')+'</b><span>'+esc(x.gevoel||'')+'</span></button>';}).join('')+'</div><p class="klein">Klik op een bouwwerk om het groot te tonen. Namen staan niet op het grote scherm.</p>':'<p class="klein">Nog geen inzendingen.</p>');
+    g.querySelectorAll('.lb-kaart').forEach(function(b){b.onclick=function(){var x=v[+b.dataset.i];toonGroot(x.img,x.titel,x.gevoel);};});
+  }).catch(liveFout);
+}
+function liveSluit(){
+  if(!confirm('De live les afsluiten? Alle namen en ingediende bouwwerken van deze les worden gewist.'))return;
+  var c=S.code;Live.be.afsluiten(c).then(function(){liveStop();alert('De live les is afgesloten en de gegevens zijn gewist.');lkBewaar();leerkrachtStart();}).catch(liveFout);
+}
+
+/* Leerling doet mee */
+function liveKeuzeLeerling(be){
+  app.innerHTML='<div class="topbalk"><span class="badge">Leerling</span><span class="badge rand">'+S.code+'</span></div><h2>Live les</h2>'+
+   '<div class="kaart"><p>Je leerkracht geeft de les live. Jouw scherm volgt de slides van je leerkracht.</p>'+
+   (be.naam==='demo'?'<h3 style="margin-top:.6rem">Je voornaam</h3><input type="text" id="lv-naam" maxlength="30" placeholder="Enkel je voornaam">':'<p class="klein">Je meldt je aan met je schoolaccount. Je leerkracht ziet enkel je voornaam.</p>')+
+   '<div class="knoprij"><button class="hoofd" id="lv-ja">Doe mee</button><button class="tweede" id="lv-nee">Werk op eigen tempo</button></div></div>';
+  document.getElementById('lv-nee').onclick=function(){if(S.mi>0||S.si>0)welkomTerug();else moduleIntro();};
+  document.getElementById('lv-ja').onclick=function(){
+    var n=document.getElementById('lv-naam');if(n&&!n.value.trim()){alert('Vul je voornaam in.');return;}
+    Live.be=be;Live.rol='ll';
+    be.init().then(function(acc){Live.naam=n?n.value.trim().split(' ')[0]:acc;return be.deelnemen(S.code,Live.naam);}).then(function(id){
+      Live.id=id;Live.aan=true;Live.volg=true;Live.pos=null;
+      Live.timers.push(setInterval(function(){be.hartslag(S.code,Live.id,S.mi,S.si).catch(liveFout);},10000));
+      Live.timers.push(setInterval(liveVolg,3000));liveVolg();
+    }).catch(function(e){alert('Meedoen lukte niet: '+(e.message||e));});
+  };
+}
+function liveVolg(){
+  if(!Live.aan||!Live.volg)return;
+  Live.be.lesLezen(S.code).then(function(p){
+    if(!p){liveWacht('Je leerkracht is nog niet gestart.');return;}
+    var k=p.mi+'/'+p.si;if(Live.pos===k)return;Live.pos=k;
+    if(huidigeStap&&huidigeStap.bijVerlaten)try{huidigeStap.bijVerlaten();}catch(e){}
+    S.mi=Math.min(p.mi,S.mods.length-1);
+    if(p.si<0){S.si=0;bewaarPos();liveWacht('Je leerkracht start zo module '+(S.mi+1)+': '+S.mods[S.mi].titel+'.');}
+    else{S.si=p.si;bewaarPos();toonStap();top();}
+  }).catch(liveFout);
+}
+function liveWacht(t){huidigeStap=null;app.innerHTML='<div class="topbalk"><span class="badge">Live</span><span class="badge rand">'+S.code+'</span></div><h2>Even wachten</h2><div class="kaart groen"><p><b>'+esc(t)+'</b></p><p>Jouw scherm verandert vanzelf.</p></div>';}
+function liveBalkLl(){return (Live.aan&&Live.rol==='ll')?'<div class="livebalk"><span class="lb-punt"></span><b>Live</b><span class="lb-status">Je volgt de les van je leerkracht · '+esc(Live.naam)+'</span><button class="tweede" id="lb-los" style="margin-left:auto">Verlaat de live les</button></div>':'';}
+function liveIndienen(stap,foto,data){
+  if(!(Live.aan&&Live.rol==='ll'))return;
+  var k=document.getElementById('lb-indien');if(!k)return;
+  k.onclick=function(){
+    if(!data.items||data.items.length<1){alert('Bouw eerst iets.');return;}
+    var src=foto(),img=new Image();k.disabled=true;k.textContent='Bezig met indienen …';
+    img.onload=function(){var c=document.createElement('canvas'),w=Math.min(900,img.width);c.width=w;c.height=Math.round(img.height*w/img.width);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      c.toBlob(function(bl){Live.be.indienen(S.code,{naam:Live.naam,titel:data.titel,gevoel:data.gevoel,stap:stap.id,blob:bl}).then(function(){k.textContent='✓ Ingediend bij je leerkracht';}).catch(function(e){k.disabled=false;k.textContent='Dien in bij mijn leerkracht';alert('Indienen lukte niet: '+(e.message||e));});},'image/jpeg',.82);};
+    img.src=src;
+  };
+}
+
+var huidigeStap=null;
 /* ============ STAPTYPES ============ */
 var RENDER={};
 var KLEUREN=['#06038D','#95D600','#CCFF99','#A6F04A','#FFFFFF','#D9D9D9','#3A37B5'];
@@ -1034,6 +1201,7 @@ RENDER.bouw3d=function(el,stap){
   el.querySelector('#zi').onclick=function(){rad=Math.max(N*.8,rad-2);zet();};el.querySelector('#zo').onclick=function(){rad=Math.min(N*3,rad+2);zet();};
   function foto(){spook.visible=false;teken();return renderer.domElement.toDataURL('image/png');}
   el.querySelector('#groot-knop').onclick=function(){data.img=foto();bewaar();toonGroot(data.img,data.titel,data.gevoel);};
+  if(Live.aan&&Live.rol==='ll'){var kr=el.querySelector('#groot-knop').parentNode;kr.insertAdjacentHTML('beforeend','<button class="hoofd" id="lb-indien">Dien in bij mijn leerkracht</button>');liveIndienen(stap,foto,data);}
   if(window.ResizeObserver){new ResizeObserver(maat).observe(box);}window.addEventListener('resize',maat);
   knoppen();maat();zet();bouwScene();
   stap.verplicht=function(){if(data.items.length){data.img=foto();bewaar();}return data.items.length>=3&&data.titel&&data.gevoel;};
