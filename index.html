@@ -105,6 +105,23 @@ body.pres-modus{overflow:hidden}
 .lg.l1{background:#06038D}.lg.l2{background:#95D600}
 .vermeld-kader{border-radius:24px;overflow:hidden;border:3px solid #95D600;background:#06038D;margin-bottom:.8rem}
 .vermeld-kader iframe{display:block;width:100%;height:min(1050px,82vh);border:0}
+/* oefeningen */
+.prompt-kader{background:var(--wit);color:var(--blauw);border-radius:24px;border-left:10px solid var(--groen);padding:1rem 1.25rem;margin-bottom:.8rem}
+.prompt-kader .pk-l{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin:0 0 .3rem}
+.prompt-kader .pk-t{font-weight:600;font-size:1.05rem;margin:0 0 .6rem}
+.stappenlijst{background:var(--wit);color:var(--blauw);border-radius:24px;padding:1rem 1.25rem 1rem 2.6rem;margin:0 0 .8rem}
+.stappenlijst li{margin:.35rem 0}
+.tabel-kader{overflow-x:auto;margin-bottom:1rem;border-radius:20px}
+.les-tabel{width:100%;border-collapse:collapse;background:var(--wit);color:var(--blauw)}
+.les-tabel th{background:var(--groen);text-align:left;padding:.7rem .9rem;font-size:.9rem;text-transform:uppercase}
+.les-tabel td{padding:.65rem .9rem;border-bottom:2px solid var(--grijs);vertical-align:top}
+/* vaste navigatie */
+.topnav{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;background:var(--blauw);padding:calc(env(safe-area-inset-top,0px) + .6rem) 0 .7rem;margin:0 0 1.2rem;border-bottom:2px solid rgba(255,255,255,.2)}
+.nk{cursor:pointer;font:inherit;font-weight:700;font-size:.92rem;border-radius:999px;border:2px solid rgba(255,255,255,.55);background:transparent;color:var(--wit);padding:.4rem .95rem}
+.nk:hover{border-color:var(--groen);color:var(--groen)}
+.nk.aan{background:var(--groen);border-color:var(--groen);color:var(--blauw)}
+.nrol{margin-left:auto;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--groen)}
+.kaart.intro h2{color:var(--blauw)}
 .kaart.groen .hoofd{background:var(--blauw);border-color:var(--blauw);color:var(--wit)}
 .tweede{background:transparent;border-color:var(--wit);color:var(--wit);font-weight:700}
 .kaart .tweede{border-color:var(--blauw);color:var(--blauw)}
@@ -211,6 +228,7 @@ a.link{color:var(--blauw);font-weight:800}
   <div><h1>AI-cursus</h1><p>Voor leerlingen en leerkrachten · 3e graad</p></div>
   <svg class="chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg>
 </header>
+<nav class="topnav" id="topnav" aria-label="Navigatie"></nav>
 <main id="cursus" aria-live="polite"></main>
 <div id="rapport"></div>
 <section class="voet">
@@ -247,8 +265,9 @@ var MODULES=[
   {id:'M3',letter:'C',titel:'Generatieve AI',duur:'± 50 min',klaar:true},
   {id:'M4',letter:'D',titel:'Ethiek & bias',duur:'± 50 min',klaar:true},
   {id:'M5',letter:'E',titel:'AI op school: de AI-labels',duur:'± 50 min',klaar:true},
+  {id:'M8',letter:'H',titel:'Jouw werk, jouw verantwoordelijkheid',duur:'± 50 min',klaar:true},
   {id:'M6',letter:'F',titel:'AI in de maatschappij',duur:'± 50 min',klaar:true},
-  {id:'M7',letter:'G',titel:'Aanrader: leren met Copilot',duur:'± 50 min',klaar:true}
+  {id:'M7',letter:'G',titel:'Copilot Chat: studeren en leren',duur:'± 50 min',klaar:true}
 ];
 
 /* Leerdoelen, afgeleid van de rode draden van de 3e graad in de leerlijn (na te kijken) */
@@ -257,9 +276,10 @@ var DOELEN={
   M2:['Ik begrijp hoe AI leert: van vaste regels tot machine learning en deep learning.','Ik begrijp dat model, trainingsdata en context de output beïnvloeden.','Ik kies bewust de juiste modus: een snel antwoord of diep nadenken.'],
   M3:['Ik kan uitleggen hoe generatieve AI tekst en beeld maakt.','Ik werk iteratief: ik test, vergelijk en verfijn mijn prompts.','Ik herken AI-beelden en deepfakes, en houd rekening met auteursrecht.'],
   M4:['Ik herken bias en ethische dilemma\u2019s, en reflecteer over duurzaamheid (energieverbruik).','Ik beoordeel zelf of ik gegevens of documenten in een tool mag zetten.','Ik herken antropomorfisme, sycophancy en false fluency.'],
-  M5:['Ik vraag zelf naar de afspraken en weet dat gebruik buiten de afspraken een onregelmatigheid is.','Ik documenteer mijn AI-gebruik: tool, prompts, wat ik aanpaste en hoe ik controleerde.','Ik weet dat AI-detectie nooit sluitend bewijs is, en kan mijn werk mondeling toelichten.'],
+  M5:['Ik vraag zelf naar de afspraken en weet dat gebruik buiten de afspraken een onregelmatigheid is.','Ik gebruik Copilot met mijn schoolaccount en zet er geen gegevens van mezelf of anderen in.','Ik weet dat AI-detectie nooit sluitend bewijs is, en kan mijn werk mondeling toelichten.'],
+  M8:['Ik ben verantwoordelijk voor mijn werk en maak mijn AI-gebruik zichtbaar.','Ik documenteer mijn AI-gebruik: tool, prompts, wat ik aanpaste en hoe ik controleerde, en verwijs naar AI zoals naar een bron.','Ik kan mijn werk mondeling toelichten, zoals in het hoger onderwijs.'],
   M6:['Ik reflecteer genuanceerd over de gevolgen van AI voor mijn studie en toekomstig beroep.','Ik onderscheid trends en hypes, en ken het doel van de EU AI Act.','Ik verdedig een eigen, onderbouwde visie op AI.'],
-  M7:['Ik gebruik AI als studiepartner: samenvatten, mezelf overhoren en feedback krijgen.','Ik laat AI mij vragen stellen in plaats van enkel antwoorden te geven.','Ik kies bewust wanneer ik zonder AI werk om een vaardigheid zelf te beheersen.']
+  M7:['Ik gebruik Copilot Chat als studiepartner: samenvatten, mezelf overhoren en feedback krijgen.','Ik werk iteratief: ik vraag door en stuur bij, ook als \u201cProbeer opnieuw\u201d niet werkt.','Ik gebruik een notebook om met mijn eigen bronnen te studeren, en weet wat er wel en niet in mag.']
 };
 
 var GEVOELENS=['nieuwsgierig','enthousiast','twijfel','bezorgd','bang','boos','rustig','onverschillig'];
@@ -296,7 +316,7 @@ function bouwStappen(){
   [1,2,3,4,5,6,7].forEach(function(n){
     var M='M'+n,plan=(typeof CE_PLAN!=='undefined'&&CE_PLAN[M])||{},uit=[],geplaatst={};
     siteStappen(n).forEach(function(s){
-      if(s.fn==='m5s_vermelden'){uit.push(CE_STAP.ce5_realiteit,VERMELDEN);return;}
+      if(s.fn==='m5s_vermelden'){return;}
       uit.push(s);(plan[s.fn]||[]).forEach(function(id){uit.push(CE_STAP[id]);geplaatst[id]=1;});
     });
     Object.keys(plan).forEach(function(k){plan[k].forEach(function(id){if(!geplaatst[id])uit.push(CE_STAP[id]);});});
@@ -304,6 +324,7 @@ function bouwStappen(){
     if(n===6){var k=uit.findIndex(function(s){return s.fn==='m6s_gevolgen';});uit.splice(k>=0?k+1:uit.length,0,STAD);}
     STAPPEN[M]=uit.concat([rap(n)]);
   });
+  STAPPEN.M8=MV.concat([{type:'rapport',id:'m8_rapport',titel:'Klaar: maak je rapport'}]);
 }
 /* ============ KLASVERSIE: één les van ± 50 minuten per module ============
    bord = kort scherm voor het bord · mk = voorspel/peil-vraag · stelling = peiling eens/oneens
@@ -453,6 +474,7 @@ M7:[
 var K6_START={type:'stelling',id:'k6_start',klas:true,titel:'Om mee te starten',stellingen:[{s:'Over 10 jaar is AI vooral goed nieuws voor mij.',hulp:'Denk aan je studies, je job, je vrije tijd.'}],
   lk:{tijd:'4 minuten',vragen:['Wie is optimistisch, wie bezorgd? Waarom?'],antw:['Optimisten: hulp bij studeren, gezondheid, minder saai werk. Bezorgden: jobs, nepnieuws, privacy, afhankelijkheid.'],tip:'Noteer de stand (eens/oneens) en herhaal de stelling op het einde van de les.'}};
 var KLASPLAN={
+  M8:{start:[],eind:[]},
   M1:{start:['m1_opening','m1_labels','k1_ai'],m1s1:['k1_kamer'],m1s4:['k1_auto'],m1s7:['k1_hallu'],eind:['k1_exit']},
   M2:{start:['k2_voorspel'],m2s1:['k2_zombie'],m2s3:['k2_spam'],eind:['k2_exit']},
   M3:{start:['k3_voorspel'],eind:['k3_exit']},
@@ -530,6 +552,113 @@ var CE_STAP={
 /* waar elke stap komt: na deze stap van de site */
 var CE_PLAN={M1:{m1s0:['ce1_gebruik','ce1_kloof']},M2:{m2s_verdieping3:['ce2_denk']},M3:{m3s5:['ce3_prompts']},M4:{m4s7:['ce4_risicos']},M6:{m6s_trendhype:['ce6_kansen','ce6_examen']},M7:{m7s1:['ce7_offload','ce7_tips']}};
 var VERMELDEN={type:'vermelden',id:'vermelden',titel:'Zo vermeld je AI'};
+/* ============ MODULE 7: COPILOT CHAT VOOR LEERLINGEN (oefeningen) ============ */
+function kopie(t){return '<div class="prompt-kader"><p class="pk-l">Kopieer deze prompt</p><p class="pk-t">'+t+'</p><button class="hoofd" type="button" onclick="var b=this,t=b.previousElementSibling.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent=\'✓ Gekopieerd\';setTimeout(function(){b.textContent=\'Kopieer prompt\';},1800);}).catch(function(){b.textContent=\'Selecteer en kopieer zelf\';});">Kopieer prompt</button></div>';}
+function stappenLijst(a){return '<ol class="stappenlijst">'+a.map(function(x){return '<li><b>'+x[0]+'</b> '+x[1]+'</li>';}).join('')+'</ol>';}
+var C7={
+ c7_waar:{type:'info',id:'c7_waar',titel:'Waar werk je?',html:
+  '<div class="grid"><div class="kaart groen"><h3>✓ Copilot Chat</h3><p>Met je <b>schoolaccount</b>. Zie je bovenaan het schild? Dan werk je in de beveiligde schoolomgeving. Je cursus mag erin, namen en punten niet.</p></div>'+
+  '<div class="kaart niet"><h3>✗ Teach</h3><p>De Teach-module is <b>enkel voor leerkrachten</b>. Als leerling heb je ze niet. Alles in deze module werkt met gewone Copilot Chat.</p></div>'+
+  '<div class="kaart twijfel"><h3>? Gemini Notebook</h3><p>Een extra studietool van Google. Verderop leer je hem kennen. <b>Vraag eerst of je leerkracht hem toelaat.</b></p></div></div>'},
+ c7_vier:{type:'info',id:'c7_vier',titel:'Geef Copilot vier dingen',html:
+  '<div class="grid"><div class="kaart"><h3>1. Doel</h3><p>Wat wil je bereiken? Begrijpen, oefenen, samenvatten?</p></div><div class="kaart"><h3>2. Context</h3><p>Welk vak, welk jaar, welke toets?</p></div><div class="kaart"><h3>3. Bron</h3><p>Je cursus of je eigen notities.</p></div><div class="kaart"><h3>4. Verwachting</h3><p>Hoe lang, welke vorm, welk niveau?</p></div></div>'+
+  '<div class="kaart twijfel"><p>Ontbreekt context? Dan vult Copilot zelf de gaten in, en krijg je een middelmatig antwoord.</p></div>'},
+ c7_oef1:{type:'reflectie',id:'c7_oef1',titel:'Oefening 1 · Van losse vraag naar sterke prompt',geenOnthoud:true,
+  intro:'<div class="grid"><div class="kaart niet"><h3>Losse vraag</h3><p>"Leg de Koude Oorlog uit."</p></div><div class="kaart groen"><h3>Sterke prompt</h3><p>"Ik zit in het 6de jaar en heb vrijdag een toets geschiedenis over de Koude Oorlog. Leg de oorzaken uit in 5 korte punten, met telkens één voorbeeld. Gebruik eenvoudige taal."</p></div></div>'+
+   '<div class="kaart"><p><b>Jouw beurt.</b> Kies een vak van deze week. Probeer eerst een losse vraag in Copilot, dan een sterke prompt met de vier dingen. Vergelijk de antwoorden.</p></div>',
+  vragen:[{k:'r1',q:'Jouw sterke prompt'},{k:'r2',q:'Wat was er beter aan het tweede antwoord?'}]},
+ c7_gesprek:{type:'info',id:'c7_gesprek',titel:'Maak er een gesprek van',html:
+  '<div class="kaart"><p>Een goed antwoord krijg je zelden met één prompt. In het onderzoek van ChatEQUITY stopte <b>48%</b> van de leerlingen na één prompt. Vraag door, bijvoorbeeld zo:</p></div>'+
+  kopie('Leg het uit alsof ik het voor het eerst hoor.')+kopie('Geef een voorbeeld uit het dagelijks leven.')+kopie('Wat begrijp ik nog niet? Stel mij drie vragen.')+kopie('Op welk deel van mijn cursus baseer je dit?')+
+  bron('ChatEQUITY (KU Leuven), eerste resultaten (pilootstudie), Torhout 18/11/2026.')},
+ c7_opnieuw:{type:'info',id:'c7_opnieuw',titel:'\u201cProbeer opnieuw\u201d werkt niet altijd',html:
+  '<div class="kaart twijfel"><p>De knop om een antwoord opnieuw te laten maken geeft soms bijna hetzelfde, of werkt niet. <b>Doe dit in de plaats:</b></p></div>'+
+  stappenLijst([['Stuur bij.','Zeg wat er beter moet: "korter", "eenvoudiger", "met een voorbeeld".'],['Herformuleer.','Schrijf je vraag anders, met meer context.'],['Start een nieuwe chat.','Loopt het gesprek vast? Begin opnieuw met een sterke prompt.'],['Bewaar je prompt.','Kopieer een goede prompt eerst, zodat je hem niet kwijt bent.']])},
+ c7_cursus:{type:'reflectie',id:'c7_cursus',titel:'Oefening 2 · Werk met je cursus',geenOnthoud:true,
+  intro:'<div class="kaart groen"><p>Je cursus mag in <b>Copilot met je schoolaccount</b>. In een gratis tool mag hij niet. Zet er nooit namen of punten bij.</p></div>'+
+   stappenLijst([['Upload één hoofdstuk','in Copilot Chat (paperclip of sleep het bestand).'],['Vraag de kernbegrippen.',''],['Vraag oefenvragen zoals op een toets.',''],['Check de bron:','"Op welke pagina staat dit?" Kijk het na in je cursus.']])+
+   kopie('Welke 8 kernbegrippen staan in dit hoofdstuk? Leg ze kort uit en zeg op welke pagina ze staan.')+kopie('Maak 5 oefenvragen over dit hoofdstuk, zoals op een toets. Geef de antwoorden pas als ik erom vraag.'),
+  vragen:[{k:'r1',q:'Welk hoofdstuk gebruikte je?'},{k:'r2',q:'Klopte alles? Wat vond je terug in je cursus, en wat niet?'}]},
+ c7_samenv:{type:'reflectie',id:'c7_samenv',titel:'Oefening 3 · Controleer je eigen samenvatting',geenOnthoud:true,
+  intro:'<div class="kaart"><p><b>Eerst zelf, dan AI.</b> Neem een samenvatting die je zelf maakte, plak ze in Copilot en vraag enkel feedback.</p></div>'+
+   kopie('Hier is mijn samenvatting van [onderwerp]. Herschrijf ze niet. Zeg welke belangrijke begrippen ontbreken en waar ik iets fout uitleg.')+
+   '<div class="kaart twijfel"><p><b>Jij beslist</b> wat je aanpast. Zo blijft de samenvatting van jou, en leer je het meest.</p></div>',
+  vragen:[{k:'r1',q:'Welke tips gaf Copilot?'},{k:'r2',q:'Wat paste je aan, en wat niet? Waarom?'}]},
+ g_wat:{type:'info',id:'g_wat',titel:'Gemini Notebook: drie delen, één notebook',html:
+  '<div class="kaart twijfel"><p><b>Eerst navragen:</b> Gemini Notebook is een studietool van Google, buiten de schoolomgeving. Gebruik hem enkel als je leerkracht dat toelaat.</p></div>'+
+  '<div class="grid"><div class="kaart"><h3>Bronnen</h3><p>Links voeg je bronnen toe: je eigen notities, een webpagina of een tekst. Je kan ook nieuwe bronnen zoeken op het web.</p></div>'+
+  '<div class="kaart"><h3>Chat</h3><p>In het midden stel je vragen over <b>jouw</b> bronnen. Het antwoord verwijst naar waar het staat.</p></div>'+
+  '<div class="kaart groen"><h3>Studio</h3><p>Rechts maak je er studiehulp van: quiz, flashcards, mindmap, audio-overzicht …</p></div></div>'+
+  '<div class="kaart"><p>Het verschil met een gewone chat: alles blijft bij <b>één vak of één hoofdstuk</b>. Je moet niet telkens opnieuw uitleggen waarmee je bezig bent. Onderaan staat zelf: Gemini Notebook kan fouten maken, dus dubbelcheck de reacties.</p></div>'},
+ g_studio:{type:'info',id:'g_studio',titel:'De Studio: zo studeer je ermee',html:
+  '<div class="tabel-kader"><table class="les-tabel"><tr><th>In de Studio</th><th>Zo gebruik je het om te studeren</th><th>Let op</th></tr>'+
+  [['Quiz','Jezelf testen na een eerste keer zelf leren.','Kijk na waarom een antwoord juist is.'],['Flashcards','Begrippen en definities inoefenen, verspreid over enkele dagen.','Vergelijk met de definitie in je cursus.'],['Mindmap','Het overzicht en de verbanden zien.','Maak eerst zelf een schema.'],['Audio-overzicht','Een gesprek over je bronnen, om te herhalen onderweg.','Het kan dingen vereenvoudigen of fout zeggen.'],['Video-overzicht','Een korte uitleg met beelden.','Controleer wat je niet herkent.'],['Infographic en diapresentatie','Een visuele samenvatting.','Tekst en cijfers op beelden bevatten soms fouten.'],['Rapporten en gegevenstabel','Een studiegids of een overzicht van begrippen.','Lees het kritisch, het is geen cursus.']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>';}).join('')+'</table></div>'},
+ g_mag:{type:'info',id:'g_mag',titel:'Wat mag er in je Gemini Notebook?',html:
+  '<div class="grid"><div class="kaart groen"><h3>✓ Wel</h3><p>Je eigen notities en samenvattingen, zonder namen. Openbare bronnen, zoals een betrouwbare website.</p></div>'+
+  '<div class="kaart niet"><h3>✗ Niet</h3><p>De cursus, toetsen of opdrachten van je leerkracht: dat zijn schooldocumenten, en die horen in Copilot met je schoolaccount. Namen, foto\u2019s of gegevens van jezelf of anderen.</p></div>'+
+  '<div class="kaart twijfel"><h3>? Eerst navragen</h3><p>Mag Gemini Notebook bij deze opdracht? Kijk naar het AI-label en vraag het je leerkracht.</p></div></div>'+
+  '<div class="kaart"><p>Wil je je <b>cursus</b> gebruiken in een notebook? Doe dat dan in een <b>Copilot-notebook</b> met je schoolaccount (vorige stap).</p></div>'},
+ g_oef5:{type:'reflectie',id:'g_oef5',titel:'Oefening 4 · Bouw je studienotebook',geenOnthoud:true,
+  intro:'<div class="kaart twijfel"><p>Enkel als je leerkracht Gemini Notebook toelaat. Anders doe je dezelfde stappen in een <b>Copilot-notebook</b>.</p></div>'+
+   stappenLijst([['Maak een notebook','met als titel het vak en het hoofdstuk.'],['Voeg bronnen toe:','je eigen samenvatting en twee betrouwbare websites.'],['Stel drie vragen','in de chat: "Leg uit …", "Vergelijk …", "Waar staat dit?"'],['Maak een quiz of flashcards','in de Studio en test jezelf.'],['Controleer','met je cursus: wat klopte niet?']])+
+   kopie('Overhoor me over de bronnen in dit notebook. Stel één vraag per keer, wacht op mijn antwoord en geef een hint als ik het niet weet.'),
+  vragen:[{k:'r1',q:'Welke bronnen zette je in je notebook?'},{k:'r2',q:'Wat was het nuttigst om te studeren, en welke fout vond je?'}]},
+ g_oef6:{type:'reflectie',id:'g_oef6',titel:'Oefening 5 · Eerst jouw mindmap, dan die van AI',geenOnthoud:true,
+  intro:stappenLijst([['Teken zelf','in 5 minuten een mindmap van je hoofdstuk, op papier.'],['Laat er een maken:','Studio › Mindmap in Gemini Notebook, of vraag Copilot om een schema.'],['Vergelijk:','wat had jij dat AI niet had? En omgekeerd?'],['Beslis:','vul je eigen mindmap aan. Die neem je mee.']]),
+  vragen:[{k:'r1',q:'Wat had jij, en AI niet?'},{k:'r2',q:'Wat nam je over van AI, en waarom?'}]},
+ c7_controle:{type:'info',id:'c7_controle',titel:'Jij blijft verantwoordelijk',html:
+  '<div class="grid"><div class="kaart"><h3>Klopt het?</h3><p>Feiten, namen, cijfers en bronnen.</p></div><div class="kaart"><h3>Mag het?</h3><p>Kijk naar het AI-label. Geen gegevens van jezelf of anderen.</p></div><div class="kaart"><h3>Past het?</h3><p>Bij je vak, je opdracht en je niveau.</p></div><div class="kaart"><h3>Ontbreekt er iets?</h3><p>Overtuigend is niet altijd volledig.</p></div></div>'+
+  '<div class="kaart groen"><p>Gebruikte je AI voor een taak? Vermeld het in je transparantieverklaring. Hoe: <a class="link" href="ai-vermelden.html" target="_blank" rel="noopener">AI vermelden, stap voor stap ↗</a></p></div>'}
+};
+Object.keys(C7).forEach(function(k){CE_STAP[k]=C7[k];});
+/* ============ MODULE: JOUW WERK, JOUW VERANTWOORDELIJKHEID ============ */
+var MV=[
+ {type:'info',id:'mv_waarom',titel:'Jij blijft verantwoordelijk',html:
+  '<div class="kaart"><p>Op Sint-Rembert mag AI je helpen. Maar wat je indient, blijft <b>jouw werk</b>. Daarom vragen we drie dingen:</p></div>'+
+  '<div class="grid"><div class="kaart groen"><h3>Verantwoordelijk</h3><p>Jij controleert wat AI maakt, en staat in voor wat je indient. Een fout van AI is jouw fout.</p></div>'+
+  '<div class="kaart"><h3>Transparant</h3><p>Speelde AI een echte rol in je werk? Dan zeg je eerlijk hoe.</p></div>'+
+  '<div class="kaart"><h3>Kunnen uitleggen</h3><p>Je kan in een kort gesprek tonen hoe je werk tot stand kwam, en wat je zelf deed.</p></div></div>'+
+  '<p class="bron">Bron: Beleidskader AI Sint-Rembert (kernprincipe Transparantie en eigenaarschap) en de AI-leerlijn, 3e graad.</p>'},
+ {type:'stelling',id:'mv_stelling',klas:true,titel:'Waar sta jij?',
+  stellingen:[{s:'Als AI maar een klein beetje hielp, moet ik het niet vermelden.',hulp:'Wat is "een klein beetje"? Wanneer speelde AI een echte rol?'},{s:'Wie eerlijk vermeldt dat hij AI gebruikte, krijgt daardoor minder punten.',hulp:'Wat beoordeelt je leerkracht: het resultaat, of ook hoe je werkte?'}],
+  lk:{tijd:'8 minuten',vragen:['Wanneer speelde AI een betekenisvolle rol?','Wat is het risico als je het niet vermeldt?'],antw:['Ideeën, structuur, uitleg, letterlijke tekst, beelden: telkens vermelden. Enkel spelling nakijken van je eigen tekst: een korte vermelding volstaat.','Gebruik buiten de afspraken geldt als onregelmatigheid. Eerlijk vermelden binnen het label is net wat gevraagd wordt.'],tip:'Benadruk: transparantie wordt niet afgestraft. Het label bepaalt wat mag; de vermelding toont hoe je werkte.'}},
+ CE_STAP.ce5_realiteit,
+ {type:'info',id:'mv_drie',titel:'AI vermelden: drie lagen',html:
+  '<div class="grid"><div class="kaart"><h3>1. De originele bron</h3><p>Zocht je informatie met AI? Lees dan de <b>echte bron</b> zelf en verwijs naar die bron, niet naar de AI. Dat heeft altijd de voorkeur.</p></div>'+
+  '<div class="kaart"><h3>2. Citeer AI</h3><p>Nam je iets <b>letterlijk</b> over (enkel als het label het toelaat)? Zet het tussen aanhalingstekens, met een verwijzing in APA.</p></div>'+
+  '<div class="kaart groen"><h3>3. Je transparantieverklaring</h3><p>Een kort blad bij je werk: welke tool, waarvoor, in welke fase, wat je zelf deed en hoe je controleerde.</p></div></div>'+
+  '<div class="kaart twijfel"><h3>Zo citeer je AI in APA</h3><p>In de tekst: \u201c…\u201d (Microsoft, 2026)<br>In de bronnenlijst: Microsoft. (2026). <i>Microsoft 365 Copilot</i> [Generatieve AI]. (link naar de tool)</p><p class="klein">Het bedrijf is de auteur. Geen raadpleegdatum; een onduidelijk versienummer laat je weg.</p></div>'+
+  '<p class="bron">Bron: AI-leerlijn Sint-Rembert, op basis van Greeni (KU Leuven) en de Werkgroep APA.</p>'},
+ {type:'info',id:'mv_tabel',titel:'Wat noteer je, bij welk gebruik?',html:
+  '<div class="tabel-kader"><table class="les-tabel"><tr><th>Wat deed AI?</th><th>Wat noteer je?</th></tr>'+
+  [['Taal en spelling verbeteren in een tekst die je zelf schreef','Geen bronvermelding; een korte vermelding in je transparantieverklaring.'],
+   ['Ideeën, brainstorm of een eerste structuur','Vermelding in je transparantieverklaring: waarvoor en wat je ermee deed.'],
+   ['Uitleg vragen of informatie zoeken','De originele bron zelf lezen en die vermelden; AI-gebruik in je transparantieverklaring.'],
+   ['Tekst letterlijk overnemen (enkel als het label het toelaat)','Aanhalingstekens + verwijzing in de tekst + vermelding in de bronnenlijst (APA).'],
+   ['Een beeld, grafiek of code laten maken','Onderschrift "AI-gegenereerd beeld (naam tool)" + vermelding in je transparantieverklaring.']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td></tr>';}).join('')+'</table></div>'+
+  '<p class="bron">Bron: AI-leerlijn Sint-Rembert, 3e graad.</p>'},
+ {type:'mk',id:'mv_check',titel:'Wat noteer jij?',intro:'Kies telkens wat je moet noteren.',
+  V:[{q:'Copilot verbeterde de spelling van een tekst die je zelf schreef.',o:['Niets','Een korte vermelding in je transparantieverklaring','Een APA-verwijzing'],a:1,f:'Een korte vermelding volstaat. Geen bronvermelding nodig.'},
+     {q:'Copilot legde je de oorzaken van de Franse Revolutie uit, en je gebruikte dat in je werk.',o:['Naar Copilot verwijzen in je bronnenlijst','De originele bron zelf lezen en die vermelden','Niets, het was maar uitleg'],a:1,f:'Zoek de echte bron, lees ze en verwijs ernaar. Vermeld het AI-gebruik in je transparantieverklaring.'},
+     {q:'Bij label 4 nam je een zin van Copilot letterlijk over.',o:['Aanhalingstekens en een APA-verwijzing','Herschrijven zodat het niet opvalt','Niets'],a:0,f:'Letterlijk overgenomen = citeren: aanhalingstekens, verwijzing in de tekst en in de bronnenlijst.'},
+     {q:'Je liet een grafiek maken met AI.',o:['Onderschrift "AI-gegenereerd beeld" en vermelding','Niets, het is maar een grafiek','Enkel je naam eronder'],a:0,f:'Onder het beeld: AI-gegenereerd beeld (naam tool), en een vermelding in je transparantieverklaring.'}]},
+ {type:'info',id:'mv_blad',titel:'Je transparantieverklaring',html:
+  '<div class="kaart"><p>In de 3e graad voeg je bij een taak waarvoor je AI gebruikte een <b>transparantieverklaring</b> toe: één blad. Zo werkt ze:</p></div>'+
+  '<ol class="stappenlijst"><li><b>AI-labels per fase.</b> Je leerkracht vult per fase het label in (bv. onderzoek, structuur, eerste versie, eindredactie). Jij noteert per fase waarvoor je AI gebruikte.</li><li><b>Mijn AI-gebruik.</b> Welke tool, waarvoor, je belangrijkste prompts, en wat je zelf deed en aanpaste.</li><li><b>Controle, bronnen en bewijs.</b> Hoe je controleerde, je bronvermelding, en screenshots met de relevante delen aangeduid. Je volledige chatgeschiedenis geef je nooit af.</li><li><b>Verklaring.</b> Binnen de afspraken gewerkt, en je kan het mondeling toelichten.</li></ol>'+
+  '<div class="knoprij"><a class="hoofd" style="text-decoration:none;display:inline-block" href="AI-verantwoording-3e-graad.docx" download>Download de transparantieverklaring (Word)</a></div>'},
+ {type:'vermelden',id:'vermelden',titel:'AI vermelden, stap voor stap'},
+ {type:'info',id:'mv_hoger',titel:'Klaar voor het hoger onderwijs',html:
+  '<div class="kaart"><p>In het hoger onderwijs volstaat "ik heb AI gebruikt" niet. Je moet tonen welke tool je waarvoor gebruikte, wat je eigen inbreng was en hoe je controleerde. Wat je hier leert, gebruik je daar meteen.</p></div>'+
+  '<div class="grid"><div class="kaart"><h3>KU Leuven</h3><p>Werkt vanaf 2026-2027 met een aparte <b>transparantieverklaring</b>, zoals het blad dat jij nu leert invullen.</p></div>'+
+  '<div class="kaart"><h3>VUB</h3><p>Vraagt om AI-gebruik expliciet te vermelden, <b>prompts en output bij te houden</b>, en output niet zomaar over te nemen.</p></div>'+
+  '<div class="kaart"><h3>Overal</h3><p>De regels verschillen per instelling, per vak en per opdracht. Zoek ze zelf op en vraag ernaar als ze ontbreken.</p></div></div>'+
+  '<div class="kaart groen"><h3>Wat je op het einde van het 6e jaar kan</h3><p>Een AI-logboek bijhouden bij een grotere opdracht (bv. je GIP), AI correct vermelden, zelf de afspraken nagaan, en je werk mondeling verdedigen.</p></div>'+
+  '<p class="bron">Bron: AI-leerlijn Sint-Rembert, op basis van de VUB-richtlijnen voor studenten (februari 2025) en KU Leuven.</p>'},
+ {type:'reflectie',id:'mv_reflectie',titel:'Wat neem ik mee?',vragen:[{k:'r1',q:'Waar vind je bij een nieuwe opdracht de afspraken over AI, en wat doe je als ze ontbreken?'},{k:'r2',q:'Wat ga je vanaf nu anders doen als je AI gebruikt voor een taak?'}]}
+];
+
+CE_PLAN.M7={m7s0:['c7_waar'],m7s1:['ce7_offload','ce7_tips','c7_vier','c7_oef1','c7_gesprek','c7_opnieuw'],m7_toets:['c7_cursus','c7_samenv'],m7_notebook:['g_wat','g_studio','g_mag','g_oef5','g_oef6'],m7s5:['c7_controle']};
+
 
 var TITELS={};
 function titelDia(m){return {type:'titel',id:'titel_'+m.id,titel:''};}
@@ -550,30 +679,35 @@ function lBewaar(d){schrijf(sleutel(),d);}
 function antwoord(id,v){var d=lData();if(v===undefined)return d.a[id];d.a[id]=v;lBewaar(d);}
 function bewaarPos(){var d=lData(),m=S.mods[S.mi];if(m)d.pos[m.id]=S.si;lBewaar(d);}
 function stappenVan(id){return (S.rol==='lk'?KLAS[id]:STAPPEN[id])||[];}
-var KORT={M1:'Wat AI is, waar je het tegenkomt en waar het fout loopt.',M2:'Van vaste regels tot deep learning: hoe AI leert.',M3:'Tekst en beeld maken met AI, en sterk prompten.',M4:'Bias, deepfakes, privacy en energie.',M5:'De AI-labels, de afspraken en hoe je AI vermeldt.',M6:'Jobs, regels, trends en jouw visie op AI.',M7:'Studeren met Copilot: leren in plaats van laten doen.'};
+var KORT={M1:'Wat AI is, waar je het tegenkomt en waar het fout loopt.',M2:'Van vaste regels tot deep learning: hoe AI leert.',M3:'Tekst en beeld maken met AI, en sterk prompten.',M4:'Bias, deepfakes, privacy en energie.',M5:'De AI-labels en de afspraken op school.',M8:'Transparant werken: AI vermelden, stap voor stap, en de link met het hoger onderwijs.',M6:'Jobs, regels, trends en jouw visie op AI.',M7:'Studeren met Copilot Chat en Gemini Notebook, met praktische oefeningen.'};
 
 /* ============ START ============ */
 var ICO_LK='<svg class="icoon" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="26" fill="#06038D"/><rect x="12" y="14" width="28" height="18" rx="4" fill="#fff"/><rect x="16" y="18" width="12" height="3" rx="1.5" fill="#95D600"/><rect x="16" y="24" width="18" height="3" rx="1.5" fill="#06038D"/><rect x="22" y="34" width="8" height="6" fill="#fff"/></svg>';
 var ICO_LL='<svg class="icoon" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="26" fill="#95D600"/><circle cx="26" cy="19" r="7" fill="#06038D"/><rect x="15" y="29" width="22" height="11" rx="5.5" fill="#06038D"/></svg>';
 function start(){
   sluitPres();S={rol:null,mods:[],mi:0,si:0};
-  app.innerHTML='<span class="badge">3e graad · 5e en 6e jaar</span><h2 style="margin-top:.7rem">Wie ben jij?</h2>'+
+  nav('start');
+  app.innerHTML='<div class="kaart intro"><span class="badge">3e graad · 5e en 6e jaar</span><h2 style="margin:.6rem 0 .4rem">Waarom deze cursus?</h2>'+
+   '<p>Bijna iedereen gebruikt AI. Het verschil zit in <b>hoe goed</b> je het gebruikt: kritisch, eerlijk en zo dat je er echt van leert. Dat vraagt ook het hoger onderwijs straks van je.</p>'+
+   '<div class="knoprij"><button class="tweede" id="leeswaarom">Lees waarom we dit doen</button></div></div>'+
+   '<h2 style="margin-top:1.4rem">Wie ben jij?</h2>'+
    '<div class="grid" style="grid-template-columns:1fr">'+
    '<button class="keuze" id="kLl">'+ICO_LL+'<span>Ik ben leerling<small>Kies zelf welke modules je volgt, op je eigen tempo.</small></span></button>'+
-   '<button class="keuze" id="kLk">'+ICO_LK+'<span>Ik ben leerkracht<small>Kies je modules en geef de les met een geleide presentatie.</small></span></button></div>'+paginaKnoppen();
+   '<button class="keuze" id="kLk">'+ICO_LK+'<span>Ik ben leerkracht<small>Kies je modules en geef de les met een geleide presentatie.</small></span></button></div>';
+  document.getElementById('leeswaarom').onclick=function(){toonPagina('waarom');};
   document.getElementById('kLl').onclick=function(){S.rol='ll';var d=lData();d.keuze.length?overzicht():kiesModules();};
   document.getElementById('kLk').onclick=function(){S.rol='lk';var d=lData();d.keuze.length?overzicht():kiesModules();};
-  bindPaginas(start);
 }
 function rolBadge(){return '<span class="badge">'+(S.rol==='lk'?'Leerkracht':'Leerling')+'</span>';}
 
 /* ============ MODULES KIEZEN ============ */
 function kiesModules(){
+  nav('wijzig');
   var d=lData(),kz=d.keuze.length?d.keuze:[];
   var h='<div class="topbalk">'+rolBadge()+'</div><h2>'+(S.rol==='lk'?'Welke modules geef je?':'Welke modules wil je volgen?')+'</h2>'+
    '<p>'+(S.rol==='lk'?'Je kan dit later altijd aanpassen. Per module krijg je een geleide presentatie met notities.':'Kies wat je wil leren. Je kan later altijd modules toevoegen.')+'</p>';
   MODULES.forEach(function(m,i){
-    h+='<label class="mod"><input type="checkbox" value="'+m.id+'"'+(kz.indexOf(m.id)>-1?' checked':'')+'><span><b>'+(m.id==='M7'?esc(m.titel):'Module '+(i+1)+' · '+esc(m.titel))+'</b><small>'+esc(KORT[m.id]||'')+(d.klaar.indexOf(m.id)>-1?' · ✓ afgerond':'')+'</small></span></label>';});
+    h+='<label class="mod"><input type="checkbox" value="'+m.id+'"'+(kz.indexOf(m.id)>-1?' checked':'')+'><span><b>'+'Module '+(i+1)+' · '+esc(m.titel)+'</b><small>'+esc(KORT[m.id]||'')+(d.klaar.indexOf(m.id)>-1?' · ✓ afgerond':'')+'</small></span></label>';});
   h+='<div class="knoprij"><button class="tweede" id="alles">Alles aanvinken</button><button class="hoofd" id="ok">Verder</button><button class="tweede" id="terug">← Terug</button></div>';
   app.innerHTML=h;
   var sync=function(){app.querySelectorAll('.mod input').forEach(function(i){i.parentNode.classList.toggle('aan',i.checked);});};
@@ -586,25 +720,21 @@ function kiesModules(){
     var d=lData();d.keuze=k;lBewaar(d);overzicht();top();};
 }
 function overzicht(){
-  sluitPres();
+  sluitPres();nav('modules');
   var d=lData();S.mods=MODULES.filter(function(m){return d.keuze.indexOf(m.id)>-1;});
   var h='<div class="topbalk">'+rolBadge()+'</div><h2>'+(S.rol==='lk'?'Jouw lessen':'Jouw modules')+'</h2>';
   S.mods.forEach(function(m,i){
     var st=stappenVan(m.id),p=d.pos[m.id]||0,klaar=d.klaar.indexOf(m.id)>-1,nr=MODULES.indexOf(m)+1;
     var label=S.rol==='lk'?(p>0?'Ga verder (dia '+(p+1)+')':'Start de presentatie'):(klaar?'Bekijk opnieuw':(p>0?'Ga verder (stap '+(p+1)+')':'Start'));
-    h+='<div class="kaart'+(klaar&&S.rol==='ll'?' groen':'')+'"><h3>'+(m.id==='M7'?esc(m.titel):'Module '+nr+' · '+esc(m.titel))+'</h3><p class="klein">'+esc(KORT[m.id]||'')+' · '+st.length+(S.rol==='lk'?' dia\u2019s':' stappen')+(klaar&&S.rol==='ll'?' · ✓ afgerond':'')+'</p>'+
+    h+='<div class="kaart'+(klaar&&S.rol==='ll'?' groen':'')+'"><h3>'+'Module '+nr+' · '+esc(m.titel)+'</h3><p class="klein">'+esc(KORT[m.id]||'')+' · '+st.length+(S.rol==='lk'?' dia\u2019s':' stappen')+(klaar&&S.rol==='ll'?' · ✓ afgerond':'')+'</p>'+
       '<div class="knoprij"><button class="hoofd" data-m="'+i+'">'+label+'</button>'+(p>0?'<button class="tweede" data-opnieuw="'+i+'">Van voor af aan</button>':'')+'</div></div>';});
-  h+='<div class="knoprij"><button class="tweede" id="wijzig">Modules aanpassen</button><button class="tweede" id="terug">← Start</button></div>'+paginaKnoppen();
   app.innerHTML=h;
   app.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){S.mi=+b.dataset.m;S.si=lData().pos[S.mods[S.mi].id]||0;openModule();};});
   app.querySelectorAll('[data-opnieuw]').forEach(function(b){b.onclick=function(){S.mi=+b.dataset.opnieuw;S.si=0;bewaarPos();openModule();};});
-  document.getElementById('wijzig').onclick=kiesModules;
-  document.getElementById('terug').onclick=start;
-  bindPaginas(overzicht);
 }
 function openModule(){ if(S.rol==='lk'){toonStap();} else if(S.si===0) moduleIntro(); else toonStap(); }
 function moduleIntro(){
-  var m=S.mods[S.mi];huidigeStap=null;
+  var m=S.mods[S.mi];huidigeStap=null;nav('modules');
   app.innerHTML='<div class="topbalk">'+rolBadge()+'</div>'+
    '<h2>'+esc(m.titel)+'</h2><div class="kaart"><h3>Na deze module kan ik:</h3><ul>'+(DOELEN[m.id]||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul><p class="klein">'+stappenVan(m.id).length+' stappen</p></div>'+
    '<div class="kaart twijfel"><p><b>Kijk eerst naar het label.</b> Geen label = geen AI. Twijfel je? Vraag het vóór je begint. Hoe je AI vermeldt: <a class="link" href="'+LABELSITE+'" target="_blank" rel="noopener">AI vermelden, stap voor stap ↗</a></p></div>'+
@@ -617,6 +747,7 @@ function moduleIntro(){
 function toonStap(){
   var m=S.mods[S.mi];if(!m){overzicht();return;}
   if(S.rol==='lk'){toonDia();return;}
+  nav('modules');
   var st=stappenVan(m.id),stap=st[S.si];
   if(!stap){S.si=0;stap=st[0];}
   var pct=Math.round((S.si+1)/st.length*100);
@@ -651,7 +782,7 @@ function toonDia(){
   var m=S.mods[S.mi],st=stappenVan(m.id),stap=st[S.si];if(!stap){S.si=0;stap=st[0];}
   presOpen=true;document.body.classList.add('pres-modus');huidigeStap=stap;
   var nr=MODULES.indexOf(m)+1,pct=Math.round((S.si+1)/st.length*100),open=!!window.__notesOpen;
-  var h='<div class="pres"><div class="pres-top"><span class="badge">'+(m.id==='M7'?esc(m.titel):'Module '+nr+' · '+esc(m.titel))+'</span>'+
+  var h='<div class="pres"><div class="pres-top"><span class="badge">'+'Module '+nr+' · '+esc(m.titel)+'</span>'+
     '<span class="stap">Dia '+(S.si+1)+' / '+st.length+'</span>'+
     '<button class="pk" id="p-notes" title="Notities (N)">'+(open?'Verberg notities':'Notities')+'</button><button class="pk" id="p-venster" title="Notities in een apart venster">Notities apart</button><button class="pk" id="p-fs" title="Volledig scherm (F)">Volledig scherm</button><button class="pk" id="p-x">Sluiten</button></div>'+
     '<div class="pres-body"><div class="pres-dia"><div class="pres-inhoud">'+
@@ -708,9 +839,26 @@ window.__cursusVorige=function(){var b=document.getElementById('vorige');if(b&&!
 window.__cursusThuis=function(){if(S.rol)overzicht();else start();};
 
 /* ============ PAGINA'S ============ */
-var PAGINAS={docs:'Documenten',vermelden:'AI vermelden, stap voor stap'};
+var PAGINAS={waarom:'Waarom deze cursus?',docs:'Documenten',vermelden:'AI vermelden'};
+function nav(actief){
+  var n=document.getElementById('topnav');if(!n)return;
+  var k=[['start','Start']];
+  if(S.rol)k.push(['modules',S.rol==='lk'?'Mijn lessen':'Mijn modules'],['wijzig','Modules aanpassen']);
+  k=k.concat([['waarom','Waarom deze cursus?'],['docs','Documenten'],['vermelden','AI vermelden']]);
+  n.innerHTML=k.map(function(x){return '<button class="nk'+(x[0]===actief?' aan':'')+'" data-nav="'+x[0]+'">'+x[1]+'</button>';}).join('')+(S.rol?'<span class="nrol">'+(S.rol==='lk'?'Leerkracht':'Leerling')+'</span>':'');
+  n.querySelectorAll('[data-nav]').forEach(function(b){b.onclick=function(){
+    if(huidigeStap&&huidigeStap.bijVerlaten)try{huidigeStap.bijVerlaten();}catch(e){}
+    var v=b.dataset.nav;if(v==='start')start();else if(v==='modules')overzicht();else if(v==='wijzig')kiesModules();else toonPagina(v);top();};});
+}
 function paginaKnoppen(){return '<div class="knoprij" style="margin-top:1.4rem">'+Object.keys(PAGINAS).map(function(k){return '<button class="tweede" data-pagina="'+k+'">'+PAGINAS[k]+'</button>';}).join('')+'</div>';}
 function bindPaginas(terug){app.querySelectorAll('[data-pagina]').forEach(function(b){b.onclick=function(){toonPagina(b.dataset.pagina,terug);};});}
+var WAAROM='<h2>Waarom deze cursus?</h2>'+
+ '<div class="cijfers">'+cijfer('7 à 9 op 10','Vlaamse 15-jarigen gebruiken AI minstens één keer per maand.','')+cijfer('20% · 3%','is digitaal ongeletterd: jongeren uit de laagste tegenover de hoogste sociale klasse.','niet')+cijfer('+48% · −17%','beter tijdens het oefenen met AI, maar lager op het examen zonder AI.','groen')+'</div>'+
+ '<div class="kaart"><p>AI is overal. Bijna iedereen heeft er toegang toe. Het verschil zit in <b>hoe goed</b> je het gebruikt: kun je het kritisch inzetten, controleren en eerlijk vermelden? En leer je er echt van, of laat je AI het denkwerk doen?</p>'+
+ '<p>Na het secundair verwachten hogescholen, universiteiten en werkgevers dat je AI verantwoord gebruikt, je gebruik documenteert en je werk kan uitleggen. Met deze cursus oefen je dat nu al.</p></div>'+
+ '<h3 style="margin:1.2rem 0 .6rem">Onze vier kernprincipes</h3>'+
+ '<div class="grid"><div class="kaart"><h3>De mens blijft centraal</h3><p>Jij stelt de vraag en jij beslist. AI vervangt je eigen denken niet.</p></div><div class="kaart"><h3>Meerwaarde</h3><p>Gebruik AI enkel als het echt helpt. Kan het even goed zonder, dan liever zonder.</p></div><div class="kaart"><h3>Transparantie en eigenaarschap</h3><p>Jij blijft verantwoordelijk, controleert de output en maakt je AI-gebruik zichtbaar.</p></div><div class="kaart"><h3>Leeftijdsgeschikt</h3><p>AI mag je basisvaardigheden niet uithollen: zelf lezen, schrijven, rekenen en redeneren blijven belangrijk.</p></div></div>'+
+ '<p class="bron">Bronnen: ChatEQUITY (KU Leuven), Torhout 18/11/2026; ICILS 2023; OECD Digital Education Outlook 2026 (Bastani e.a., 2025); Beleidskader AI Sint-Rembert; AI-leerlijn Sint-Rembert.</p>';
 var DOCS=[
  ['Transparantieverklaring 3e graad','Volledige AI-verantwoording, met AI-labels per fase. Op één blad.','AI-verantwoording-3e-graad.docx','Download (Word)'],
  ['Blad 2e graad','Korte AI-vermelding met blad.','AI-verantwoording-2e-graad.docx','Download (Word)'],
@@ -718,12 +866,14 @@ var DOCS=[
  ['Klasposter AI-labels','De vier labels: wat mag bij welke opdracht?','AI-labels-poster%20(1).png','Bekijk de poster'],
  ['Invulcursus (papieren versie)','De cursus om af te drukken.','invulcursus-ai-leerlingen.pdf','Open (PDF)']];
 function toonPagina(k,terug){
-  sluitPres();
+  sluitPres();nav(k);huidigeStap=null;
+  var terugKnop='<div class="knoprij"><button class="tweede" id="pterug">← Terug</button></div>';
+  if(k==='waarom'){app.innerHTML=WAAROM+terugKnop;document.getElementById('pterug').onclick=terug||function(){S.rol?overzicht():start();};top();return;}
   if(k==='vermelden'){app.innerHTML='<div class="topbalk"><span class="badge">AI vermelden</span></div>';var w=document.createElement('div');app.appendChild(w);RENDER.vermelden(w,{});
-    app.insertAdjacentHTML('beforeend','<div class="knoprij"><button class="tweede" id="pterug">← Terug</button></div>');document.getElementById('pterug').onclick=terug||start;top();return;}
+    app.insertAdjacentHTML('beforeend','<div class="knoprij"><button class="tweede" id="pterug">← Terug</button></div>');document.getElementById('pterug').onclick=terug||function(){S.rol?overzicht():start();};top();return;}
   app.innerHTML='<div class="topbalk"><span class="badge">Documenten</span></div><h2>Documenten</h2><div class="grid">'+DOCS.map(function(d){return '<div class="kaart"><h3>'+esc(d[0])+'</h3><p class="klein">'+esc(d[1])+'</p><div class="knoprij"><a class="hoofd" style="text-decoration:none;display:inline-block" href="'+d[2]+'"'+(/\.docx$/.test(d[2])?' download':' target="_blank" rel="noopener"')+'>'+d[3]+'</a></div></div>';}).join('')+'</div>'+
     '<div class="knoprij"><button class="tweede" id="pterug">← Terug</button></div>';
-  document.getElementById('pterug').onclick=terug||start;top();
+  document.getElementById('pterug').onclick=terug||function(){S.rol?overzicht():start();};top();
 }
 var Live={aan:false,rol:null,volg:false};function liveIndienen(){}
 bouwStappen();bouwKlas();
@@ -992,7 +1142,7 @@ RENDER.rapport=function(el){
 };
 RENDER.titel=function(el){
   var m=S.mods[S.mi],nr=MODULES.indexOf(m)+1;
-  el.innerHTML='<div class="titeldia"><span class="badge">3e graad · '+(m.id==='M7'?'Aanrader':'Module '+nr)+'</span><h1>'+esc(m.titel)+'</h1><p class="sub">'+esc(KORT[m.id]||'')+'</p>'+
+  el.innerHTML='<div class="titeldia"><span class="badge">3e graad · '+'Module '+nr+'</span><h1>'+esc(m.titel)+'</h1><p class="sub">'+esc(KORT[m.id]||'')+'</p>'+
    '<div class="kaart"><h3>Na deze les kan je:</h3><ul>'+(DOELEN[m.id]||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'+
    '<p class="klein">Leerlingen kunnen meevolgen op hun laptop: open de cursus · Ik ben leerling · '+esc(m.titel)+'.</p></div>';
 };
