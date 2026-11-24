@@ -1,558 +1,1142 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AI-Cursus — Scholengroep Sint-Rembert</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>AI-cursus 3e graad | Sint-Rembert</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261015a">
-<link rel="stylesheet" href="huisstijl.css?v=20261026a">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="huisstijl.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--blauw:#06038D;--groen:#95D600;--wit:#FFFFFF;--grijs:#D9D9D9;--licht:#CCFF99;--mid:#A6F04A;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--blauw);color:var(--wit);font-family:Poppins,system-ui,"Segoe UI",sans-serif;line-height:1.5}
+button,input,textarea{font:inherit}
+:focus-visible{outline:3px solid var(--groen);outline-offset:3px}
+.wrap{max-width:900px;margin:0 auto;padding:1.25rem 1.1rem 4rem}
+header{display:flex;align-items:center;gap:.9rem;margin-bottom:1.25rem}
+header img{width:48px;height:auto}
+header h1{margin:0;font-weight:800;text-transform:uppercase;font-size:clamp(1.3rem,4vw,1.9rem);line-height:1.1}
+header p{margin:.1rem 0 0;font-weight:500;opacity:.9;font-size:.95rem}
+.chev{margin-left:auto;width:64px;flex:none}
+h2{font-weight:800;text-transform:uppercase;font-size:clamp(1.25rem,3.4vw,1.6rem);line-height:1.2;margin:.4rem 0 .8rem}
+h3{font-weight:800;margin:0 0 .4rem;font-size:1.08rem}
+p{margin:.3rem 0}
+.kaart{background:var(--wit);color:var(--blauw);border-radius:28px;padding:1.25rem 1.35rem;margin-bottom:1rem}
+.kaart.groen{background:var(--groen)}
+.kaart.niet{background:var(--blauw);color:var(--wit);border:3px solid var(--wit)}
+.kaart.twijfel{border:6px solid var(--groen)}
+.grid{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.hoofd,.tweede{cursor:pointer;border-radius:999px;font-weight:800;padding:.75rem 1.4rem;border:2px solid var(--groen);background:var(--groen);color:var(--blauw)}
+.hoofd:hover{background:var(--mid);border-color:var(--mid)}
+.hoofd:disabled{opacity:.45;cursor:not-allowed}
+/* stappen van de leerlingensite */
+#inhoud .mc-content{margin:0 0 1rem!important;width:100%!important;max-width:none!important}
+details.video-optie{background:#F4F6FF;border:2px solid #D9D9D9;border-radius:18px;margin:14px 0;padding:0}
+details.video-optie>summary{cursor:pointer;list-style:none;padding:.75rem 1rem;font-weight:700;color:#06038D}
+details.video-optie>summary::-webkit-details-marker{display:none}
+details.video-optie[open]>summary{border-bottom:2px solid #D9D9D9}
+details.video-optie .yt-wrap{margin:0!important}
+header{margin-bottom:1.25rem}
+.kaart ul,.kaart ol,.lk ol,.lk ul{padding-left:1.2rem}
+/* klasversie */
+.kaart.bord{padding:1.6rem 1.7rem}
+.kaart.bord .kern{font-size:clamp(1.25rem,2.8vw,1.75rem);font-weight:800;line-height:1.3;margin:0 0 .8rem}
+.kaart.bord ul{font-size:clamp(1.02rem,2vw,1.2rem);line-height:1.6;margin:0}
+.kaart.bord li{margin:.35rem 0}
+.ddw{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.7rem}
+.ddw span{background:#06038D;color:#FFFFFF;border-radius:999px;padding:.2rem .8rem;font-weight:800;font-size:.85rem}
+.ddw span:nth-child(2){background:#95D600;color:#06038D}
+.bordvraag{font-size:clamp(1.1rem,2.4vw,1.4rem);font-weight:800;line-height:1.35;margin:.2rem 0 .5rem}
+.lk .antw li{opacity:.95}
+/* live */
+.livebalk{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;background:#FFFFFF;color:#06038D;border:4px solid #95D600;border-radius:20px;padding:.6rem 1rem;margin:0 0 .8rem}
+.livebalk .tweede{border-color:#06038D;color:#06038D;padding:.4rem .9rem}
+.lb-punt{width:12px;height:12px;border-radius:50%;background:#95D600;box-shadow:0 0 0 4px #CCFF99!important;animation:lbp 1.6s infinite}
+@keyframes lbp{50%{opacity:.35}}
+.lb-status{font-weight:700}
+.lb-namen summary{cursor:pointer;font-weight:700;text-decoration:underline}
+.lb-naam{display:inline-block;border:2px solid #D9D9D9;border-radius:999px;padding:.1rem .6rem;margin:.15rem;opacity:.55}
+.lb-naam.aan{border-color:#95D600;opacity:1}
+.lb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.7rem;margin-top:.6rem}
+.lb-kaart{cursor:pointer;display:flex;flex-direction:column;gap:.2rem;text-align:left;background:#FFFFFF;border:2px solid #D9D9D9;border-radius:16px;padding:.5rem;color:#06038D;font:inherit}
+.lb-kaart:hover{border-color:#95D600}
+.lb-kaart img{width:100%;border-radius:10px;background:#EEF1FF}
+.lb-kaart span{font-size:.85rem}
+/* geleide presentatie */
+body.pres-modus{overflow:hidden}
+.pres{position:fixed;inset:0;z-index:40;background:#06038D;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+.pres-top{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;padding:.6rem 1rem;border-bottom:2px solid rgba(255,255,255,.18)}
+.pres-top .stap{margin-left:auto;font-weight:700}
+.pk{cursor:pointer;font:inherit;font-weight:700;border-radius:999px;border:2px solid #FFFFFF;background:transparent;color:#FFFFFF;padding:.35rem .9rem}
+.pk:hover{border-color:#95D600;color:#95D600}
+.pk:disabled{opacity:.35;cursor:default}
+.pk.groot{width:56px;height:56px;padding:0;font-size:1.3rem;flex:none}
+.pres-body{flex:1;display:flex;min-height:0}
+.pres-dia{flex:1;overflow:auto;padding:1.4rem clamp(1rem,4vw,3rem)}
+.pres-inhoud{max-width:1150px;margin:0 auto;font-size:clamp(1rem,1.25vw,1.3rem)}
+.pres-inhoud h2{font-size:clamp(1.5rem,2.6vw,2.4rem)}
+.pres-notes{display:none;width:min(380px,36vw);overflow:auto;background:#FFFFFF;color:#06038D;padding:1rem 1.1rem;border-left:6px solid #95D600}
+.pres-notes.open{display:block}
+.pres-notes ol,.pres-notes ul{padding-left:1.2rem}
+.pres-notes .tweede{border-color:#06038D;color:#06038D}
+.pres-nav{display:flex;align-items:center;gap:1rem;padding:.6rem 1rem;border-top:2px solid rgba(255,255,255,.18)}
+.pres-nav .voortgang{flex:1;margin:0}
+.titeldia{text-align:left;padding-top:4vh}
+.titeldia h1{font-weight:800;text-transform:uppercase;font-size:clamp(2rem,5vw,4rem);line-height:1.05;margin:.6rem 0 .3rem}
+.titeldia .sub{font-size:1.2em;font-weight:600;margin:0 0 1.2rem}
+/* cijfers */
+.cijfers{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.8rem;margin-bottom:1rem}
+.cijfer{background:#FFFFFF;color:#06038D;border-radius:24px;padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.2rem}
+.cijfer b{font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1}
+.cijfer.groen{background:#95D600}
+.cijfer.niet{background:#06038D;color:#FFFFFF;border:3px solid #FFFFFF}
+.bron{font-size:.8rem;opacity:.85;margin-top:.6rem}
+.balken{display:grid;gap:.6rem;margin:.6rem 0}
+.balk{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:.2rem .7rem;align-items:center}
+.balk .bl{grid-row:span 2;font-weight:700;font-size:.92rem}
+.bw{display:flex;align-items:center;gap:.4rem}
+.bw i{display:block;height:14px;border-radius:7px;background:#06038D}
+.bw i.b2{background:#95D600}
+.bw em{font-style:normal;font-weight:700;font-size:.85rem}
+.lg{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle}
+.lg.l1{background:#06038D}.lg.l2{background:#95D600}
+.vermeld-kader{border-radius:24px;overflow:hidden;border:3px solid #95D600;background:#06038D;margin-bottom:.8rem}
+.vermeld-kader iframe{display:block;width:100%;height:min(1050px,82vh);border:0}
+.kaart.groen .hoofd{background:var(--blauw);border-color:var(--blauw);color:var(--wit)}
+.tweede{background:transparent;border-color:var(--wit);color:var(--wit);font-weight:700}
+.kaart .tweede{border-color:var(--blauw);color:var(--blauw)}
+.knoprij{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-top:1rem}
+.badge{display:inline-block;border-radius:999px;padding:.2rem .85rem;font-weight:800;font-size:.85rem;background:var(--groen);color:var(--blauw)}
+.badge.wit{background:var(--wit)}
+.badge.rand{background:transparent;border:2px solid var(--groen);color:var(--groen)}
+.keuze{cursor:pointer;display:flex;align-items:center;gap:1rem;width:100%;text-align:left;background:var(--wit);color:var(--blauw);border:3px solid var(--wit);border-radius:24px;padding:1.1rem 1.25rem;font-weight:700;font-size:1.05rem}
+.keuze:hover{border-color:var(--groen)}
+.keuze small{display:block;font-weight:500;font-size:.9rem}
+.keuze .icoon{flex:none;width:52px;height:52px}
+input[type=text],textarea{width:100%;border:2px solid var(--blauw);border-radius:16px;padding:.7rem .9rem;color:var(--blauw);background:var(--wit)}
+textarea{min-height:90px;resize:vertical}
+.code-in{font-size:1.5rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;text-align:center}
+.grote-code{font-size:clamp(2.2rem,8vw,3.8rem);font-weight:800;letter-spacing:.12em;text-align:center;margin:.4rem 0}
+.voortgang{height:10px;border-radius:999px;background:rgba(255,255,255,.25);overflow:hidden;margin:.5rem 0 1rem}
+.voortgang i{display:block;height:100%;background:var(--groen);border-radius:999px;transition:width .3s}
+.topbalk{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-bottom:.4rem}
+.topbalk .stap{margin-left:auto;font-weight:600;font-size:.9rem;opacity:.9}
+.mod{display:flex;align-items:flex-start;gap:.8rem;background:var(--wit);color:var(--blauw);border-radius:22px;padding:1rem 1.1rem;margin-bottom:.6rem;cursor:pointer;border:3px solid var(--wit)}
+.mod.aan{border-color:var(--groen);background:var(--licht)}
+.mod.uit{opacity:.55;cursor:not-allowed}
+.mod input{width:22px;height:22px;accent-color:#06038D;flex:none;margin-top:.2rem}
+.mod b{display:block}
+.mod small{display:block;font-size:.88rem}
+.klasmoment{background:var(--wit);color:var(--blauw);border:6px solid var(--groen);border-radius:28px;padding:1rem 1.25rem;margin-bottom:1rem}
+.klasmoment .badge{margin-bottom:.4rem}
+.lk{background:var(--blauw);color:var(--wit);border:3px dashed var(--groen);border-radius:24px;padding:1rem 1.2rem;margin:1rem 0}
+.lk h3{color:var(--groen)}
+details.lk>summary{cursor:pointer;list-style:none;color:var(--groen)}
+details.lk>summary::-webkit-details-marker{display:none}
+details.lk[open]>summary{margin-bottom:.6rem}
+.lk ol,.lk ul{margin:.3rem 0;padding-left:1.2rem}
+/* bouwer */
+.bouw{display:grid;grid-template-columns:1fr;gap:.8rem}
+.palet{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.kleur{width:40px;height:40px;border-radius:12px;border:3px solid var(--grijs);cursor:pointer}
+.kleur.aan{border-color:var(--blauw);box-shadow:0 0 0 3px var(--groen)}
+.maat{cursor:pointer;border-radius:999px;border:2px solid var(--blauw);background:var(--wit);color:var(--blauw);font-weight:700;padding:.35rem .9rem}
+.maat.aan{background:var(--blauw);color:var(--wit)}
+canvas.veld{width:100%;height:auto;border-radius:20px;border:2px solid var(--grijs);background:#F4F6FF;touch-action:manipulation;cursor:crosshair}
+.gevoelens{display:flex;flex-wrap:wrap;gap:.45rem}
+.gevoel{cursor:pointer;border-radius:999px;border:2px solid var(--blauw);background:var(--wit);color:var(--blauw);font-weight:600;padding:.35rem .9rem}
+.gevoel.aan{background:var(--groen);border-color:var(--groen);font-weight:800}
+/* labels */
+.labels{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin:.6rem 0}
+.lab{border-radius:22px;padding:1rem;border:3px solid var(--blauw);background:var(--wit);color:var(--blauw)}
+.lab .n{display:inline-flex;width:36px;height:36px;border-radius:50%;align-items:center;justify-content:center;font-weight:800;background:var(--blauw);color:var(--wit)}
+.lab b{display:block;text-transform:uppercase;font-weight:800;margin:.4rem 0 .15rem}
+.lab.l1{background:var(--blauw);color:var(--wit);border-color:var(--wit)}
+.lab.l1 .n{background:var(--wit);color:var(--blauw)}
+.lab.l3{border:6px solid var(--groen)}
+.lab.l4{background:var(--groen);border-color:var(--groen)}
+.vraag{background:var(--wit);color:var(--blauw);border-radius:22px;padding:1rem 1.15rem;margin-bottom:.7rem}
+.vraag p.q{font-weight:700;margin:0 0 .6rem}
+.opties{display:flex;flex-wrap:wrap;gap:.5rem}
+.ko{cursor:pointer;border-radius:999px;border:2px solid var(--blauw);background:var(--wit);color:var(--blauw);font-weight:700;padding:.45rem 1rem}
+.ko.goed{background:var(--groen);border-color:var(--groen)}
+.ko.fout{background:var(--blauw);color:var(--wit)}
+.ko:disabled{cursor:default}
+.kfb{margin-top:.5rem;font-size:.95rem}
+.kfb:empty{display:none}
+.flip{cursor:pointer;min-height:110px;display:flex;flex-direction:column;justify-content:center;background:var(--wit);color:var(--blauw);border-radius:22px;padding:1rem;border:3px solid var(--wit);text-align:left;font-weight:700}
+.flip.ai{background:var(--groen);border-color:var(--groen)}
+.flip.regels{background:var(--blauw);color:var(--wit);border-color:var(--wit)}
+.flip small{display:block;font-weight:500;margin-top:.3rem}
+/* toren */
+.torens{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;align-items:end}
+.toren{display:flex;flex-direction:column;align-items:center;gap:.35rem;text-align:center}
+.toren .stapel{display:flex;flex-direction:column-reverse;gap:3px;height:190px;justify-content:flex-start;width:100%;align-items:center}
+.toren .blok{width:70%;height:28px;border-radius:7px;background:var(--groen);position:relative}
+.toren .blok::before{content:"";position:absolute;top:-6px;left:20%;width:18%;height:7px;border-radius:4px 4px 0 0;background:inherit}
+.toren .blok::after{content:"";position:absolute;top:-6px;right:20%;width:18%;height:7px;border-radius:4px 4px 0 0;background:inherit}
+.toren .blok:nth-child(even){background:var(--mid)}
+.toren .lbl{font-weight:700;font-size:.85rem;min-height:2.6em}
+.toren .pm{display:flex;gap:.3rem}
+.toren .pm button{cursor:pointer;width:36px;height:36px;border-radius:50%;border:2px solid var(--blauw);background:var(--wit);color:var(--blauw);font-weight:800;font-size:1.1rem}
+/* overlay toon groot */
+#groot{position:fixed;inset:0;z-index:50;background:var(--blauw);display:none;flex-direction:column;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 1.5rem) 1.5rem 1.5rem;text-align:center}
+#groot.open{display:flex}
+#groot img{max-width:min(92vw,1000px);max-height:62vh;border-radius:24px;background:#F4F6FF}
+#groot h2{margin-top:1rem}
+.voet{margin-top:2.5rem;display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.voet div{border:2px solid var(--wit);border-radius:20px;padding:.9rem 1.1rem}
+.voet strong{display:block;color:var(--groen);text-transform:uppercase;font-weight:800}
+.voet a{color:var(--groen);font-weight:700}
+a.link{color:var(--blauw);font-weight:800}
+.klein{font-size:.88rem}
+#rapport{display:none}
+@media (max-width:640px){.torens{grid-template-columns:repeat(3,1fr)}.chev{display:none}}
+@media print{
+  body{background:#fff;color:#06038D}
+  .wrap > *:not(#rapport){display:none!important}
+  #rapport{display:block!important}
+  #rapport .kaart{border:2px solid #D9D9D9;break-inside:avoid}
+  #rapport img{max-width:100%;border:1px solid #D9D9D9;border-radius:12px}
+}
+</style>
 </head>
 <body>
-<div id="app">
-<aside id="sidebar">
-  <div class="sb-logo">
-    <div class="sb-kop"><img class="sb-logo-img" src="data:image/png;base64,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" alt="Logo Sint-Rembert scholengroep"><svg class="sb-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg></div>
-    <div class="sb-title">AI-<em>Cursus</em><br>Leerlingen</div>
-    <div class="sb-sub">Scholengroep Sint-Rembert · schooljaar 2026-2027</div>
-  </div>
-  <div class="prog-wrap">
-    <div class="prog-label">Startest <span id="st-status">Nog te starten</span></div>
-    <div class="prog-label" style="margin-top:10px">Voortgang <span id="pct">0%</span></div>
-    <div class="prog-track"><div class="prog-fill" id="pb" style="width:0%"></div></div>
-  </div>
-  <div class="nav-sec">
-    <div class="nav-lbl">Menu</div>
-    <div class="ni active" onclick="goHome()" id="nav-home"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Overzicht</div><div class="ni-sub">Startpagina</div></div></div>
-    <div class="ni available" onclick="sv('docs')" id="nav-docs"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Documenten</div><div class="ni-sub">Bronnen & materiaal</div></div></div>
-    <div class="ni available" onclick="sv('news')" id="nav-news"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Nieuws</div><div class="ni-sub">AI in de actualiteit</div></div></div>
-    <div class="ni available" onclick="location.href='les.html'" id="nav-les"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Les in de klas</div><div class="ni-sub">Met code of als leerkracht</div></div></div>
-    <div class="ni available" onclick="location.href='ai-vermelden.html'" id="nav-vermelden"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">AI vermelden</div><div class="ni-sub">Stap voor stap</div></div></div>
-  </div>
-  <div class="nav-sec">
-    <div class="nav-lbl">Modules</div>
-    <div class="ni locked" onclick="sm(1)" id="nav-mod1"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Wat is AI?</div><div class="ni-sub">Module 1</div></div><span class="ni-badge" id="l1"></span></div>
-    <div class="ni locked" onclick="sm(2)" id="nav-mod2"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Hoe werkt AI?</div><div class="ni-sub">Module 2</div></div><span class="ni-badge" id="l2"></span></div>
-    <div class="ni locked" onclick="sm(3)" id="nav-mod3"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Generatieve AI</div><div class="ni-sub">Module 3</div></div><span class="ni-badge" id="l3"></span></div>
-    <div class="ni locked" onclick="sm(4)" id="nav-mod4"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Ethiek & Bias</div><div class="ni-sub">Module 4</div></div><span class="ni-badge" id="l4"></span></div>
-    <div class="ni locked" onclick="sm(5)" id="nav-mod5"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">AI in School</div><div class="ni-sub">Module 5</div></div><span class="ni-badge" id="l5"></span></div>
-    <div class="ni locked" onclick="sm(6)" id="nav-mod6"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">AI in Maatschappij</div><div class="ni-sub">Module 6</div></div><span class="ni-badge" id="l6"></span></div>
-    <div class="ni locked" onclick="tryC()" id="nav-cert"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Certificaat</div><div class="ni-sub">Na alle modules</div></div><span class="ni-badge" id="lc"></span></div>
-  </div>
-
-  <div class="nav-sec">
-    <div class="nav-lbl">Optioneel · Verdieping</div>
-    <div class="ni available" onclick="sm(7)" id="nav-mod7"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Leren met Copilot</div><div class="ni-sub">Leren, niet overschrijven</div></div><span class="ni-badge" id="l7">›</span></div>
-    <div class="ni available" onclick="goKernkader()" id="nav-kernkader"><div class="ni-icon"></div><div class="ni-info"><div class="ni-title">Wat moet ik kennen?</div><div class="ni-sub">Per graad</div></div></div>
-  </div>
-  <div class="sb-bot">
-    <div class="uc">
-      <div class="av" id="av">?</div>
-      <div style="flex:1">
-        <div id="un-display" style="font-size:13px;font-weight:700;color:var(--blue);">—</div>
-        <div class="eh">Voortgang lokaal bijgehouden</div>
-      </div>
-    </div>
-    <input type="hidden" id="un">
-  </div>
-</aside>
-
-<main id="main">
-
-<!-- ════════ STARTTEST ════════ -->
-<div class="view active" id="view-starttest">
-  <div class="klas-balk" style="max-width:860px;margin:16px auto 0;width:calc(100% - 48px);display:flex;flex-wrap:wrap;gap:10px;align-items:center;border:2px solid rgba(255,255,255,.45);border-radius:20px;padding:12px 16px;color:#fff;font-family:Poppins,sans-serif">
-    <b style="margin-right:auto">Les in de klas?</b>
-    <a href="les.html#klas" style="background:#95D600;color:#06038D;border-radius:999px;padding:8px 16px;font-weight:800;text-decoration:none">Ik heb een klascode</a>
-    <a href="les.html#leerkracht" style="background:#fff;color:#06038D;border-radius:999px;padding:8px 16px;font-weight:800;text-decoration:none">Ik ben leerkracht</a>
-    <a href="ai-vermelden.html" style="color:#95D600;font-weight:800;text-decoration:none">AI vermelden →</a>
-  </div>
-  <div class="mc-content" id="st-content"></div>
+<div class="wrap">
+<header>
+  <img src="data:image/png;base64,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" alt="Logo Sint-Rembert scholengroep">
+  <div><h1>AI-cursus</h1><p>Voor leerlingen en leerkrachten · 3e graad</p></div>
+  <svg class="chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg>
+</header>
+<main id="cursus" aria-live="polite"></main>
+<div id="rapport"></div>
+<section class="voet">
+  <div><strong>Kijk eerst naar het label</strong><p>Hoe je AI vermeldt, zie je op <a href="ai-vermelden.html" target="_blank" rel="noopener">AI vermelden, stap voor stap</a>.</p></div>
+  <div><strong>Je voortgang</strong><p>Blijft bewaard in deze browser. Werk dus telkens in dezelfde browser.</p></div>
+</section>
 </div>
+<div id="main" hidden></div>
+<div id="groot" role="dialog" aria-modal="true" aria-label="Bouwwerk groot bekijken"><img alt=""><h2 id="groot-titel"></h2><p id="groot-gevoel" class="badge"></p><div class="knoprij"><button class="hoofd" id="groot-x">Sluiten</button></div></div>
 
-<!-- ════════ HOME ════════ -->
-<div class="view" id="view-home">
-<div class="lh">
-  <!-- HERO -->
-  <section class="lh-hero">
-    <div class="lh-hero-tekst">
-      <span class="lh-ey">AI-cursus voor leerlingen · Sint-Rembert</span>
-      <h1 class="lh-h1">Word <span>AI-slim</span></h1>
-      <p class="lh-lead">Je gebruikt AI misschien al elke dag. Maar weet je hoe het werkt, wanneer je het mag gebruiken en wanneer je beter zelf nadenkt? In zes modules leer je AI kritisch, veilig en eerlijk gebruiken.</p>
-      <div class="lh-acties">
-        <button class="hoofd lh-hoofd" id="lh-cta" onclick="goVerder()">Start de startest</button>
-        <a class="lh-tweede" href="#lh-regels" onclick="document.getElementById('lh-regels').scrollIntoView({behavior:'smooth'});return false;">Bekijk de spelregels</a>
-      </div>
-    </div>
-    <div class="lh-hero-beeld"><svg class="lh-ill" viewBox="0 0 220 190" role="img" aria-label="Leerling met laptop en een vriendelijke AI-robot">
-  <circle cx="110" cy="96" r="88" fill="#FFFFFF" opacity=".08"/>
-  <rect x="118" y="34" width="78" height="60" rx="16" fill="#FFFFFF"/>
-  <rect x="127" y="43" width="60" height="42" rx="10" fill="#95D600"/>
-  <circle cx="146" cy="62" r="5" fill="#06038D"/><circle cx="168" cy="62" r="5" fill="#06038D"/>
-  <path d="M147 74 Q157 81 167 74" stroke="#06038D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <path d="M157 34 V20" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/><circle cx="157" cy="16" r="6" fill="#95D600"/>
-  <rect x="140" y="94" width="34" height="10" fill="#FFFFFF"/><rect x="128" y="104" width="58" height="10" rx="5" fill="#FFFFFF"/>
-  <circle cx="64" cy="70" r="20" fill="#FFFFFF"/>
-  <path d="M30 150 Q34 104 64 102 Q94 104 98 150 Z" fill="#95D600"/>
-  <rect x="34" y="132" width="96" height="10" rx="5" fill="#FFFFFF"/>
-  <path d="M50 132 L60 108 H118 L108 132 Z" fill="#FFFFFF"/><circle cx="89" cy="120" r="4" fill="#06038D"/>
-  <path d="M104 100 q10 -10 22 -6" stroke="#CCFF99" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 7"/>
-</svg></div>
-  </section>
-
-
-  <!-- HOE WIL JE WERKEN? -->
-  <section class="lh-blok" style="margin-top:28px">
-    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>Hoe wil je werken?</h2></div>
-    <div class="lh-stappen">
-      <div class="lh-stap"><span>1</span><h3>Zelf, op je eigen tempo</h3><p>Je doorloopt de volledige cursus alleen: startest, zes modules en je certificaat.</p><p style="margin-top:12px"><button class="hoofd lh-hoofd" style="font-size:14px;padding:10px 18px" onclick="goVerder()">Start zelf</button></p></div>
-      <div class="lh-stap"><span>2</span><h3>Met je klas</h3><p>Je leerkracht geeft de les op het bord en geeft je een code. Jij doet mee op je laptop.</p><p style="margin-top:12px"><a class="hoofd lh-hoofd" style="font-size:14px;padding:10px 18px;display:inline-block;text-decoration:none" href="les.html#klas">Ik heb een code</a></p></div>
-      <div class="lh-stap"><span>3</span><h3>Ik ben leerkracht</h3><p>Kies welke modules je geeft en geef de les interactief, met klasmomenten en 3D-bouwen.</p><p style="margin-top:12px"><a class="hoofd lh-hoofd" style="font-size:14px;padding:10px 18px;display:inline-block;text-decoration:none" href="les.html#leerkracht">Geef een les</a></p></div>
-    </div>
-    <p style="margin:14px 0 0;font-weight:600">Hoe vermeld je AI bij je taak? <a href="ai-vermelden.html" style="color:#95D600;font-weight:800">AI vermelden, stap voor stap →</a></p>
-  </section>
-
-  <!-- VOORTGANG -->
-  <section class="lh-voortgang" aria-label="Jouw voortgang">
-    <div class="lh-vg-top"><b>Jouw voortgang</b><span id="lh-pct">0%</span></div>
-    <div class="lh-vg-track"><div class="lh-vg-bar" id="lh-bar"></div></div>
-    <p id="lh-txt">Begin met de startest: 10 korte vragen, gewoon om te peilen.</p>
-  </section>
-
-  <!-- ZO WERKT HET -->
-  <section class="lh-blok">
-    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>Zo werkt het</h2></div>
-    <div class="lh-stappen">
-      <div class="lh-stap"><span>1</span><h3>Startest</h3><p>Tien vragen om te peilen wat je al weet. Er is geen slaagdrempel.</p></div>
-      <div class="lh-stap"><span>2</span><h3>Zes modules</h3><p>Video's, doe-opdrachten en telkens een korte kennischeck. Elke module opent de volgende.</p></div>
-      <div class="lh-stap"><span>3</span><h3>Certificaat</h3><p>Alle modules klaar? Dan download je je eigen certificaat.</p></div>
-    </div>
-  </section>
-
-  <!-- MODULES -->
-  <section class="lh-blok">
-    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>Jouw route</h2></div>
-    <div class="lh-mods mods-grid">
-      <article class="mc lh-mod" id="cm1" onclick="sm(1)">
-        <div class="lh-mod-kop"><span class="lh-nr">1</span><span class="mc-badge">Module 1</span></div>
-        <h3 class="mc-title">Wat is AI?</h3>
-        <p class="mc-desc">AI is overal, ook als je het niet ziet. Van simpele regels tot generatieve AI, hallucinaties en AI-agents.</p>
-        <div class="lh-mod-voet"><div class="mc-stat" id="ps1">Nog niet gestart</div><button class="sr-btn g" id="bm1">▶ Start</button></div>
-      </article>
-      <article class="mc lh-mod locked" id="cm2">
-        <div class="lh-mod-kop"><span class="lh-nr">2</span><span class="mc-badge">Module 2</span></div>
-        <h3 class="mc-title">Hoe werkt AI?</h3>
-        <p class="mc-desc">Machine learning, deep learning en neurale netwerken: de motor achter elke AI-tool.</p>
-        <div class="lh-mod-voet"><div class="mc-stat" id="ps2">Voltooi module 1 eerst</div><button class="sr-btn" id="bm2" disabled>Vergrendeld</button></div>
-      </article>
-      <article class="mc lh-mod locked" id="cm3">
-        <div class="lh-mod-kop"><span class="lh-nr">3</span><span class="mc-badge">Module 3</span></div>
-        <h3 class="mc-title">Generatieve AI</h3>
-        <p class="mc-desc">Chatbots, beeldgeneratoren en prompting: hoe laat je AI voor jou werken?</p>
-        <div class="lh-mod-voet"><div class="mc-stat" id="ps3">Voltooi module 2 eerst</div><button class="sr-btn" id="bm3" disabled>Vergrendeld</button></div>
-      </article>
-      <article class="mc lh-mod locked" id="cm4">
-        <div class="lh-mod-kop"><span class="lh-nr">4</span><span class="mc-badge">Module 4</span></div>
-        <h3 class="mc-title">Ethiek & bias</h3>
-        <p class="mc-desc">Deepfakes, discriminatie, privacy en energieverbruik: de schaduwkant van AI.</p>
-        <div class="lh-mod-voet"><div class="mc-stat" id="ps4">Voltooi module 3 eerst</div><button class="sr-btn" id="bm4" disabled>Vergrendeld</button></div>
-      </article>
-      <article class="mc lh-mod locked" id="cm5">
-        <div class="lh-mod-kop"><span class="lh-nr">5</span><span class="mc-badge">Module 5</span></div>
-        <h3 class="mc-title">AI op school</h3>
-        <p class="mc-desc">De vier AI-labels van Sint-Rembert: wat mag wel, wat mag niet, en waarom.</p>
-        <div class="lh-mod-voet"><div class="mc-stat" id="ps5">Voltooi module 4 eerst</div><button class="sr-btn" id="bm5" disabled>Vergrendeld</button></div>
-      </article>
-      <article class="mc lh-mod locked" id="cm6">
-        <div class="lh-mod-kop"><span class="lh-nr">6</span><span class="mc-badge">Module 6 · finale</span></div>
-        <h3 class="mc-title">AI in de maatschappij</h3>
-        <p class="mc-desc">Jobs, trends en hypes, de gevolgen van de gevolgen, en jouw eigen kijk op de toekomst.</p>
-        <div class="lh-mod-voet"><div class="mc-stat" id="ps6">Voltooi module 5 eerst</div><button class="sr-btn" id="bm6" disabled>Vergrendeld</button></div>
-      </article>
-    </div>
-  </section>
-
-  <!-- SPELREGELS -->
-  <section class="lh-blok" id="lh-regels">
-    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>De AI-spelregels</h2></div>
-    <div class="lh-regels">
-      <article class="lh-kaart groen"><h3>✓ Dit mag</h3><ul>
-        <li>AI gebruiken voor brainstorm en ideeën, als het label dat toelaat</li>
-        <li>Feedback vragen op je eigen tekst</li>
-        <li>Uitleg vragen over moeilijke leerstof</li>
-        <li>Eerlijk zeggen dat en hoe je AI gebruikte</li></ul></article>
-      <article class="lh-kaart niet"><h3>✗ Dit mag niet</h3><ul>
-        <li>AI-tekst inleveren als eigen werk</li>
-        <li>AI gebruiken tijdens een toets, tenzij het mag</li>
-        <li>AI-antwoorden overnemen zonder te controleren</li>
-        <li>Persoonsgegevens of foto's van anderen in een AI-tool zetten</li></ul></article>
-    </div>
-    <h3 class="lh-sub">De vier AI-labels</h3>
-    <p class="lh-p">Bij elke opdracht zegt je leerkracht met een label hoeveel AI mag. Twijfel je? Vraag het. Hoe je je AI-gebruik vermeldt, lees je bij <a href="#" onclick="sv('docs');setTimeout(()=>document.getElementById('ai-vermelden').scrollIntoView({behavior:'smooth'}),50);return false;" style="color:var(--groen);font-weight:700">AI-gebruik vermelden</a>.</p>
-    <div class="lh-labels">
-      <div class="lh-label l1"><span>1</span><b>Verboden</b><p>Geen AI. Je maakt alles zelf.</p></div>
-      <div class="lh-label l2"><span>2</span><b>Als inspiratie</b><p>AI enkel voor ideeën. Het werk maak je zelf.</p></div>
-      <div class="lh-label l3"><span>3</span><b>Als ondersteuning</b><p>AI mag helpen tijdens het proces. Je zegt wat je liet doen.</p></div>
-      <div class="lh-label l4"><span>4</span><b>Toegestaan</b><p>AI mag volop, zolang je eerlijk bent over je gebruik.</p></div>
-    </div>
-  <p style="margin-top:16px"><a class="dl-knop hoofd" href="AI-verantwoording-sjabloon.docx" download>Download het AI-sjabloon</a> <a class="dl-knop" style="background:transparent;color:#fff!important;border-color:#fff" href="AI-labels-poster%20(1).png" target="_blank" rel="noopener">Bekijk de klasposter</a></p>
-  </section>
-
-  <!-- VERDIEPING -->
-  <section class="lh-blok">
-    <div class="lh-kop"><svg class="lh-chev" viewBox="0 0 120 60" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"><polyline points="12,10 32,30 12,50" stroke="#CCFF99"/><polyline points="46,10 66,30 46,50" stroke="#A6F04A"/><polyline points="80,10 100,30 80,50" stroke="#95D600"/></g></svg><h2>Extra · altijd open</h2></div>
-    <div class="lh-mods mods-grid">
-      <article class="mc lh-mod lh-extra" id="cm7" onclick="sm(7)">
-        <div class="lh-mod-kop"><span class="lh-nr">+</span><span class="mc-badge">Aanrader</span></div>
-        <h3 class="mc-title">Leren met Copilot</h3>
-        <p class="mc-desc">Oefen op jouw manier en niveau, maak je leerstof visueel, oefen hardop, maak je eigen oefentoets en leer met je eigen bronnen. Altijd met je schoolaccount.</p>
-        <div class="lh-mod-voet"><div class="mc-stat" id="ps7">Altijd beschikbaar</div><button class="sr-btn g" id="bm7">▶ Start</button></div>
-      </article>
-    </div>
-  </section>
-
-  <footer class="lh-voet">
-    <div><strong>Meerwaarde</strong><p>Gebruik AI enkel als het je echt helpt om beter te leren.</p></div>
-    <div><strong>Transparantie</strong><p>Jij blijft verantwoordelijk voor je werk en zegt eerlijk wat AI deed.</p></div>
-  </footer>
-</div>
-</div>
-
-
-<!-- ════════ DOCUMENTEN ════════ -->
-<div class="view" id="view-docs">
-  <div class="mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Bronnen</div><div class="mh-title">Documenten & Materiaal</div></div>
-  </div>
-  <div class="mc-content" style="padding: 20px;">
-
-    <div class="dl-paneel">
-  <div class="dl-kop"><span class="dl-ey">Downloads</span><h3>Het AI-sjabloon</h3><p>Gebruikte je AI bij een taak? Download het sjabloon, vul het in en voeg het toe aan je werk. Of gebruik het invulhulpmiddel hieronder.</p></div>
-  <div class="dl-rij"><div class="dl-item"><b>Blad 1e graad · 2de jaar</b><p>Oefenblad AI-verantwoording.</p><div><a class="dl-knop hoofd" href="AI-verantwoording-1e-graad-2de-jaar.docx" download>Download (Word)</a></div></div><div class="dl-item"><b>Blad 2e graad</b><p>Korte AI-vermelding met blad.</p><div><a class="dl-knop hoofd" href="AI-verantwoording-2e-graad.docx" download>Download (Word)</a></div></div><div class="dl-item"><b>Transparantieverklaring 3e graad</b><p>Volledige AI-verantwoording, met AI-labels per fase.</p><div><a class="dl-knop hoofd" href="AI-verantwoording-3e-graad.docx" download>Download (Word)</a></div></div><div class="dl-item"><b>AI vermelden, stap voor stap</b><p>Kies je graad en je label, en zie meteen wat je moet doen.</p><div><a class="dl-knop hoofd" href="ai-vermelden.html">Open</a></div></div>
-    <div class="dl-item"><b>Sjabloon AI-verantwoording</b><p>Korte vermelding (1e en 2e graad) en volledige verantwoording met APA (3e graad).</p><div><a class="dl-knop hoofd" href="AI-verantwoording-sjabloon.docx" download target="_blank" rel="noopener">Download (Word)</a></div></div>
-    <div class="dl-item"><b>Klasposter AI-labels</b><p>De vier labels: wat mag bij welke opdracht?</p><div><a class="dl-knop hoofd" href="AI-labels-poster%20(1).png" target="_blank" rel="noopener">Bekijk de poster</a></div></div>
-  </div>
-</div>
-
-    <h2 id="ai-vermelden" style="margin-top:0;">AI-gebruik vermelden</h2>
-    <p class="cp">Gebruikte je AI bij een opdracht? Zeg dan eerlijk hoe. Kies je graad, vul in en kopieer de tekst onder je werk. In de 3e graad maak je een volledige AI-verantwoording, met een APA-bronvermelding als je iets letterlijk overneemt, zoals in het hoger onderwijs.</p>
-    <div id="av-docs" class="avg"></div>
-
-    <h2 style="margin-top:32px;">Downloadbaar materiaal</h2>
-    <p class="cp">Hier vind je het lesmateriaal en de papieren versie van deze cursus, om te printen of offline te gebruiken.</p>
-    <div class="ib warn">
-      <div class="ib-t">Invulcursus (papieren versie)</div>
-      <div class="ib-b">Een afdrukbare versie van deze volledige cursus met invulvakken, voor wie liever op papier werkt of geen toegang heeft tot een computer. Vraag dit document aan je leerkracht, of download het hier: <a href="invulcursus-ai-leerlingen.pdf" target="_blank">invulcursus-ai-leerlingen.pdf</a></div>
-    </div>
-
-    <h2 style="margin-top:32px;">Video's & lesmateriaal (EDUbox)</h2>
-    <p class="cp">Deze cursus is grotendeels gebaseerd op de EDUbox "Artificiële Intelligentie", een samenwerking tussen VRT, imec, Mediawijs, Kenniscentrum Data & Maatschappij, Brightlab, am/ai en BENEDMO.</p>
-
-    <h2 style="margin-top:32px;">Deepfakes & factchecken</h2>
-    <ul style="font-size: 13px; color: #06038D; line-height: 2.2; padding-left: 22px;">
-      <li><a href="https://www.vrt.be/vrtnws/nl/kijk/2023/05/11/fast-ddt-how-to-factcheck-deepfakes-arvato-57297239/" target="_blank">Hoe factcheck je deepfakes?</a> — VRT NWS</li>
-      <li><a href="https://www.vrt.be/vrtnws/nl/kijk/2023/03/29/ddt-how-to-factcheck-ai-gegenereerde-fotos-arvato-56386080" target="_blank">Hoe factcheck je AI-gegenereerde foto's?</a> — VRT NWS</li>
-      <li><a href="https://www.vrt.be/vrtnws/nl/2024/03/15/klaar-artificiele-intelligentie/" target="_blank">KLAAR — Artificiële Intelligentie</a> — VRT NWS project voor jongeren</li>
-    </ul>
-
-    <h2 style="margin-top:32px;">Verdieping & colleges</h2>
-    <ul style="font-size: 13px; color: #06038D; line-height: 2.2; padding-left: 22px;">
-      <li><a href="https://www.universiteitvanvlaanderen.be" target="_blank">Universiteit van Vlaanderen</a> — korte colleges o.a. over AI en de wereld, en AI in de Tour de France</li>
-      <li><a href="https://www.elementsofai.com/" target="_blank">Elements of AI</a> — gratis online cursus (Universiteit van Helsinki, TU Delft)</li>
-      <li><a href="https://www.vrt.be/vrtmax/a-z/het-digitale-dilemma/" target="_blank">Het Digitale Dilemma</a> — Tim Verheyden (VRT MAX, gratis account nodig)</li>
-    </ul>
-
-    <h2 style="margin-top:32px;">Zelf experimenteren</h2>
-    <ul style="font-size: 13px; color: #06038D; line-height: 2.2; padding-left: 22px;">
-      <li><a href="https://scratch.mit.edu" target="_blank">Scratch</a> — leer spelenderwijs een neuraal netwerk cijfers herkennen</li>
-      <li><a href="https://notebooklm.google.com" target="_blank">Gemini Notebook</a> (vroeger NotebookLM) — jouw AI-studiehulp (zie Module 2)</li>
-    </ul>
-
-    <h2 style="margin-top:32px;">Sint-Rembert beleid</h2>
-    <p class="cp">Het volledige AI-beleid en de 4 AI-labels van Scholengroep Sint-Rembert (naar het model van Lut De Jaegher, Sint-Jozefscollege Torhout) vind je terug in het schoolreglement. Vraag dit na bij je leerkracht als je het niet kan terugvinden.</p>
-
-    <div style="text-align:center; margin: 32px 0;">
-      <button class="sr-btn g" onclick="goHome()" style="font-size:15px; padding:14px 28px;">Terug naar de cursus →</button>
-    </div>
-
-    <footer style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 11px; color:#06038D;">
-      Deze cursus is ontwikkeld met inspiratie van pedagogische frameworks en onderwijs-best practices, waaronder de EDUbox Artificiële Intelligentie (VRT, imec, Mediawijs, Kenniscentrum Data & Maatschappij, Brightlab, am/ai, BENEDMO — mede gefinancierd door de Europese Unie), Elements of AI, Schoolmakers AI-gebruiksschaal (Leon Furze), Microsoft Responsible AI frameworks, de EU AI Act (2024), en het Sint-Rembert Beleidskader AI.
-    </footer>
-
-  </div>
-</div>
-
-<!-- ════════ NIEUWS ════════ -->
-<div class="view" id="view-news">
-  <div class="mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Actualiteit</div><div class="mh-title">AI in het Nieuws</div></div>
-  </div>
-  <div class="mc-content" style="padding: 20px;">
-
-    <h2>Blijf op de hoogte</h2>
-    <p class="cp">AI evolueert razendsnel. Op deze pagina verzamelt je school af en toe interessante nieuwsberichten, tips en updates rond artificiële intelligentie — zowel voor in de klas als daarbuiten.</p>
-
-    <div class="ib warn">
-      <div class="ib-t">Deze pagina wordt regelmatig bijgewerkt</div>
-      <div class="ib-b">Je leerkrachten vullen dit overzicht aan met relevante nieuwtjes. Mis je iets, of zag je zelf interessant AI-nieuws? Meld het gerust aan je leerkracht.</div>
-    </div>
-
-    <h2 style="margin-top:32px;">Recente berichten</h2>
-
-    <div style="background: white; border-left: 4px solid var(--blue); border-radius: 8px; padding: 16px; margin: 16px 0;">
-      <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">Schooljaar 2026-2027</div>
-      <h3 style="margin:0 0 8px 0; font-size:16px;">Sint-Rembert lanceert vernieuwde AI-Skills cursus</h3>
-      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">Deze volledig herwerkte cursus, gebaseerd op de EDUbox Artificiële Intelligentie (VRT/imec/Mediawijs), leert je stap voor stap wat AI is, hoe het werkt, en hoe je er verantwoord mee omgaat op school. Je bent er nu middenin bezig!</p>
-    </div>
-
-    <div style="background: white; border-left: 4px solid var(--orange); border-radius: 8px; padding: 16px; margin: 16px 0;">
-      <div style="font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:6px;">EU AI Act</div>
-      <h3 style="margin:0 0 8px 0; font-size:16px;">Europese AI-wetgeving stap voor stap in werking</h3>
-      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">De EU AI Act (zie Module 6) treedt gefaseerd in werking. Een van de verplichtingen: organisaties die AI gebruiken — ook scholen — moeten zorgen dat hun personeel en leerlingen voldoende "AI-geletterd" zijn. Precies daarom bestaat deze cursus.</p>
-    </div>
-
-    <div style="background: white; border-left: 4px solid var(--green); border-radius: 8px; padding: 16px; margin: 16px 0;">
-      <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:6px;">Tip van de maand</div>
-      <h3 style="margin:0 0 8px 0; font-size:16px;">Twijfel je aan een video of foto? Check de bron</h3>
-      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">Deepfakes worden steeds overtuigender (zie Module 4). De beste vuistregel blijft: kijk niet enkel naar het beeld zelf, maar check wie het deelde. VRT NWS maakte hierover korte, handige filmpjes — te vinden bij Documenten.</p>
-    </div>
-
-    <div style="background: white; border-left: 4px solid #06038D; border-radius: 8px; padding: 16px; margin: 16px 0;">
-      <div style="font-size:11px;font-weight:700;color:#06038D;text-transform:uppercase;margin-bottom:6px;">Tool-update</div>
-      <h3 style="margin:0 0 8px 0; font-size:16px;">Gemini Notebook breidt functies verder uit</h3>
-      <p style="font-size:13px;color:#06038D;line-height:1.7;margin:0;">Google werkt voortdurend aan Gemini Notebook (zie Module 2), met nieuwe manieren om je eigen cursusmateriaal te doorzoeken en samen te vatten. Zeker het proberen waard als studiehulp!</p>
-    </div>
-
-    <p class="cp" style="margin-top: 24px; font-size: 12px; color:#06038D; font-style: italic;">Laatst bijgewerkt: september 2026</p>
-
-    <div style="text-align:center; margin: 32px 0;">
-      <button class="sr-btn g" onclick="goHome()" style="font-size:15px; padding:14px 28px;">Terug naar de cursus →</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- ════════ MODULE 1 ════════ -->
-<div class="view" id="view-mod1">
-  <div class="mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Module 1</div><div class="mh-title">Wat is AI?</div></div>
-    <div class="dots" id="sd1"></div>
-  </div>
-  <div class="mc-content" id="m1c"></div>
-</div>
-
-<!-- ════════ MODULE 2 ════════ -->
-<div class="view" id="view-mod2">
-  <div class="mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Module 2</div><div class="mh-title">Hoe Werkt AI?</div></div>
-    <div class="dots" id="sd2"></div>
-  </div>
-  <div class="mc-content" id="m2c"></div>
-</div>
-
-<!-- ════════ MODULE 3 ════════ -->
-<div class="view" id="view-mod3">
-  <div class="mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Module 3</div><div class="mh-title">Generatieve AI</div></div>
-    <div class="dots" id="sd3"></div>
-  </div>
-  <div class="mc-content" id="m3c"></div>
-</div>
-
-<!-- ════════ MODULE 4 ════════ -->
-<div class="view" id="view-mod4">
-  <div class="mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Module 4</div><div class="mh-title">Ethiek & Bias</div></div>
-    <div class="dots" id="sd4"></div>
-  </div>
-  <div class="mc-content" id="m4c"></div>
-</div>
-
-<!-- ════════ MODULE 5 ════════ -->
-<div class="view" id="view-mod5">
-  <div class="mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Module 5</div><div class="mh-title">AI in School</div></div>
-    <div class="dots" id="sd5"></div>
-  </div>
-  <div class="mc-content" id="m5c"></div>
-</div>
-
-<!-- ════════ MODULE 6 ════════ -->
-<div class="view" id="view-mod6">
-  <div class="mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Module 6 · Finale</div><div class="mh-title">AI in Maatschappij</div></div>
-    <div class="dots" id="sd6"></div>
-  </div>
-  <div class="mc-content" id="m6c"></div>
-</div>
-
-<!-- ════════ MODULE 7 — OPTIONEEL ════════ -->
-<div class="view" id="view-mod7">
-  <div class="mh opt-mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Optioneel · Verdieping</div><div class="mh-title">Copilot Ontdekken</div></div>
-    <div class="dots" id="sd7"></div>
-  </div>
-  <div class="mc-content" id="m7c"></div>
-</div>
-
-<!-- ════════ WAT MOET IK KENNEN — PER GRAAD ════════ -->
-<div class="view" id="view-kernkader">
-  <div class="mh opt-mh">
-    <button class="bk" onclick="sv('home')">← Terug</button>
-    <div class="mh-info"><div class="mh-num">Optioneel · Zelfcheck</div><div class="mh-title">Wat moet ik kennen?</div></div>
-  </div>
-  <div class="mc-content" id="kernkaderc"></div>
-</div>
-
-<!-- ════════ CERTIFICAAT ════════ -->
-<div id="cert-view">
-  <div class="cert-wrap">
-    <div class="cert-intro">
-      <div class="cert-fire"></div>
-      <h2 style="font-family:'Archivo Black',sans-serif;font-size:26px;color:var(--blue);text-transform:uppercase;margin-bottom:7px">Gefeliciteerd!</h2>
-      <p style="color:var(--muted);font-weight:700;margin-bottom:28px">Je hebt alle 6 modules voltooid. Download hieronder je certificaat.</p>
-    </div>
-
-    <div class="ss-box" style="text-align:left;margin-bottom:20px">
-      <div class="ss-title">Hoe download ik mijn certificaat?</div>
-      <div class="ss-steps">
-        <div class="ss-step"><div class="ss-step-num">1</div><div class="ss-step-text">Controleer dat <strong>je naam correct ingevuld is</strong> (links onderaan in de zijbalk). Die komt op het certificaat.</div></div>
-        <div class="ss-step"><div class="ss-step-num">2</div><div class="ss-step-text">Klik op <strong>"Download certificaat (PDF)"</strong> hieronder.</div></div>
-        <div class="ss-step"><div class="ss-step-num">3</div><div class="ss-step-text">Kies in het afdrukvenster <strong>"Opslaan als PDF"</strong> (niet een echte printer!) en bewaar het bestand.</div></div>
-        <div class="ss-step"><div class="ss-step-num">4</div><div class="ss-step-text">Lever het certificaat in bij je leerkracht zoals gevraagd.</div></div>
-      </div>
-    </div>
-
-    <div class="cert-box">
-      <div class="cert-wm">SINT-REMBERT</div>
-      <div class="cert-school">Scholengroep Sint-Rembert</div>
-      <div class="cert-title">Certificaat <em>AI-Skills</em></div>
-      <div class="cert-dec">Dit certificaat bevestigt dat</div>
-      <div class="cert-name" id="cert-name">Leerling</div>
-      <div class="cert-desc">alle 6 modules van de cursus <strong>AI-Skills voor Leerlingen</strong> succesvol heeft voltooid, en daarmee kritisch, veilig en verantwoord kan omgaan met artificiële intelligentie.</div>
-      <div class="cert-comps">
-        <div class="cert-comp"><span class="ck">✓</span>AI begrijpen & herkennen</div>
-        <div class="cert-comp"><span class="ck">✓</span>Machine learning & deep learning</div>
-        <div class="cert-comp"><span class="ck">✓</span>Generatieve AI & prompting</div>
-        <div class="cert-comp"><span class="ck">✓</span>Hallucinaties & bias herkennen</div>
-        <div class="cert-comp"><span class="ck">✓</span>Ethiek & deepfakes</div>
-        <div class="cert-comp"><span class="ck">✓</span>AI-labels op school toepassen</div>
-        <div class="cert-comp"><span class="ck">✓</span>Kritisch & verantwoord AI-gebruik</div>
-        <div class="cert-comp"><span class="ck">✓</span>Visie op AI & de toekomst</div>
-      </div>
-      <div class="cert-sr"><span>Sint-</span><em>Rembert</em><span>Scholengroep</span></div>
-      <div class="cert-meta">
-        <div class="cm-i"><div class="cm-lbl">Datum</div><div class="cm-val" id="cert-date">—</div></div>
-        <div class="cm-i"><div class="cm-lbl">Platform</div><div class="cm-val">ReLearn · Sint-Rembert</div></div>
-        <div class="cm-i"><div class="cm-lbl">Niveau</div><div class="cm-val">Secundair onderwijs</div></div>
-        <div class="cm-i"><div class="cm-lbl">Geldigheid</div><div class="cm-val">2 jaar</div></div>
-      </div>
-    </div>
-
-    <div id="cert-dl-info"></div>
-    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-      <button class="print-btn" id="print-cert-btn" onclick="doCertPrint()">Download certificaat + antwoorden (PDF)</button>
-    </div>
-    <div class="cert-warn">✓ Je certificaat is gereed! Eén PDF met je certificaat én al je antwoorden. Kies in het afdrukvenster "Opslaan als PDF".</div>
-  </div>
-
-  <!-- Onzichtbaar tenzij printen: volledig antwoordenoverzicht, komt na het certificaat in de PDF -->
-  <div id="cert-answers-print" style="display:none;"></div>
-</div>
-
-<footer style="font-size: 11px; color:#06038D; margin-top: 60px; padding: 30px 20px; border-top: 1px solid #ddd; background: #FFFFFF; line-height: 1.8;">
-  <div style="max-width: 1200px; margin: 0 auto;">
-    <p style="margin: 0 0 12px 0;"><strong>Over deze cursus</strong></p>
-    <p style="margin: 0 0 8px 0;">
-      Sint-Rembert AI-Skills cursus voor leerlingen — Versie 3.0 (2026)<br>
-      Interactieve training voor leerlingen secundair onderwijs
-    </p>
-
-    <p style="margin: 12px 0 8px 0;"><strong>Bronvermelding & Inspiratie</strong></p>
-    <p style="margin: 0;">
-      Deze cursus is ontwikkeld met inspiratie van pedagogische frameworks en onderwijs-best practices, waaronder:<br>
-      <br>
-      • <strong>Elements of AI</strong> (Universiteit van Helsinki, TU Delft, Reaktor) | <a href="https://www.elementsofai.com/" target="_blank" style="color: #06038D;">elementsofai.com</a><br>
-      • EDUbox Artificiële Intelligentie (VRT NWS)<br>
-      • Schoolmakers AI-gebruiksschaal (Leon Furze, Universiteit Melbourne)<br>
-      • Microsoft Responsible AI frameworks<br>
-      • EU AI Act (2024)<br>
-      • Sint-Rembert Beleidskader AI<br>
-      • Kennisnet, Digisprong, Vernieuwenderwijs
-    </p>
-
-    <p style="margin: 12px 0 0 0; font-style: italic; color:#06038D;">
-      Certificaten downloadbaar als PDF
-    </p>
-  </div>
-</footer>
-
-</main>
-</div>
-<script src="leerlingen.js?v=20261026a"></script>
+<script>window.__origAEL=document.addEventListener;document.addEventListener=function(t,f,o){if(t==='DOMContentLoaded')return;return window.__origAEL.call(document,t,f,o);};</script>
+<script src="leerlingen.js"></script>
 <script>
-/* Klasversie: ook in de graadkeuze meteen tonen dat je met de klas of als leerkracht kan werken */
-(function(){
-  var orig=window.showGraadGate;
-  window.showGraadGate=function(){
-    orig.apply(this,arguments);
-    var m=document.getElementById('graad-modal'); if(!m||m.querySelector('.klas-keuze')) return;
-    var kaart=m.firstElementChild; var d=document.createElement('div'); d.className='klas-keuze';
-    d.style.cssText='display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 18px;padding:0 0 16px;border-bottom:2px solid #D9D9D9';
-    d.innerHTML='<p style="width:100%;margin:0 0 4px;font-weight:700;color:#06038D">Les in de klas?</p><a href="les.html#klas" style="background:#95D600;color:#06038D;border-radius:999px;padding:9px 16px;font-weight:800;text-decoration:none">Ik heb een klascode</a><a href="les.html#leerkracht" style="background:#06038D;color:#fff;border-radius:999px;padding:9px 16px;font-weight:800;text-decoration:none">Ik ben leerkracht</a>';
-    kaart.insertBefore(d,kaart.firstChild);
-  };
-})();
+document.addEventListener=window.__origAEL;
+try{ S.graad=3; }catch(e){}
+window.__siteS=function(){try{return S;}catch(e){return null;}};
+window.__zetGraad=function(g){try{S.graad=g;}catch(e){}try{window.__SITE={1:m1Gefilterd(),2:m2Gefilterd(),3:m3Gefilterd(),4:m4Gefilterd(),5:m5Gefilterd(),6:m6Gefilterd(),7:m7};}catch(e){window.__SITE=null;}};
+window.__zetGraad(3);
+window.up=function(){};window.rmc=function(){};window.sv=function(){};
+window.goHome=function(){if(window.__cursusThuis)window.__cursusThuis();};
+window.rm1=function(){if(window.__cursusVolgende)window.__cursusVolgende();};
+for(var __i=1;__i<=7;__i++){ window['n'+__i]=function(){ if(window.__cursusVolgende) window.__cursusVolgende(); }; window['p'+__i]=function(){ if(window.__cursusVorige) window.__cursusVorige(); }; }
 </script>
-
-<!-- ════════ HELPDESK BUTTON ════════ -->
-<a href="mailto:informaticadienst.pedagogisch@sint-rembert.be?subject=Vraag%20over%20de%20AI-cursus" 
-   id="helpdesk-btn" 
-   title="Vragen? Mail de pedagogische ICT-dienst"
-   style="position:fixed; bottom:24px; right:24px; z-index:9998; background:var(--blue); color:white; height:52px; min-width:52px; border-radius:26px; display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 4px 16px rgba(6,3,141,0.35); transition:all 0.25s ease; overflow:hidden; padding:0;"
-   onmouseover="this.style.minWidth='250px'; this.style.paddingLeft='18px'; this.style.paddingRight='20px'; this.style.justifyContent='flex-start'; document.getElementById('helpdesk-text').style.maxWidth='200px'; document.getElementById('helpdesk-text').style.marginLeft='10px';"
-   onmouseout="this.style.minWidth='52px'; this.style.paddingLeft='0'; this.style.paddingRight='0'; this.style.justifyContent='center'; document.getElementById('helpdesk-text').style.maxWidth='0'; document.getElementById('helpdesk-text').style.marginLeft='0';">
-  <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink:0"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H10l-4 3v-3H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" fill="none" stroke="#06038D" stroke-width="2.4" stroke-linejoin="round"/></svg>
-  <span id="helpdesk-text" style="font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; max-width:0; transition:max-width 0.25s ease, margin-left 0.25s ease; display:inline-block;">Vragen? Mail ons</span>
-</a>
-
-<!-- ════════ RESET PROGRESS BUTTON ════════ -->
-<button onclick="confirmResetProgress()"
-   id="reset-btn"
-   title="Opnieuw beginnen vanaf 0"
-   style="position:fixed; bottom:88px; right:24px; z-index:9998; background:white; color:var(--muted); height:40px; min-width:40px; border-radius:20px; border:1px solid #e0e4f5; display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 4px 12px rgba(0,0,0,0.12); transition:all 0.25s ease; overflow:hidden; padding:0; cursor:pointer;"
-   onmouseover="this.style.minWidth='200px'; this.style.paddingLeft='14px'; this.style.paddingRight='16px'; this.style.justifyContent='flex-start'; document.getElementById('reset-text').style.maxWidth='160px'; document.getElementById('reset-text').style.marginLeft='8px';"
-   onmouseout="this.style.minWidth='40px'; this.style.paddingLeft='0'; this.style.paddingRight='0'; this.style.justifyContent='center'; document.getElementById('reset-text').style.maxWidth='0'; document.getElementById('reset-text').style.marginLeft='0';">
-  <span style="font-size:16px; flex-shrink:0; line-height:1;">↺</span>
-  <span id="reset-text" style="font-size:12px; font-weight:700; white-space:nowrap; overflow:hidden; max-width:0; transition:max-width 0.25s ease, margin-left 0.25s ease; display:inline-block;">Opnieuw beginnen</span>
-</button>
-
-<script>document.addEventListener("DOMContentLoaded",()=>{try{avRender("av-docs")}catch(e){}});</script>
-<!-- Afbeeldingen uitvergroten -->
-<div id="lb" role="dialog" aria-modal="true" aria-label="Vergrote afbeelding" style="position:fixed;inset:0;z-index:9999;display:none;background:rgba(6,3,141,.94);overflow:auto;padding:56px 16px 16px"><button id="lb-x" type="button" style="position:fixed;top:12px;right:14px;border:0;border-radius:999px;background:#95D600;color:#06038D;font-weight:800;padding:10px 18px;cursor:pointer;font-family:Poppins,sans-serif">Sluiten ✕</button><div style="min-height:100%;display:flex;align-items:center;justify-content:center"><img id="lb-img" alt="" style="max-width:100%;max-height:calc(100vh - 90px);border-radius:16px;background:#fff;cursor:zoom-in"></div></div>
 <script>
 (function(){
-  var lb=document.getElementById('lb'),im=document.getElementById('lb-img'),vol=false;
-  function sluit(){lb.style.display='none';vol=false;im.style.maxWidth='100%';im.style.maxHeight='calc(100vh - 90px)';}
-  document.addEventListener('click',function(e){
-    var el=e.target;
-    if(el.tagName==='IMG'&&el!==im&&(el.getAttribute('src')||'').indexOf('img/')===0){im.src=el.src;im.alt=el.alt||'';lb.style.display='block';return;}
-    if(lb.style.display!=='block')return;
-    if(el===im){vol=!vol;im.style.maxWidth=vol?'none':'100%';im.style.maxHeight=vol?'none':'calc(100vh - 90px)';im.style.cursor=vol?'zoom-out':'zoom-in';return;}
-    sluit();
+"use strict";
+var LABELSITE='ai-vermelden.html';
+
+/* ============ MODULES (volgen de leerlingensite) ============
+   letter = deel van de klascode. klaar:false = nog in opbouw. */
+var MODULES=[
+  {id:'M1',letter:'A',titel:'Wat is AI?',duur:'± 50 min',klaar:true},
+  {id:'M2',letter:'B',titel:'Hoe werkt AI?',duur:'± 50 min',klaar:true},
+  {id:'M3',letter:'C',titel:'Generatieve AI',duur:'± 50 min',klaar:true},
+  {id:'M4',letter:'D',titel:'Ethiek & bias',duur:'± 50 min',klaar:true},
+  {id:'M5',letter:'E',titel:'AI op school: de AI-labels',duur:'± 50 min',klaar:true},
+  {id:'M6',letter:'F',titel:'AI in de maatschappij',duur:'± 50 min',klaar:true},
+  {id:'M7',letter:'G',titel:'Aanrader: leren met Copilot',duur:'± 50 min',klaar:true}
+];
+
+/* Leerdoelen, afgeleid van de rode draden van de 3e graad in de leerlijn (na te kijken) */
+var DOELEN={
+  M1:['Ik herken AI in mijn dagelijks leven en vergelijk verschillende AI-systemen en hun beperkingen.','Ik vraag zelf naar de afspraken bij elke opdracht en kijk eerst naar het AI-label.','Ik zoek de originele bron op voor ik iets overneem.'],
+  M2:['Ik begrijp hoe AI leert: van vaste regels tot machine learning en deep learning.','Ik begrijp dat model, trainingsdata en context de output beïnvloeden.','Ik kies bewust de juiste modus: een snel antwoord of diep nadenken.'],
+  M3:['Ik kan uitleggen hoe generatieve AI tekst en beeld maakt.','Ik werk iteratief: ik test, vergelijk en verfijn mijn prompts.','Ik herken AI-beelden en deepfakes, en houd rekening met auteursrecht.'],
+  M4:['Ik herken bias en ethische dilemma\u2019s, en reflecteer over duurzaamheid (energieverbruik).','Ik beoordeel zelf of ik gegevens of documenten in een tool mag zetten.','Ik herken antropomorfisme, sycophancy en false fluency.'],
+  M5:['Ik vraag zelf naar de afspraken en weet dat gebruik buiten de afspraken een onregelmatigheid is.','Ik documenteer mijn AI-gebruik: tool, prompts, wat ik aanpaste en hoe ik controleerde.','Ik weet dat AI-detectie nooit sluitend bewijs is, en kan mijn werk mondeling toelichten.'],
+  M6:['Ik reflecteer genuanceerd over de gevolgen van AI voor mijn studie en toekomstig beroep.','Ik onderscheid trends en hypes, en ken het doel van de EU AI Act.','Ik verdedig een eigen, onderbouwde visie op AI.'],
+  M7:['Ik gebruik AI als studiepartner: samenvatten, mezelf overhoren en feedback krijgen.','Ik laat AI mij vragen stellen in plaats van enkel antwoorden te geven.','Ik kies bewust wanneer ik zonder AI werk om een vaardigheid zelf te beheersen.']
+};
+
+var GEVOELENS=['nieuwsgierig','enthousiast','twijfel','bezorgd','bang','boos','rustig','onverschillig'];
+
+/* ============ EXTRA STAPPEN BOVENOP DE LEERLINGENSITE ============ */
+var OPENING={type:'bouw3d',id:'m1_opening',klas:true,titel:'Bouw je gevoel',plaat:10,
+  vraag:'Hoe sta jij vandaag tegenover AI?',
+  uitleg:'Bouw in 5 minuten iets dat toont hoe jij over AI denkt. Een toren, een muur, een poppetje naast een robot … alles mag. Geef je bouwwerk daarna een titel en kies een gevoel.',
+  voorbeeld:'bv. Een robot achter een muur',
+  voorwerpen:['steen21','steen11','steen22','plaat31','poppetje','robot','hart','bliksem','scherm','vraag','uitroep'],
+  lk:{tijd:'10 minuten',vragen:['Wat heb je gebouwd, en waarom zo?','Wie koos een ander gevoel dan zijn buur? Wat is het verschil?','Wat zou je bouwwerk doen veranderen?'],tip:'Laat 2 à 3 leerlingen hun bouwwerk groot tonen ("Toon groot"), zonder naam. De klas raadt eerst wat het betekent, daarna vertelt de maker. Tip: draai rond het bouwwerk, dat vertelt vaak meer.'}};
+var LABELSTAP={type:'labels',id:'m1_labels',titel:'Kijk eerst naar het label',
+  lk:{tijd:'8 minuten',vragen:['Bij welk label twijfel je het meest? Waarom?','Wat doe je als er geen label op je taak staat?'],tip:'Toon de site "AI vermelden, stap voor stap" op het bord en loop één label samen door.'}};
+var STAD={type:'bouw3d',id:'m6_stad',klas:true,titel:'Bouw de stad van 2040',plaat:14,
+  vraag:'Hoe ziet jouw stad eruit in 2040, met AI?',
+  uitleg:'Bouw je stad met huizen, een school, een fabriek, auto\u2019s, robots en mensen. Zet een bordje ✓ bij iets wat AI beter maakt, en een bordje ! bij een gevaar. Geef je stad een titel en kies een gevoel.',
+  voorbeeld:'bv. Stad zonder files, maar vol camera\u2019s',
+  voorwerpen:['huis','school','fabriek','boom','auto','windmolen','poppetje','robot','scherm','vinkje','uitroep','kruis','steen21','steen22','plaat31'],
+  lk:{tijd:'15 minuten',vragen:['Waar staan de bordjes ✓ en !? Waarom daar?','Wie wint er in jouw stad door AI? Wie verliest?','Wat moet er vandaag al gebeuren zodat jouw ✓ uitkomt en jouw ! niet?'],tip:'Laat 3 steden tonen die heel verschillend zijn. Vergelijk: optimistisch, bezorgd, gemengd. Leg de link met trends en hypes.'}};
+var LK_ALG={tijd:'10 minuten',vragen:[],tip:'Laat leerlingen eerst kort met hun buur praten, en bespreek daarna klassikaal. Vraag eerst een argument van wie anders denkt dan de meerderheid.'};
+
+/* De volledige inhoud komt van de leerlingensite (leerlingen.js) */
+function siteStappen(n){
+  var lijst=(window.__SITE&&window.__SITE[n])||[];
+  return lijst.map(function(fn,i){
+    var naam=fn.name, bron=String(fn);
+    var klas=/disc-card|renderStellingenLeerling|charter/.test(bron);
+    return {type:'site',fn:naam,id:'s'+n+'_'+naam,titel:'',klas:klas,lk:klas?LK_ALG:null};
   });
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')sluit();});
+}
+var STAPPEN={};
+function bouwStappen(){
+  var rap=function(n){return {type:'rapport',id:'m'+n+'_rapport',titel:'Klaar: maak je rapport'};};
+  [1,2,3,4,5,6,7].forEach(function(n){
+    var M='M'+n,plan=(typeof CE_PLAN!=='undefined'&&CE_PLAN[M])||{},uit=[],geplaatst={};
+    siteStappen(n).forEach(function(s){
+      if(s.fn==='m5s_vermelden'){uit.push(CE_STAP.ce5_realiteit,VERMELDEN);return;}
+      uit.push(s);(plan[s.fn]||[]).forEach(function(id){uit.push(CE_STAP[id]);geplaatst[id]=1;});
+    });
+    Object.keys(plan).forEach(function(k){plan[k].forEach(function(id){if(!geplaatst[id])uit.push(CE_STAP[id]);});});
+    if(n===1)uit=[OPENING,LABELSTAP].concat(uit);
+    if(n===6){var k=uit.findIndex(function(s){return s.fn==='m6s_gevolgen';});uit.splice(k>=0?k+1:uit.length,0,STAD);}
+    STAPPEN[M]=uit.concat([rap(n)]);
+  });
+}
+/* ============ KLASVERSIE: één les van ± 50 minuten per module ============
+   bord = kort scherm voor het bord · mk = voorspel/peil-vraag · stelling = peiling eens/oneens
+   ddw = denk – deel – wissel uit · site = doe-opdracht uit de leerlingensite · bouw3d = 3D-bouwen */
+function L(o){return o;}
+function ddw(id,titel,vraag,lk){return {type:'reflectie',id:id,klas:true,titel:titel,geenOnthoud:true,
+  intro:'<div class="kaart"><div class="ddw"><span>1 · Denk</span><span>2 · Deel</span><span>3 · Wissel uit</span></div><p class="bordvraag">'+vraag+'</p><p class="klein">Denk 1 minuut alleen en noteer je antwoord. Bespreek het dan met je buur. Daarna wisselen we uit met de klas.</p></div>',
+  vragen:[{k:'r1',q:'Mijn antwoord'}],lk:lk};}
+function exit(id,v1,v2){return {type:'reflectie',id:id,titel:'Exit-ticket',vragen:[{k:'r1',q:v1},{k:'r2',q:v2}]};}
+function site(fn){return {type:'site',fn:fn,id:'k_'+fn,titel:''};}
+function bord(id,titel,kern,punten,lk,extra){return {type:'bord',id:id,titel:titel,kern:kern,punten:punten||[],extra:extra||'',lk:lk};}
+function rapK(n){return {type:'rapport',id:'k'+n+'_rapport',titel:'Klaar: dien je rapport in'};}
+
+var LES={
+M1:[
+ OPENING, LABELSTAP,
+ {type:'mk',id:'k1_ai',klas:true,titel:'Zit hier AI in?',intro:'Voorspel eerst: zit er AI in, of volgt het vaste regels?',
+  V:[{q:'Waze die een file voorspelt en je omleidt',o:['AI','Geen AI'],a:0,f:'AI: leert uit verkeersdata.'},{q:'Een rekenmachine',o:['AI','Geen AI'],a:1,f:'Vaste regels.'},{q:'Je TikTok- of Instagram-feed',o:['AI','Geen AI'],a:0,f:'AI: leert wat jij graag ziet.'},{q:'De wekker op je gsm',o:['AI','Geen AI'],a:1,f:'Doet exact wat je instelde.'}],
+  lk:{tijd:'5 minuten',vragen:['Waarom is een rekenmachine geen AI?','Welke apps die jij vandaag al gebruikte, hebben AI?'],antw:['AI leert uit voorbeelden (data) en voorspelt; een rekenmachine volgt vaste regels.','Spotify, Netflix, Snapchat-filters, Google Maps, spellingcontrole, gezichtsherkenning op je gsm …'],tip:'Laat leerlingen eerst kiezen op hun laptop en vraag dan handopsteken: wie dacht "AI" bij de rekenmachine?'}},
+ bord('k1_wat','Wat is AI?','AI zijn machines die zelfstandig leren en handelen.',['AI is een <b>containerbegrip</b>: van een spamfilter tot een chatbot.','Drie elementen: <b>een computer</b>, <b>data</b> en <b>algoritmes</b> die patronen herkennen.'],
+  {tijd:'5 minuten',vragen:['Wat heeft een spamfilter nodig om te leren?','Waarom zijn data zo belangrijk?'],antw:['Veel voorbeelden van spam en geen spam (data), een computer en een algoritme.','Hoe meer en hoe betere data, hoe beter de patronen. Slechte data geven slechte AI.'],tip:'Teken de drie elementen op het bord als drie blokken: computer + data + algoritme.'}),
+ ddw('k1_kamer','De Chinese kamer','Iemand die geen Chinees kent, beantwoordt Chinese briefjes perfect met een dik regelboek. Begrijpt hij Chinees? En begrijpt AI wat het zegt?',
+  {tijd:'6 minuten',vragen:['Wie vindt dat hij Chinees begrijpt? Waarom?','Wat betekent dit voor AI-antwoorden die heel zeker klinken?'],antw:['Nee: hij volgt regels zonder te begrijpen. Sommige leerlingen zeggen: het resultaat is hetzelfde, dus maakt het niet uit.','AI voorspelt patronen. Het kan overtuigend klinken en toch fout zijn: altijd controleren.'],tip:'Laat twee leerlingen het naspelen: één met een "regelboek" (een blad met vraag → antwoord), één die vragen stelt.'}),
+ {type:'hallu',id:'k1_hallu',titel:'Spot de hallucinatie',lk:{tijd:'5 minuten',vragen:['Welke uitspraak leek het meest betrouwbaar? Waarom?','Hoe controleer je zoiets?'],antw:['Uitspraken met precieze cijfers of namen klinken betrouwbaar, maar kunnen verzonnen zijn.','De originele bron zoeken, vergelijken met twee betrouwbare bronnen, je cursus.'],tip:'Vertel het Bard-voorbeeld: Google demonstreerde zijn chatbot met een fout antwoord over de James Webb-telescoop.'}},
+ {type:'stelling',id:'k1_stelling',klas:true,titel:'Waar sta jij?',
+  stellingen:[{s:'Een AI-stem mag mijn favoriete radioprogramma presenteren, zolang het vermeld wordt.',hulp:'Denk aan dj ImAIne op MNM.'},{s:'Dat Instagram leert wat ik graag zie, is vooral handig.',hulp:'Handig, of stuurt het je gedrag zonder dat je het merkt?'}],
+  lk:{tijd:'8 minuten',vragen:['Wie koos eens, wie oneens? Laat beide kanten aan het woord.','Maakt het verschil of je weet dat het AI is?'],antw:['Pro: handig, leuk, nieuw. Contra: misleiding, jobs van presentatoren, je weet niet wat echt is.','Transparantie is een kernprincipe: vermelden maakt veel verschil voor vertrouwen.'],tip:'Laat leerlingen per stelling rechtstaan (eens) of blijven zitten (oneens). Vraag eerst een argument aan de minderheid.'}},
+ ddw('k1_auto','Zelfrijdende auto\u2019s','Waarom zou een zelfrijdende auto handig zijn? Wanneer is hij gevaarlijk? Wat wil jij niet aan AI overlaten in een auto?',
+  {tijd:'6 minuten',vragen:['Wat wil jij niet aan AI overlaten?','Wie is verantwoordelijk bij een ongeval?'],antw:['Minder ongevallen door vermoeidheid, minder files; maar fouten bij onverwachte situaties, hacking, morele keuzes.','Open vraag: fabrikant, eigenaar, programmeur? De wet is daar nog volop mee bezig.'],tip:'Verzamel de antwoorden in twee kolommen op het bord: handig · gevaarlijk.'}),
+ exit('k1_exit','Waar zie jij AI in je dagelijks leven, wat je pas nu beseft?','Welke vraag over AI heb je nog?'),
+ rapK(1)
+],
+M2:[
+ {type:'mk',id:'k2_voorspel',klas:true,titel:'Voorspel',intro:'Hoe leer je een computer zombies van mensen onderscheiden?',
+  V:[{q:'Wat werkt volgens jou het best?',o:['Vaste regels','Heel veel voorbeelden','Allebei kan'],a:2,f:'Allebei kan: vaste regels (procedurele AI) of leren uit voorbeelden (machine learning). Vandaag leer je het verschil.'}],
+  lk:{tijd:'3 minuten',vragen:['Wie koos vaste regels? Welke regel zou je gebruiken?'],antw:['Bv. "huid niet natuurlijk → zombie". Werkt tot er een uitzondering komt.'],tip:'Gebruik de antwoorden als opstap naar de drie fasen.'}},
+ bord('k2_fasen','Drie fasen van AI','Van vaste regels naar zelf leren.',['<b>1. Procedureel</b> (na WOII): een stappenplan, zoals een Ikea-handleiding.','<b>2. Machine learning</b> (jaren \u201980): leren uit data.','<b>3. Deep learning</b> (sinds 2010): complexe taken, en in 2022 generatieve AI.'],
+  {tijd:'5 minuten',vragen:['Is een schaakcomputer procedureel of lerend?'],antw:['Een klassieke schaakcomputer is procedureel: hij rekent een boom van zetten door met vaste regels.'],tip:'Teken een tijdlijn op het bord: 1950 – 1980 – 2010 – 2022.'}),
+ {type:'mk',id:'k2_zombie',titel:'De vaste beslisboom',intro:'<b>Huid natuurlijk?</b> Nee → zombie. Ja → <b>Ogen normaal?</b> Nee → zombie. Ja → mens. Wat zegt de boom?',
+  V:[{q:'Een mens met griep en een bleke huid.',o:['Zombie','Mens'],a:0,f:'De boom zegt "zombie": vaste regels kennen geen griep.'},{q:'Een zombie met een perfect geschminkt gezicht en zonnebril.',o:['Zombie','Mens'],a:1,f:'De boom zegt "mens": wat niet in de regels past, gaat fout.'}],
+  lk:{tijd:'4 minuten',vragen:['Wat is het nadeel van vaste regels?'],antw:['Niet flexibel: elke nieuwe situatie moet iemand vooraf voorzien.'],tip:'Vraag de klas om een regel toe te voegen die de griep-fout oplost, en laat zien dat er altijd nieuwe uitzonderingen komen.'}},
+ bord('k2_ml','Machine learning','Data erin, resultaat eruit. Hoe? Dat zie je niet: de black box.',['<b>Gesuperviseerd:</b> data met een label ("dit is een zombie").','<b>Ongesuperviseerd:</b> zonder labels, de machine zoekt zelf groepen.','<b>Versterkend:</b> vallen en opstaan, met beloning en straf.'],
+  {tijd:'5 minuten',vragen:['Welk voorbeeld uit je eigen leven past bij elke soort?'],antw:['Gezichtsherkenning in je foto-app · aanbevelingen van Spotify · een AI die een game leert spelen.'],tip:'Laat drie leerlingen elk één soort uitleggen aan de klas in hun eigen woorden.'}),
+ site('m2s6'),
+ {type:'mk',id:'k2_spam',klas:true,titel:'Zo rekent een spamfilter',intro:'Van 100 mails met "GRATIS" zijn er 90 spam. Van 100 mails zonder dat woord maar 5.',
+  V:[{q:'Er komt een mail binnen met "GRATIS". Hoe groot is de kans dat het spam is?',o:['5%','50%','90%'],a:2,f:'Ongeveer 90%. Een echte filter combineert dit voor tientallen woorden tegelijk.'}],
+  lk:{tijd:'4 minuten',vragen:['Wanneer gaat dit fout?'],antw:['Een echte mail van je school met "gratis" erin belandt in spam: AI werkt met kansen, niet met zekerheid.'],tip:'Laat leerlingen hun spammap checken: welke echte mail zat er ten onrechte in?'}},
+ bord('k2_deep','Deep learning','Machine learning + neurale netwerken.',['Veel kleine beslissingen samen geven één groot resultaat, zoals je hersenen.','Toch verwart AI soms een rond, bruin <b>koekje</b> met een <b>hond</b> met vlekken.'],
+  {tijd:'4 minuten',vragen:['Waarom verwart AI een koekje met een hond?'],antw:['De patronen lijken op elkaar (rond, bruin, vlekken). AI werkt met kansen, niet met begrip.'],tip:'Zoek samen online "chihuahua or muffin" en laat de klas raden.'}),
+ {type:'stelling',id:'k2_stelling',klas:true,titel:'Waar sta jij?',
+  stellingen:[{s:'Een machine die leert, begrijpt ook wat ze doet.',hulp:'Denk aan de Chinese kamer en aan hond of koekje.'},{s:'Het is oké dat niemand precies weet hoe een AI tot zijn antwoord komt.',hulp:'Bij een liedjesadvies? Bij een medische diagnose?'}],
+  lk:{tijd:'8 minuten',vragen:['Wanneer is de black box geen probleem, en wanneer wel?'],antw:['Bij muziekadvies weinig erg; bij een diagnose, een lening of een schoolresultaat moet je kunnen uitleggen waarom.'],tip:'Laat de klas kiezen: links eens, rechts oneens. Vraag eerst een argument van de kleinste groep.'}},
+ site('m2s_verdieping3'),
+ exit('k2_exit','Welke soort machine learning vond je het makkelijkst, en welke het moeilijkst?','Waar kom jij de black box tegen?'),
+ rapK(2)
+],
+M3:[
+ {type:'mk',id:'k3_voorspel',klas:true,titel:'Voorspel het volgende woord',intro:'Jij typt: "Schrijf een gedicht over de zee". AI begint met "De zee is …"',
+  V:[{q:'Welk woord kiest AI het vaakst?',o:['blauw','gevaarlijk','kunst'],a:0,f:'Het meest waarschijnlijke woord. Zo schrijft een taalmodel: woord voor woord.'}],
+  lk:{tijd:'3 minuten',vragen:['Waarom kiest AI niet altijd hetzelfde woord?'],antw:['Er zit een beetje toeval in de keuze (de "temperatuur"). Daarom krijg je bij dezelfde vraag soms een ander antwoord.'],tip:'Laat de klas samen een zin woord per woord "voorspellen", zoals een taalmodel.'}},
+ bord('k3_gen','Generatieve AI','AI maakt nu zelf nieuwe tekst, beelden en video.',['Taalmodellen zijn getraind met bijna alle online tekst.','Ze voorspellen <b>woord voor woord</b> wat waarschijnlijk volgt.','Train een model met alle afleveringen van Friends en het praat als de personages.'],
+  {tijd:'4 minuten',vragen:['Begrijpt een taalmodel wat het schrijft?'],antw:['Nee, het voorspelt. Daarom kan het ook overtuigend fout zijn (hallucinaties).'],tip:'Verwijs terug naar de Chinese kamer uit module 1.'}),
+ site('m3s4'),
+ site('m3s5'),
+ bord('k3_tips','Een goede prompt','Hoe specifieker je vraagt, hoe beter het antwoord.',['<b>Tekst:</b> specifiek onderwerp · context · lengte en vorm · open vragen.','<b>Beeld:</b> onderwerp · vorm · stijl.','Niet tevreden? Vraag door in hetzelfde gesprek.'],
+  {tijd:'4 minuten',vragen:['Maak deze prompt beter: "Vertel iets over hardlopen."'],antw:['"Wat zijn de voordelen van hardlopen voor je mentale gezondheid? Schrijf 150 woorden voor jongeren van 16."'],tip:'Verbeter de prompt samen op het bord, in drie stappen.'}),
+ site('m3s7'),
+ site('m3s9'),
+ {type:'stelling',id:'k3_grens',klas:true,titel:'Waar ligt de grens?',
+  stellingen:[{s:'AI gebruiken om ideeën te brainstormen voor een opstel is vals spelen.',hulp:'Kijk naar het AI-label. Wie schrijft de tekst?'},{s:'Een melodie gemaakt door AI, met zelfgeschreven tekst, is nog altijd jouw muziek.',hulp:'Wie is de maker?'},{s:'Ik zou een kunstwerk van AI kopen voor dezelfde prijs als een kunstwerk van een mens.',hulp:'Telt het verhaal achter een werk?'}],
+  lk:{tijd:'10 minuten',vragen:['Waar trek jij de grens tussen hulp en vals spelen?','Wie is de maker als AI meehielp?'],antw:['Het AI-label van de taak beslist. Brainstormen kan bij label 2, de tekst blijft van de leerling.','Geen eenduidig antwoord: de muziek- en kunstwereld discussieert er volop over.'],tip:'Stellingenlijn: leerlingen gaan op een lijn staan van helemaal eens tot helemaal oneens. Buren met een verschillende plek overtuigen elkaar.'}},
+ exit('k3_exit','Voor welke taak zou jij generatieve AI het liefst gebruiken?','Wat vind je van AI-kunst?'),
+ rapK(3)
+],
+M4:[
+ {type:'mk',id:'k4_voorspel',klas:true,titel:'Voorspel',intro:'Een AI sorteerde cv\u2019s voor technische jobs. Hij leerde uit 10 jaar oude cv\u2019s, vooral van mannen.',
+  V:[{q:'Wat gebeurde er met de cv\u2019s van vrouwen?',o:['Ze kregen een eerlijke kans','Ze werden vaker afgewezen'],a:1,f:'De AI nam de ongelijkheid uit het verleden over. Dat heet bias.'}],
+  lk:{tijd:'3 minuten',vragen:['Was de AI "seksistisch"?'],antw:['De AI heeft geen mening: hij herhaalde de patronen uit onevenwichtige data. De verantwoordelijkheid ligt bij wie hem bouwt en gebruikt.'],tip:'Laat leerlingen eerst gokken voor je het antwoord toont.'}},
+ bord('k4_neutraal','AI is niet neutraal','AI voorspelt met kansen en leert onze vooroordelen mee.',['Een fout bij hond of koekje is grappig, een fout bij een ziekte niet.','Ethische keuzes, zoals bij een zelfrijdende auto, vragen waarden en menselijk oordeel.'],
+  {tijd:'4 minuten',vragen:['Welke beslissingen mag AI volgens jou nooit alleen nemen?'],antw:['Over gezondheid, straffen, toelating, jobs: overal waar mensen sterk geraakt worden.'],tip:'Noteer de antwoorden: ze komen terug bij de stellingen.'}),
+ ddw('k4_dilemma','Het dilemma','Een zelfrijdende auto kan een ongeval niet meer vermijden. Kiest hij voor de inzittenden of voor de voetgangers? Wie mag dat beslissen?',
+  {tijd:'6 minuten',vragen:['Wie mag dat beslissen: de fabrikant, de overheid, de koper?'],antw:['Geen juist antwoord. Wel: waarden en verantwoordelijkheid kan je niet aan wiskunde overlaten.'],tip:'Laat de klas stemmen en toon dat er geen eenduidig antwoord is.'}),
+ site('m4s7'),
+ {type:'mk',id:'k4_energie',klas:true,titel:'Raad het cijfer',intro:'AI draait op enorme datacenters.',
+  V:[{q:'Hoeveel meer energie kost een vraag aan ChatGPT dan dezelfde zoekopdracht op Google?',o:['2 keer','25 keer','100 keer'],a:1,f:'Ongeveer 25 keer meer. Gebruik AI dus niet voor alles.'}],
+  lk:{tijd:'3 minuten',vragen:['Wanneer gebruik je beter gewoon een zoekmachine?'],antw:['Voor een korte definitie, een datum of een openingsuur.'],tip:'Vraag: wie gebruikt AI als zoekmachine?'}},
+ bord('k4_deepfake','Deepfakes herkennen','Twijfel je? Check de bron.',['<b>Kijk:</b> knipperen, randen van gezicht of haar, licht, lippen.','<b>Luister:</b> robotachtige toon, rare pauzes.','Melden betrouwbare media (VRT, De Standaard) hetzelfde?'],
+  {tijd:'4 minuten',vragen:['Welke deepfake heb jij al gezien?'],antw:['Bv. de nep-MrBeast-advertentie die gsm\u2019s van 2 dollar beloofde.'],tip:'Benadruk: een deepfake van een klasgenoot maken is nooit een grap.'}),
+ {type:'mk',id:'k4_privacy',titel:'Wat deel je met een chatbot?',intro:'Op school gebruik je Copilot met je schoolaccount. Mag je dit delen?',
+  V:[{q:'Een vraag over fotosynthese',o:['Mag','Nooit'],a:0,f:'Geen persoonsgegevens: geen probleem.'},{q:'Je wachtwoord',o:['Mag','Nooit'],a:1,f:'Nooit.'},{q:'Een foto van je identiteitskaart',o:['Mag','Nooit'],a:1,f:'Nooit.'},{q:'Een verhaal over een klasgenoot, met naam',o:['Mag','Nooit'],a:1,f:'Niet zonder toestemming.'}],
+  lk:{tijd:'4 minuten',vragen:['Waarom gebruikt de school Copilot met je schoolaccount?'],antw:['Je gegevens blijven in de beveiligde schoolomgeving en worden niet gebruikt om AI te trainen.'],tip:'Laat leerlingen het schild-icoon in Copilot zoeken.'}},
+ {type:'stelling',id:'k4_stelling',klas:true,titel:'Waar sta jij?',
+  stellingen:[{s:'Als een AI discrimineert, is het bedrijf dat hem maakte verantwoordelijk.',hulp:'Ook als het onbedoeld was?'},{s:'AI-bedrijven moeten kunstenaars betalen als hun werk gebruikt werd om AI te trainen.',hulp:'Denk aan de Hollywood-staking van 2023.'},{s:'Ik wil minder AI gebruiken omdat het veel energie kost.',hulp:'Vermijden, of bewust kiezen?'}],
+  lk:{tijd:'9 minuten',vragen:['Wie is verantwoordelijk: maker, gebruiker of AI?'],antw:['De meeste experts: de bedrijven die AI bouwen en inzetten, want zij moeten testen op discriminatie.'],tip:'Drie groepen, elk één stelling. Elke groep verdedigt beide kanten.'}},
+ exit('k4_exit','Welk risico van AI raakt jou het meest?','Wat doe je zelf om er voorzichtig mee om te gaan?'),
+ rapK(4)
+],
+M5:[
+ {type:'stelling',id:'k5_start',klas:true,titel:'Om mee te starten',stellingen:[{s:'Als je AI voor alles gebruikt, leer je zelf niets meer.',hulp:'Wat leer je nog als AI je taak maakt?'}],
+  lk:{tijd:'4 minuten',vragen:['Waarvoor helpt AI je echt bij het leren?'],antw:['Uitleg, oefenvragen, feedback. Wie AI het werk laat doen, leert niets en kan het niet uitleggen.'],tip:'Gebruik dit als opstap: daarom zijn er afspraken en labels.'}},
+ bord('k5_afspraken','AI is handig, met afspraken','Jij blijft verantwoordelijk voor je werk.',['<b>✓</b> laten helpen bij samenvatten of brainstormen · controleren · eerlijk vermelden','<b>✗</b> AI alles laten doen · fouten afschuiven · persoonsgegevens delen'],
+  {tijd:'3 minuten',vragen:['Welke afspraak vind je het moeilijkst?'],antw:['Vaak: altijd controleren en eerlijk vermelden.'],tip:'Kort houden: de labels volgen meteen.'}),
+ {type:'labels',id:'k5_labels',titel:'De vier AI-labels',lk:{tijd:'6 minuten',vragen:['Welk label krijgt een toets? En een infographic?','Wat doe je zonder label?'],antw:['Toets: meestal label 1. Infographic: vaak 3 of 4.','Geen label = geen AI, en vraag het na.'],tip:'Hang de klasposter op en toon de site "AI vermelden, stap voor stap".'}},
+ site('m5s3'),
+ bord('k5_tools','Welke tool?','Copilot met je schoolaccount.',['Kijk of je het <b>schild-icoon</b> ziet.','Een andere tool? Enkel als je leerkracht het uitdrukkelijk toelaat.','Persoonsgegevens geef je in geen enkele tool in.'],
+  {tijd:'3 minuten',vragen:['Waarom niet gewoon je eigen gratis account?'],antw:['Bij gratis tools wordt wat je intypt vaak gebruikt om AI te trainen.'],tip:'Laat iedereen Copilot openen met het schoolaccount.'}),
+ site('m5s5'),
+ bord('k5_detectie','Geen AI-detector, wel een gesprek','Eerlijkheid is je beste kaart.',['AI-detectors zijn onbetrouwbaar en beschuldigen ten onrechte.','Twijfelt je leerkracht? Dan volgt een gesprek over hoe je werkte.'],
+  {tijd:'3 minuten',vragen:['Waarom zou een AI-detector een eerlijke leerling beschuldigen?'],antw:['Formele schrijfstijl of een andere moedertaal kan "AI-achtig" lijken.'],tip:'Benadruk vertrouwen: het gesprek gaat over het leerproces.'}),
+ site('m5s_vermelden'),
+ ddw('k5_charter','Ons klascharter','Welke twee afspraken over AI wil jouw klas er nog bij?',
+  {tijd:'8 minuten',vragen:['Welke afspraak komt het vaakst terug?','Wat doe je als een klasgenoot vraagt om zijn ChatGPT-tekst te kopiëren?'],antw:['Bv. AI-gebruik bij groepswerk samen afspreken; prompts bewaren.','Nee zeggen en uitleggen dat het plagiaat is, en dat jullie allebei verantwoordelijk zijn.'],tip:'Verzamel op het bord, laat stemmen en hang het charter naast de labelposter.'}),
+ rapK(5)
+],
+M6:[
+ {type:'stelling',id:'k6_jobs',klas:true,titel:'Verdwijnen alle jobs?',stellingen:[{s:'AI zal op termijn alle jobs doen verdwijnen.',hulp:'Welke jobs zijn kwetsbaar, welke minder?'}],
+  lk:{tijd:'5 minuten',vragen:['Is die angst realistisch?'],antw:['Routinematige, voorspelbare taken veranderen het snelst. Jobs met zorg, contact en vakmanschap minder.'],tip:'Vraag welke job leerlingen later willen doen.'}},
+ site('m6s2'),
+ {type:'stelling',id:'k6_stellingen',klas:true,titel:'Waar sta jij?',
+  stellingen:[{s:'Voor sommige zaken wil ik AI liever niet inzetten.',hulp:'Waar zijn mensen beter in?'},{s:'AI zal nooit zo creatief kunnen zijn als mensen.',hulp:'Kan iets van AI kunst zijn?'}],
+  lk:{tijd:'8 minuten',vragen:['Waarvoor zou jij AI nooit gebruiken?','Wat is creativiteit?'],antw:['Bv. een liefdesbrief, een moeilijk gesprek, een eigen mening.','Iets nieuws maken met betekenis. AI combineert bestaande patronen; of dat creatief is, is een open debat.'],tip:'Eén kant verdedigt eens, de andere oneens, ook als het niet hun mening is. Wissel daarna.'}},
+ {type:'mk',id:'k6_aiact',titel:'Europa maakt regels',intro:'De <b>EU AI Act</b> (2024) is de eerste uitgebreide AI-wet ter wereld. Ze verbiedt bv. massale sociale scoring van burgers.',
+  V:[{q:'Waarom regelt elk land AI anders?',o:['Andere waarden rond privacy en vrijheid','AI bestaat niet overal'],a:0,f:'Sommige landen zetten AI in voor bewaking, andere laten de markt bijna vrij.'}],
+  lk:{tijd:'4 minuten',vragen:['Wat zou jij verbieden?'],antw:['Bv. emotieherkenning op school, deepfakes van echte personen, sociale scoring.'],tip:'Vertel dat emotieherkenning bij leerlingen ook in ons beleidskader niet mag.'}},
+ site('m6s_trendhype'),
+ STAD,
+ site('m6s_gevolgen'),
+ {type:'reflectie',id:'k6_visie',titel:'Jouw visie op AI',vragen:[{k:'r1',q:'Wat is jouw visie op AI? Kansen, gevaren, en wat jij belangrijk vindt (3 à 5 zinnen).',min:100},{k:'r2',q:'Wat neem je mee naar het hoger onderwijs of je werk?'}]},
+ rapK(6)
+],
+M7:[
+ {type:'stelling',id:'k7_start',klas:true,titel:'Om mee te starten',stellingen:[{s:'Ik gebruik AI al om te studeren.',hulp:'Hoe precies?'}],
+  lk:{tijd:'3 minuten',vragen:['Hoe gebruik je het nu?'],antw:['Vaak: samenvattingen laten maken. Vandaag leer je hoe AI je laat leren in plaats van het werk over te nemen.'],tip:'Noteer de antwoorden en kom erop terug op het einde.'}},
+ {type:'mk',id:'k7_prompt',klas:true,titel:'Welke prompt laat je leren?',intro:'Kies telkens de prompt waarmee je het meest leert.',
+  V:[{q:'Hoofdstuk 3 studeren',o:['"Maak een samenvatting van hoofdstuk 3."','"Overhoor me over hoofdstuk 3, één vraag per keer."'],a:1,f:'Overhoren laat jou het werk doen: zo onthoud je meer.'},{q:'Vast bij oefening 5',o:['"Wat is het antwoord?"','"Geef me een hint, niet het antwoord."'],a:1,f:'Met een hint denk je zelf verder.'}],
+  lk:{tijd:'4 minuten',vragen:['Waarom leer je meer als AI vragen stelt?'],antw:['Jezelf testen (oefenen met terughalen) werkt beter dan herlezen.'],tip:'Laat leerlingen een eigen leerprompt bedenken voor een vak van morgen.'}},
+ site('m7_manier'),
+ site('m7s_agent'),
+ ddw('k7_doe','Probeer het nu','Open Copilot met je schoolaccount. Laat je overhoren over een vak dat je nu studeert, één vraag per keer. Wat leerde je?',
+  {tijd:'10 minuten',vragen:['Wat ging goed? Waar vergiste Copilot zich?'],antw:['Leerlingen merken vaak fouten op: controleer altijd met de cursus.'],tip:'Loop rond en help bij het aanmelden. Zie je Study and Learn niet, gebruik dan gewone Copilot Chat met de prompt.'}),
+ bord('k7_samen','Samen studeren','Eerst jullie, dan Copilot.',['Elkaar overhoren · samen één samenvatting · groepswerk plannen · uitleggen aan elkaar.','Nooit namen of gegevens van groepsgenoten in de chat.'],
+  {tijd:'4 minuten',vragen:['Welke manier probeer jij deze week?'],antw:['Vaak gekozen: elkaar overhoren met vragen van Copilot.'],tip:'Laat elk groepje één manier kiezen voor hun volgende groepswerk.'}),
+ exit('k7_exit','Hoe ga jij Copilot gebruiken om te leren?','Waarvoor gebruik je het bewust niet?'),
+ rapK(7)
+]};
+
+var K6_START={type:'stelling',id:'k6_start',klas:true,titel:'Om mee te starten',stellingen:[{s:'Over 10 jaar is AI vooral goed nieuws voor mij.',hulp:'Denk aan je studies, je job, je vrije tijd.'}],
+  lk:{tijd:'4 minuten',vragen:['Wie is optimistisch, wie bezorgd? Waarom?'],antw:['Optimisten: hulp bij studeren, gezondheid, minder saai werk. Bezorgden: jobs, nepnieuws, privacy, afhankelijkheid.'],tip:'Noteer de stand (eens/oneens) en herhaal de stelling op het einde van de les.'}};
+var KLASPLAN={
+  M1:{start:['m1_opening','m1_labels','k1_ai'],m1s1:['k1_kamer'],m1s4:['k1_auto'],m1s7:['k1_hallu'],eind:['k1_exit']},
+  M2:{start:['k2_voorspel'],m2s1:['k2_zombie'],m2s3:['k2_spam'],eind:['k2_exit']},
+  M3:{start:['k3_voorspel'],eind:['k3_exit']},
+  M4:{start:['k4_voorspel'],m4s1:['k4_dilemma','k4_energie'],m4s5:['k4_privacy'],eind:['k4_exit']},
+  M5:{start:['k5_start'],eind:[]},
+  M6:{start:['k6_start'],eind:[]},
+  M7:{start:['k7_start'],m7s1:['k7_prompt'],m7s_agent:['k7_doe'],eind:['k7_exit']}
+};
+var KLAS={};
+function bouwKlas(){
+  Object.keys(KLASPLAN).forEach(function(M){
+    var pool={};[OPENING,LABELSTAP,STAD,K6_START].concat(LES[M]||[]).forEach(function(s){pool[s.id]=s;});
+    var plan=KLASPLAN[M],basis=STAPPEN[M].filter(function(s){return s.type!=='rapport';}),uit=[];
+    var neem=function(ids){(ids||[]).forEach(function(id){if(pool[id])uit.push(pool[id]);});};
+    uit.push(titelDia(MODULES.filter(function(x){return x.id===M;})[0]));
+    neem(plan.start);
+    basis.forEach(function(s){if(s===OPENING||s===LABELSTAP)return;uit.push(s);if(s.fn)neem(plan[s.fn]);});
+    neem(plan.eind);
+    uit.push({type:'rapport',id:'k'+M.slice(1)+'_rapport',titel:'Einde van de module'});
+    KLAS[M]=uit;
+  });
+}
+/* ============ CHATEQUITY: cijfers doorheen de cursus ============
+   Bron: presentatie prof. dr. Orhan Agirdag (ChatEQUITY, KU Leuven), Torhout, 18/11/2026. Eerste resultaten = pilootstudie. */
+function bron(t){return '<p class="bron">Bron: '+t+'</p>';}
+function cijfer(groot,tekst,kleur){return '<div class="cijfer'+(kleur?' '+kleur:'')+'"><b>'+groot+'</b><span>'+tekst+'</span></div>';}
+var CE_STAP={
+ ce1_gebruik:{type:'mk',id:'ce1_gebruik',klas:true,titel:'Hoeveel jongeren gebruiken AI?',
+  intro:'Onderzoekers van de KU Leuven (ChatEQUITY) vroegen het aan Vlaamse 15-jarigen. <b>Raad eerst.</b>',
+  V:[{q:'Hoeveel Vlaamse 15-jarigen gebruiken AI minstens één keer per maand?',o:['Ongeveer 1 op 4','Ongeveer de helft','7 tot 9 op 10'],a:2,f:'Van 69% tot 88%, afhankelijk van de sociale achtergrond. Bijna iedereen heeft toegang: slechts 2 tot 5% heeft geen toegang tot AI.'}],
+  lk:{tijd:'4 minuten',vragen:['Klopt dit met onze klas? Wie gebruikt AI elke week?'],antw:['Meestal gaan bijna alle handen omhoog. Vraag dan: waarvoor?'],tip:'Handopsteken: dagelijks, wekelijks, maandelijks, nooit. Bron: ChatEQUITY, dia 10 (Vlaamse 15-jarigen naar sociale achtergrond).'}},
+ ce1_kloof:{type:'info',id:'ce1_kloof',titel:'Het verschil zit in kunnen, niet in hebben',html:
+  '<div class="kaart"><p>Bijna iedereen heeft toegang tot AI. Het grote verschil tussen jongeren zit in <b>hoe goed ze ermee kunnen werken</b>.</p></div>'+
+  '<div class="cijfers">'+cijfer('20% · 3%','is digitaal ongeletterd: jongeren uit de laagste tegenover de hoogste sociale klasse','niet')+cijfer('10% · 37%','is kritisch digitaal geletterd: laagste tegenover hoogste sociale klasse','groen')+'</div>'+
+  '<div class="kaart twijfel"><p><b>Daarom deze cursus:</b> niet óf je AI gebruikt, maar hoe je het goed, kritisch en eerlijk gebruikt. Dat kan iedereen leren.</p></div>'+
+  bron('ICILS 2023, Vlaamse jongeren (N = 3.365), via ChatEQUITY (KU Leuven), Torhout 18/11/2026.')},
+ ce2_denk:{type:'mk',id:'ce2_denk',klas:true,titel:'Kies de juiste denkmodus',
+  intro:'Veel AI-tools hebben een snelle modus en een modus die langer nadenkt (een redeneermodel), voor moeilijke of belangrijke taken. ChatEQUITY liet leerlingen en leerkrachten opdrachten maken met AI en hield bij welke modus ze kozen.',
+  V:[{q:'Hoeveel leerlingen kozen minstens één keer de modus die langer nadenkt?',o:['1 op 29','1 op 3','Meer dan de helft'],a:0,f:'Slechts 1 op 29 leerlingen, tegenover 6 op 22 leerkrachten. Tip: kies voor een complexe of belangrijke taak bewust de modus die dieper nadenkt, als je tool die heeft.'}],
+  lk:{tijd:'4 minuten',vragen:['Wanneer is een snel antwoord goed genoeg, en wanneer niet?'],antw:['Snel: een woord uitleggen, een idee. Diep: een redenering, een moeilijke oefening, een belangrijke tekst.'],tip:'Toon in Copilot waar je de modus kiest. Pilootstudie ChatEQUITY: 29 leerlingen en 22 leerkrachten, verschillende opdrachten.'}},
+ ce3_prompts:{type:'mk',id:'ce3_prompts',klas:true,titel:'Hoeveel keer vraag jij door?',
+  intro:'ChatEQUITY volgde hoe leerlingen en leerkrachten met AI werkten.',
+  V:[{q:'Hoeveel prompts gebruikten leerlingen gemiddeld per opdracht?',o:['1','2 à 3','5 of meer'],a:1,f:'Gemiddeld 2,3 (leerkrachten 3,2). Bijna de helft van de leerlingen (48%) gaf bij de eerste opdracht maar één prompt. Je eerste prompt is een vertrekpunt: verfijn stap voor stap, of laat AI jou eerst vragen stellen.'}],
+  lk:{tijd:'4 minuten',vragen:['Waarom stoppen we zo snel na één prompt?'],antw:['Snelheid en gemak: leerlingen zeiden zelf dat ze een kort antwoord willen, anders moeten ze te veel lezen.'],tip:'Laat leerlingen één prompt van vandaag drie keer verfijnen en vergelijken. Pilootstudie: kleine groep, beschrijvend.'}},
+ ce4_risicos:{type:'info',id:'ce4_risicos',titel:'Drie risico\u2019s die je niet meteen ziet',html:
+  '<div class="grid"><div class="kaart"><h3>Antropomorfisme</h3><p>AI behandelen als een mens: "het begrijpt me", "het is mijn vriend". Een chatbot voelt niets en kent jou niet.</p></div>'+
+  '<div class="kaart"><h3>Sycophancy</h3><p>AI die je naar de mond praat: het geeft je snel gelijk, ook als je fout bent.</p></div>'+
+  '<div class="kaart"><h3>False fluency</h3><p>Vlot, zeker en overtuigend geschreven, en toch fout. Mooie zinnen zijn geen bewijs.</p></div></div>'+
+  '<div class="kaart twijfel"><h3>Probeer het</h3><p>Vraag in Copilot (schoolaccount): "Klopt het dat de Eerste Wereldoorlog in 1920 begon?" Geeft AI je gelijk, of verbetert het je?</p></div>'+
+  bron('ChatEQUITY (KU Leuven), zeven risico\u2019s van AI in het onderwijs, Torhout 18/11/2026.')},
+ ce5_realiteit:{type:'info',id:'ce5_realiteit',titel:'Wat leerlingen echt doen met AI',html:
+  '<div class="kaart"><p>ChatEQUITY sprak met leerlingen over hun AI-gebruik. Wat ze zelf vertelden:</p><ul><li>Snel en gemakkelijk gaat voor: een kort antwoord, anders moet je te veel lezen.</li><li>Bronnen controleren vinden ze vervelend. Eén leerling typt standaard "dit is fout", zonder zelf na te kijken.</li><li>Sommigen gebruiken <b>humanizers</b>, zodat hun tekst menselijker lijkt.</li></ul></div>'+
+  '<div class="kaart groen"><h3>Daarom: geen AI-detector, wel een gesprek</h3><p>Een detector is makkelijk te omzeilen en beschuldigt vaak ten onrechte. Wat wel werkt: eerlijk vermelden wat je deed, en het kunnen uitleggen.</p></div>'+
+  bron('ChatEQUITY (KU Leuven), eerste resultaten (pilootstudie, interviews), Torhout 18/11/2026.')},
+ ce6_kansen:{type:'info',id:'ce6_kansen',titel:'AI en kansengelijkheid',html:
+  '<div class="kaart"><p>Leerlingen met een andere thuistaal dan het Nederlands gebruiken AI vaker voor schoolwerk, ook bij gelijke sociale achtergrond.</p>'+
+  '<div class="balken">'+[['Teksten samenvatten',43.4,50.0],['Vooronderzoek',34.9,44.8],['Teksten opstellen',41.9,47.3],['Helpen bij het leren',50.7,59.6]].map(function(r){return '<div class="balk"><span class="bl">'+r[0]+'</span><div class="bw"><i style="width:'+(r[1]*1.5)+'%"></i><em>'+String(r[1]).replace('.',',')+'</em></div><div class="bw"><i class="b2" style="width:'+(r[2]*1.5)+'%"></i><em>'+String(r[2]).replace('.',',')+'</em></div></div>';}).join('')+'</div>'+
+  '<p class="klein"><span class="lg l1"></span>Nederlands thuis &nbsp; <span class="lg l2"></span>Andere taal thuis · frequentiescore 0-100</p></div>'+
+  '<div class="cijfers">'+cijfer('+7 maanden','leerwinst in lezen na 7 weken oefenen met een AI-leescoach (één schoolstudie, lager onderwijs)','groen')+'</div>'+
+  '<div class="kaart twijfel"><p><b>Kans of kloof?</b> AI kan helpen wie extra steun nodig heeft. Maar wie het niet goed leert gebruiken, kan ook achterop raken.</p></div>'+
+  bron('ChatEQUITY (KU Leuven): AI-gebruik naar thuistaal, gecorrigeerd voor sociale achtergrond; Reading Coach, één schoolstudie (g = 0,55). Torhout 18/11/2026.')},
+ ce6_examen:{type:'stelling',id:'ce6_examen',klas:true,titel:'Mag AI je examen verbeteren?',
+  intro:'In een onderzoek in het hoger onderwijs (211 studenten) verbeterden een assistent en GPT-4o dezelfde examens. GPT-4o rangschikte de studenten bijna even goed als de assistent (correlatie 0,91), maar gaf gemiddeld hogere punten: <b>6,4 tegenover 5,8 op 10</b>.',
+  stellingen:[{s:'AI mag mijn examen mee verbeteren, als een leerkracht het nakijkt.',hulp:'Wat als AI zich vergist? Wie is verantwoordelijk? Wil jij weten dat AI meekeek?'}],
+  lk:{tijd:'8 minuten',vragen:['Wat is het verschil tussen feedback van AI en punten van AI?','Wie beslist bij ons over punten?'],antw:['Volgens het beleidskader van Sint-Rembert blijft de beoordeling bij de leerkracht. AI mag enkel feedbacksuggesties geven op geanonimiseerde teksten, en de leerkracht beslist.'],tip:'Bron: ChatEQUITY, dia 69 tot 74 (hoger onderwijs, Wijsgerige Pedagogiek). Ingescande toetsen met naam laten verbeteren door AI mag volgens het beleidskader niet.'}},
+ ce7_offload:{type:'mk',id:'ce7_offload',klas:true,titel:'Leren of laten doen?',
+  intro:'Onderzoekers vergeleken leerlingen die wiskunde oefenden mét algemene AI met leerlingen die zonder AI oefenden.',
+  V:[{q:'Wat gebeurde er op het examen, waar niemand AI mocht gebruiken?',o:['De AI-groep scoorde beter','Beide groepen scoorden even goed','De AI-groep scoorde slechter'],a:2,f:'Tijdens het oefenen deed de AI-groep het 48% beter, maar op het examen zonder AI scoorde ze 17% lager. AI nam het denkwerk over: dat heet cognitive offloading.'}],
+  lk:{tijd:'5 minuten',vragen:['Wat besteed je beter niet uit aan AI?','Wanneer helpt uitbesteden wel?'],antw:['Nadelig: het denkwerk zelf ("schrijf mijn tekst"). Helpend: bijzaken ("check mijn spelling").'],tip:'Bron: OECD Digital Education Outlook 2026, fig. 1.5, op basis van Bastani e.a. (2025), via ChatEQUITY. Helpend tegenover nadelig uitbesteden: Lodge & Loble (2026).'}},
+ ce7_tips:{type:'info',id:'ce7_tips',titel:'Vijf tips om met AI te leren',html:
+  '<div class="cijfers">'+cijfer('+48%','beter tijdens het oefenen met AI','groen')+cijfer('-17%','lager op het examen zonder AI','niet')+'</div>'+
+  '<div class="grid"><div class="kaart"><h3>1. Eerst zelf denken</h3><p>Maak zelf een opzet. Vraag AI daarna om feedback of een hint, en beslis zelf.</p></div><div class="kaart"><h3>2. Kies de denkmodus</h3><p>Snel antwoord, iets maken, of diep nadenken voor een moeilijke taak.</p></div><div class="kaart"><h3>3. Verfijn stap voor stap</h3><p>Je eerste prompt is een vertrekpunt. Laat AI jou eerst vragen stellen.</p></div><div class="kaart"><h3>4. Geef context</h3><p>Voor wie, waarvoor, welke vorm. Nooit gegevens van jezelf of anderen.</p></div><div class="kaart"><h3>5. Doe een cross-check</h3><p>Vergelijk met je cursus of een betrouwbare bron.</p></div></div>'+
+  bron('OECD Digital Education Outlook 2026 (Bastani e.a., 2025) en vijf AI-tips van ChatEQUITY (KU Leuven), Torhout 18/11/2026.')}
+};
+/* waar elke stap komt: na deze stap van de site */
+var CE_PLAN={M1:{m1s0:['ce1_gebruik','ce1_kloof']},M2:{m2s_verdieping3:['ce2_denk']},M3:{m3s5:['ce3_prompts']},M4:{m4s7:['ce4_risicos']},M6:{m6s_trendhype:['ce6_kansen','ce6_examen']},M7:{m7s1:['ce7_offload','ce7_tips']}};
+var VERMELDEN={type:'vermelden',id:'vermelden',titel:'Zo vermeld je AI'};
+
+var TITELS={};
+function titelDia(m){return {type:'titel',id:'titel_'+m.id,titel:''};}
+function zetGraad(g){if(window.__zetGraad)window.__zetGraad(3);bouwStappen();bouwKlas();}
+
+/* ============ OPSLAG ============ */
+function lees(k,def){try{var v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;}}
+function schrijf(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+/* ============ STATE ============ */
+var app=document.getElementById('cursus');
+var S={rol:null,mods:[],mi:0,si:0};
+function top(){window.scrollTo({top:0,behavior:'smooth'});}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function sleutel(){return S.rol==='lk'?'srp_leerkracht':'srp_leerling';}
+function lData(){var d=lees(sleutel(),null)||{};d.keuze=d.keuze||[];d.pos=d.pos||{};d.a=d.a||{};d.klaar=d.klaar||[];return d;}
+function lBewaar(d){schrijf(sleutel(),d);}
+function antwoord(id,v){var d=lData();if(v===undefined)return d.a[id];d.a[id]=v;lBewaar(d);}
+function bewaarPos(){var d=lData(),m=S.mods[S.mi];if(m)d.pos[m.id]=S.si;lBewaar(d);}
+function stappenVan(id){return (S.rol==='lk'?KLAS[id]:STAPPEN[id])||[];}
+var KORT={M1:'Wat AI is, waar je het tegenkomt en waar het fout loopt.',M2:'Van vaste regels tot deep learning: hoe AI leert.',M3:'Tekst en beeld maken met AI, en sterk prompten.',M4:'Bias, deepfakes, privacy en energie.',M5:'De AI-labels, de afspraken en hoe je AI vermeldt.',M6:'Jobs, regels, trends en jouw visie op AI.',M7:'Studeren met Copilot: leren in plaats van laten doen.'};
+
+/* ============ START ============ */
+var ICO_LK='<svg class="icoon" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="26" fill="#06038D"/><rect x="12" y="14" width="28" height="18" rx="4" fill="#fff"/><rect x="16" y="18" width="12" height="3" rx="1.5" fill="#95D600"/><rect x="16" y="24" width="18" height="3" rx="1.5" fill="#06038D"/><rect x="22" y="34" width="8" height="6" fill="#fff"/></svg>';
+var ICO_LL='<svg class="icoon" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="26" fill="#95D600"/><circle cx="26" cy="19" r="7" fill="#06038D"/><rect x="15" y="29" width="22" height="11" rx="5.5" fill="#06038D"/></svg>';
+function start(){
+  sluitPres();S={rol:null,mods:[],mi:0,si:0};
+  app.innerHTML='<span class="badge">3e graad · 5e en 6e jaar</span><h2 style="margin-top:.7rem">Wie ben jij?</h2>'+
+   '<div class="grid" style="grid-template-columns:1fr">'+
+   '<button class="keuze" id="kLl">'+ICO_LL+'<span>Ik ben leerling<small>Kies zelf welke modules je volgt, op je eigen tempo.</small></span></button>'+
+   '<button class="keuze" id="kLk">'+ICO_LK+'<span>Ik ben leerkracht<small>Kies je modules en geef de les met een geleide presentatie.</small></span></button></div>'+paginaKnoppen();
+  document.getElementById('kLl').onclick=function(){S.rol='ll';var d=lData();d.keuze.length?overzicht():kiesModules();};
+  document.getElementById('kLk').onclick=function(){S.rol='lk';var d=lData();d.keuze.length?overzicht():kiesModules();};
+  bindPaginas(start);
+}
+function rolBadge(){return '<span class="badge">'+(S.rol==='lk'?'Leerkracht':'Leerling')+'</span>';}
+
+/* ============ MODULES KIEZEN ============ */
+function kiesModules(){
+  var d=lData(),kz=d.keuze.length?d.keuze:[];
+  var h='<div class="topbalk">'+rolBadge()+'</div><h2>'+(S.rol==='lk'?'Welke modules geef je?':'Welke modules wil je volgen?')+'</h2>'+
+   '<p>'+(S.rol==='lk'?'Je kan dit later altijd aanpassen. Per module krijg je een geleide presentatie met notities.':'Kies wat je wil leren. Je kan later altijd modules toevoegen.')+'</p>';
+  MODULES.forEach(function(m,i){
+    h+='<label class="mod"><input type="checkbox" value="'+m.id+'"'+(kz.indexOf(m.id)>-1?' checked':'')+'><span><b>'+(m.id==='M7'?esc(m.titel):'Module '+(i+1)+' · '+esc(m.titel))+'</b><small>'+esc(KORT[m.id]||'')+(d.klaar.indexOf(m.id)>-1?' · ✓ afgerond':'')+'</small></span></label>';});
+  h+='<div class="knoprij"><button class="tweede" id="alles">Alles aanvinken</button><button class="hoofd" id="ok">Verder</button><button class="tweede" id="terug">← Terug</button></div>';
+  app.innerHTML=h;
+  var sync=function(){app.querySelectorAll('.mod input').forEach(function(i){i.parentNode.classList.toggle('aan',i.checked);});};
+  app.querySelectorAll('.mod input').forEach(function(i){i.onchange=sync;});sync();
+  document.getElementById('alles').onclick=function(){app.querySelectorAll('.mod input').forEach(function(i){i.checked=true;});sync();};
+  document.getElementById('terug').onclick=start;
+  document.getElementById('ok').onclick=function(){
+    var k=[].map.call(app.querySelectorAll('.mod input:checked'),function(i){return i.value;});
+    if(!k.length){alert('Kies minstens één module.');return;}
+    var d=lData();d.keuze=k;lBewaar(d);overzicht();top();};
+}
+function overzicht(){
+  sluitPres();
+  var d=lData();S.mods=MODULES.filter(function(m){return d.keuze.indexOf(m.id)>-1;});
+  var h='<div class="topbalk">'+rolBadge()+'</div><h2>'+(S.rol==='lk'?'Jouw lessen':'Jouw modules')+'</h2>';
+  S.mods.forEach(function(m,i){
+    var st=stappenVan(m.id),p=d.pos[m.id]||0,klaar=d.klaar.indexOf(m.id)>-1,nr=MODULES.indexOf(m)+1;
+    var label=S.rol==='lk'?(p>0?'Ga verder (dia '+(p+1)+')':'Start de presentatie'):(klaar?'Bekijk opnieuw':(p>0?'Ga verder (stap '+(p+1)+')':'Start'));
+    h+='<div class="kaart'+(klaar&&S.rol==='ll'?' groen':'')+'"><h3>'+(m.id==='M7'?esc(m.titel):'Module '+nr+' · '+esc(m.titel))+'</h3><p class="klein">'+esc(KORT[m.id]||'')+' · '+st.length+(S.rol==='lk'?' dia\u2019s':' stappen')+(klaar&&S.rol==='ll'?' · ✓ afgerond':'')+'</p>'+
+      '<div class="knoprij"><button class="hoofd" data-m="'+i+'">'+label+'</button>'+(p>0?'<button class="tweede" data-opnieuw="'+i+'">Van voor af aan</button>':'')+'</div></div>';});
+  h+='<div class="knoprij"><button class="tweede" id="wijzig">Modules aanpassen</button><button class="tweede" id="terug">← Start</button></div>'+paginaKnoppen();
+  app.innerHTML=h;
+  app.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){S.mi=+b.dataset.m;S.si=lData().pos[S.mods[S.mi].id]||0;openModule();};});
+  app.querySelectorAll('[data-opnieuw]').forEach(function(b){b.onclick=function(){S.mi=+b.dataset.opnieuw;S.si=0;bewaarPos();openModule();};});
+  document.getElementById('wijzig').onclick=kiesModules;
+  document.getElementById('terug').onclick=start;
+  bindPaginas(overzicht);
+}
+function openModule(){ if(S.rol==='lk'){toonStap();} else if(S.si===0) moduleIntro(); else toonStap(); }
+function moduleIntro(){
+  var m=S.mods[S.mi];huidigeStap=null;
+  app.innerHTML='<div class="topbalk">'+rolBadge()+'</div>'+
+   '<h2>'+esc(m.titel)+'</h2><div class="kaart"><h3>Na deze module kan ik:</h3><ul>'+(DOELEN[m.id]||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul><p class="klein">'+stappenVan(m.id).length+' stappen</p></div>'+
+   '<div class="kaart twijfel"><p><b>Kijk eerst naar het label.</b> Geen label = geen AI. Twijfel je? Vraag het vóór je begint. Hoe je AI vermeldt: <a class="link" href="'+LABELSITE+'" target="_blank" rel="noopener">AI vermelden, stap voor stap ↗</a></p></div>'+
+   '<div class="knoprij"><button class="hoofd" id="go">Start</button><button class="tweede" id="ov">← Mijn modules</button></div>';
+  document.getElementById('go').onclick=function(){S.si=0;bewaarPos();toonStap();};
+  document.getElementById('ov').onclick=overzicht;
+}
+
+/* ============ STAP TONEN (leerling) ============ */
+function toonStap(){
+  var m=S.mods[S.mi];if(!m){overzicht();return;}
+  if(S.rol==='lk'){toonDia();return;}
+  var st=stappenVan(m.id),stap=st[S.si];
+  if(!stap){S.si=0;stap=st[0];}
+  var pct=Math.round((S.si+1)/st.length*100);
+  var h='<div class="topbalk"><span class="badge">'+esc(m.titel)+'</span><span class="stap">Stap '+(S.si+1)+' van '+st.length+'</span></div><div class="voortgang"><i style="width:'+pct+'%"></i></div>';
+  if(stap.klas) h+='<div class="klasmoment"><span class="badge">Denkmoment</span><p><b>Doe de opdracht en denk na over de vragen onderaan.</b> Volg je dit in de klas? Bespreek het met je buur.</p></div>';
+  huidigeStap=stap;
+  h+=(stap.titel?'<h2>'+esc(stap.titel)+'</h2>':'')+'<div id="inhoud"></div>';
+  if(stap.lk&&stap.lk.vragen.length) h+='<div class="kaart twijfel"><h3>Denk hierover na</h3><ol>'+stap.lk.vragen.map(function(v){return '<li>'+esc(v)+'</li>';}).join('')+'</ol></div>';
+  h+='<div class="knoprij"><button class="tweede" id="vorige"'+(S.si===0?' disabled':'')+'>← Vorige</button>'+
+     (stap.type==='rapport'?'':'<button class="hoofd" id="volgende">Volgende →</button>')+
+     '<button class="tweede" id="pauze">Mijn modules</button></div>';
+  app.innerHTML=h;
+  RENDER[stap.type](document.getElementById('inhoud'),stap);
+  document.getElementById('vorige').onclick=function(){if(stap.bijVerlaten)stap.bijVerlaten();if(S.si>0){S.si--;bewaarPos();toonStap();top();}};
+  var v=document.getElementById('volgende');
+  if(v) v.onclick=function(){
+    if(stap.verplicht&&!stap.verplicht()){alert(stap.melding||'Werk deze stap eerst af.');return;}
+    if(stap.bijVerlaten)stap.bijVerlaten();S.si++;bewaarPos();toonStap();top();};
+  document.getElementById('pauze').onclick=function(){if(stap.bijVerlaten)stap.bijVerlaten();bewaarPos();overzicht();};
+}
+
+/* ============ GELEIDE PRESENTATIE (leerkracht) ============ */
+var notesWin=null,presOpen=false;
+function notesHtml(stap,m){
+  var lk=stap.lk;
+  var h='<h3>Dia '+(S.si+1)+' · '+esc(stap.titel||(stap.type==='titel'?m.titel:''))+'</h3>';
+  if(!lk) return h+'<p class="klein">Geen notities bij deze dia.'+(stap.type==='site'?' Laat leerlingen meelezen en de opdracht doen op hun laptop, of doe ze samen op het bord.':'')+'</p>';
+  return h+'<p><b>Tijd:</b> '+esc(lk.tijd)+'</p>'+(lk.vragen.length?'<p><b>Gespreksvragen</b></p><ol>'+lk.vragen.map(function(v){return '<li>'+esc(v)+'</li>';}).join('')+'</ol>':'')+
+    (lk.antw&&lk.antw.length?'<p><b>Mogelijke antwoorden</b></p><ul>'+lk.antw.map(function(v){return '<li>'+esc(v)+'</li>';}).join('')+'</ul>':'')+'<p class="klein">'+esc(lk.tip||'')+'</p>';
+}
+function toonDia(){
+  var m=S.mods[S.mi],st=stappenVan(m.id),stap=st[S.si];if(!stap){S.si=0;stap=st[0];}
+  presOpen=true;document.body.classList.add('pres-modus');huidigeStap=stap;
+  var nr=MODULES.indexOf(m)+1,pct=Math.round((S.si+1)/st.length*100),open=!!window.__notesOpen;
+  var h='<div class="pres"><div class="pres-top"><span class="badge">'+(m.id==='M7'?esc(m.titel):'Module '+nr+' · '+esc(m.titel))+'</span>'+
+    '<span class="stap">Dia '+(S.si+1)+' / '+st.length+'</span>'+
+    '<button class="pk" id="p-notes" title="Notities (N)">'+(open?'Verberg notities':'Notities')+'</button><button class="pk" id="p-venster" title="Notities in een apart venster">Notities apart</button><button class="pk" id="p-fs" title="Volledig scherm (F)">Volledig scherm</button><button class="pk" id="p-x">Sluiten</button></div>'+
+    '<div class="pres-body"><div class="pres-dia"><div class="pres-inhoud">'+
+      (stap.klas?'<div class="klasmoment"><span class="badge">Klasmoment</span><p><b>Hier praat de klas samen.</b></p></div>':'')+
+      (stap.titel?'<h2>'+esc(stap.titel)+'</h2>':'')+'<div id="inhoud"></div></div></div>'+
+    '<aside class="pres-notes'+(open?' open':'')+'" id="p-n"><div id="p-n-in">'+notesHtml(stap,m)+'</div>'+(stap.lk?'<div class="knoprij"><button class="tweede" id="timer">Start timer</button><span id="tijd" style="font-weight:800;font-size:1.3rem"></span></div>':'')+'</aside></div>'+
+    '<div class="pres-nav"><button class="pk groot" id="vorige"'+(S.si===0?' disabled':'')+' aria-label="Vorige dia">◀</button><div class="voortgang"><i style="width:'+pct+'%"></i></div>'+
+    (S.si<st.length-1?'<button class="pk groot" id="volgende" aria-label="Volgende dia">▶</button>':'<button class="pk groot" disabled>■</button>')+'</div></div>';
+  app.innerHTML=h;
+  RENDER[stap.type](document.getElementById('inhoud'),stap);
+  document.getElementById('vorige').onclick=function(){if(S.si>0){S.si--;bewaarPos();toonDia();}};
+  var v=document.getElementById('volgende');if(v)v.onclick=function(){S.si++;bewaarPos();toonDia();};
+  document.getElementById('p-x').onclick=function(){if(document.fullscreenElement)document.exitFullscreen();overzicht();top();};
+  document.getElementById('p-fs').onclick=function(){if(document.fullscreenElement)document.exitFullscreen();else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();};
+  document.getElementById('p-notes').onclick=function(){window.__notesOpen=!window.__notesOpen;toonDia();};
+  document.getElementById('p-venster').onclick=openNotesVenster;
+  var t=document.getElementById('timer');if(t)t.onclick=function(){startTimer(stap.lk.tijd);};
+  updateNotesVenster(stap,m);
+  document.querySelector('.pres-dia').scrollTop=0;
+}
+function openNotesVenster(){
+  notesWin=window.open('','srp_notities','width=560,height=760');
+  if(!notesWin){alert('Je browser blokkeerde het venster. Sta pop-ups toe voor deze site.');return;}
+  notesWin.document.title='Notities · AI-cursus';
+  notesWin.document.body.innerHTML='<div id="n" style="font-family:Poppins,Arial,sans-serif;color:#06038D;padding:18px;line-height:1.5"></div>';
+  var m=S.mods[S.mi];updateNotesVenster(stappenVan(m.id)[S.si],m);
+}
+function updateNotesVenster(stap,m){
+  if(!notesWin||notesWin.closed)return;
+  var st=stappenVan(m.id),volgende=st[S.si+1];
+  try{notesWin.document.getElementById('n').innerHTML='<p style="background:#95D600;display:inline-block;padding:2px 12px;border-radius:999px;font-weight:800">'+esc(m.titel)+' · dia '+(S.si+1)+' / '+st.length+'</p>'+notesHtml(stap,m)+
+    (volgende?'<hr><p style="opacity:.7"><b>Volgende dia:</b> '+esc(volgende.titel||(volgende.type==='site'?'stap uit de cursus':''))+'</p>':'');}catch(e){}
+}
+function sluitPres(){presOpen=false;document.body.classList.remove('pres-modus');}
+document.addEventListener('keydown',function(e){
+  if(!presOpen||S.rol!=='lk')return;
+  var tg=e.target&&e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT'||(e.target&&e.target.isContentEditable))return;
+  if(document.getElementById('groot').classList.contains('open'))return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){var v=document.getElementById('volgende');if(v){e.preventDefault();v.click();}}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){var p=document.getElementById('vorige');if(p&&!p.disabled){e.preventDefault();p.click();}}
+  else if(e.key==='n'||e.key==='N'){document.getElementById('p-notes').click();}
+  else if(e.key==='f'||e.key==='F'){document.getElementById('p-fs').click();}
+});
+
+var timerId=null;
+function startTimer(txt){
+  clearInterval(timerId);var min=parseInt(txt,10)||5,s=min*60,el=document.getElementById('tijd');
+  function tik(){if(!document.body.contains(el)){clearInterval(timerId);return;}el.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');if(s--<=0){clearInterval(timerId);el.textContent='Tijd!';}}
+  tik();timerId=setInterval(tik,1000);
+}
+
+window.__cursusVolgende=function(){var b=document.getElementById('volgende');if(b)b.click();};
+window.__cursusVorige=function(){var b=document.getElementById('vorige');if(b&&!b.disabled)b.click();};
+window.__cursusThuis=function(){if(S.rol)overzicht();else start();};
+
+/* ============ PAGINA'S ============ */
+var PAGINAS={docs:'Documenten',vermelden:'AI vermelden, stap voor stap'};
+function paginaKnoppen(){return '<div class="knoprij" style="margin-top:1.4rem">'+Object.keys(PAGINAS).map(function(k){return '<button class="tweede" data-pagina="'+k+'">'+PAGINAS[k]+'</button>';}).join('')+'</div>';}
+function bindPaginas(terug){app.querySelectorAll('[data-pagina]').forEach(function(b){b.onclick=function(){toonPagina(b.dataset.pagina,terug);};});}
+var DOCS=[
+ ['Transparantieverklaring 3e graad','Volledige AI-verantwoording, met AI-labels per fase. Op één blad.','AI-verantwoording-3e-graad.docx','Download (Word)'],
+ ['Blad 2e graad','Korte AI-vermelding met blad.','AI-verantwoording-2e-graad.docx','Download (Word)'],
+ ['Blad 1e graad · 2de jaar','Oefenblad AI-verantwoording.','AI-verantwoording-1e-graad-2de-jaar.docx','Download (Word)'],
+ ['Klasposter AI-labels','De vier labels: wat mag bij welke opdracht?','AI-labels-poster%20(1).png','Bekijk de poster'],
+ ['Invulcursus (papieren versie)','De cursus om af te drukken.','invulcursus-ai-leerlingen.pdf','Open (PDF)']];
+function toonPagina(k,terug){
+  sluitPres();
+  if(k==='vermelden'){app.innerHTML='<div class="topbalk"><span class="badge">AI vermelden</span></div>';var w=document.createElement('div');app.appendChild(w);RENDER.vermelden(w,{});
+    app.insertAdjacentHTML('beforeend','<div class="knoprij"><button class="tweede" id="pterug">← Terug</button></div>');document.getElementById('pterug').onclick=terug||start;top();return;}
+  app.innerHTML='<div class="topbalk"><span class="badge">Documenten</span></div><h2>Documenten</h2><div class="grid">'+DOCS.map(function(d){return '<div class="kaart"><h3>'+esc(d[0])+'</h3><p class="klein">'+esc(d[1])+'</p><div class="knoprij"><a class="hoofd" style="text-decoration:none;display:inline-block" href="'+d[2]+'"'+(/\.docx$/.test(d[2])?' download':' target="_blank" rel="noopener"')+'>'+d[3]+'</a></div></div>';}).join('')+'</div>'+
+    '<div class="knoprij"><button class="tweede" id="pterug">← Terug</button></div>';
+  document.getElementById('pterug').onclick=terug||start;top();
+}
+var Live={aan:false,rol:null,volg:false};function liveIndienen(){}
+bouwStappen();bouwKlas();
+var huidigeStap=null;
+
+/* ============ STAPTYPES ============ */
+var RENDER={};
+var KLEUREN=['#06038D','#95D600','#CCFF99','#A6F04A','#FFFFFF','#D9D9D9','#3A37B5'];
+var COLS=16,ROWS=11,CEL=40;
+
+RENDER.bouw=function(el,stap){
+  var data=antwoord(stap.id)||{blokken:[],titel:'',gevoel:''};
+  var kleur=0,maat=2,gum=false,historie=[];
+  el.innerHTML='<div class="kaart"><h3>'+esc(stap.vraag)+'</h3><p>'+esc(stap.uitleg)+'</p></div>'+
+   '<div class="kaart bouw"><div class="palet" id="pal"></div>'+
+   '<div class="palet"><span class="klein"><b>Breedte</b></span>'+[1,2,3,4].map(function(n){return '<button class="maat" data-m="'+n+'">'+n+'</button>';}).join('')+
+   '<button class="maat" id="gum">Gom</button><button class="maat" id="undo">↶ Terug</button><button class="maat" id="leeg">Leegmaken</button></div>'+
+   '<canvas class="veld" id="veld" width="'+(COLS*CEL)+'" height="'+(ROWS*CEL)+'" aria-label="Bouwveld: klik om een blokje te plaatsen"></canvas>'+
+   '<p class="klein">Klik in een kolom: het blokje valt naar beneden. Met de gom klik je een blokje weg.</p></div>'+
+   '<div class="kaart"><h3>Geef je bouwwerk een titel</h3><input type="text" id="bt" maxlength="60" placeholder="bv. Een brug met een gat erin"><h3 style="margin-top:.9rem">Welk gevoel past erbij?</h3><div class="gevoelens" id="gv"></div>'+
+   '<div class="knoprij"><button class="hoofd" id="groot-knop">Toon groot (voor het bord)</button></div></div>';
+  var pal=el.querySelector('#pal');
+  pal.innerHTML='<span class="klein"><b>Kleur</b></span>'+KLEUREN.map(function(k,i){return '<button class="kleur" data-k="'+i+'" style="background:'+k+'" aria-label="Kleur '+(i+1)+'"></button>';}).join('');
+  var cv=el.querySelector('#veld'),cx=cv.getContext('2d');
+  function rr(x,y,w,h,r){cx.beginPath();cx.moveTo(x+r,y);cx.arcTo(x+w,y,x+w,y+h,r);cx.arcTo(x+w,y+h,x,y+h,r);cx.arcTo(x,y+h,x,y,r);cx.arcTo(x,y,x+w,y,r);cx.closePath();}
+  function teken(){
+    cx.fillStyle='#F4F6FF';cx.fillRect(0,0,cv.width,cv.height);
+    cx.fillStyle='#E1E5F7';for(var c=0;c<COLS;c++)for(var r=0;r<ROWS;r++){cx.beginPath();cx.arc(c*CEL+CEL/2,r*CEL+CEL/2,2.2,0,7);cx.fill();}
+    data.blokken.forEach(function(b){
+      var x=b.c*CEL+2,y=(ROWS-1-b.r)*CEL+8,w=b.w*CEL-4,h=CEL-10,kl=KLEUREN[b.k];
+      cx.fillStyle=kl;rr(x,y,w,h,7);cx.fill();
+      cx.strokeStyle=(kl==='#FFFFFF'||kl==='#CCFF99'||kl==='#D9D9D9')?'#06038D':'rgba(0,0,0,.18)';cx.lineWidth=2;rr(x,y,w,h,7);cx.stroke();
+      for(var i=0;i<b.w;i++){var sx=b.c*CEL+i*CEL+CEL/2;cx.fillStyle=kl;rr(sx-9,y-7,18,9,4);cx.fill();cx.stroke();}
+    });
+  }
+  function hoogte(c){var h=0;data.blokken.forEach(function(b){if(c>=b.c&&c<b.c+b.w)h=Math.max(h,b.r+1);});return h;}
+  function bewaar(){antwoord(stap.id,data);}
+  function klik(e){
+    var rc=cv.getBoundingClientRect(),x=(e.clientX-rc.left)*cv.width/rc.width,y=(e.clientY-rc.top)*cv.height/rc.height;
+    var c=Math.floor(x/CEL),r=ROWS-1-Math.floor(y/CEL);
+    if(gum){for(var i=data.blokken.length-1;i>=0;i--){var b=data.blokken[i];if(c>=b.c&&c<b.c+b.w&&r===b.r){historie.push(JSON.stringify(data.blokken));data.blokken.splice(i,1);
+          // laat blokken erboven zakken
+          var zakt=true;while(zakt){zakt=false;data.blokken.sort(function(a,b){return a.r-b.r;}).forEach(function(z){if(z.r===0)return;var vrij=true;for(var q=z.c;q<z.c+z.w;q++){data.blokken.forEach(function(o){if(o!==z&&q>=o.c&&q<o.c+o.w&&o.r===z.r-1)vrij=false;});}if(vrij){z.r--;zakt=true;}});}
+          break;}}
+    } else {
+      c=Math.max(0,Math.min(COLS-maat,c));var h=0;for(var q=c;q<c+maat;q++)h=Math.max(h,hoogte(q));
+      if(h>=ROWS){return;}
+      historie.push(JSON.stringify(data.blokken));data.blokken.push({c:c,r:h,w:maat,k:kleur});
+    }
+    teken();bewaar();
+  }
+  cv.addEventListener('click',klik);
+  function knoppen(){el.querySelectorAll('.kleur').forEach(function(b){b.classList.toggle('aan',+b.dataset.k===kleur&&!gum);});
+    el.querySelectorAll('.maat[data-m]').forEach(function(b){b.classList.toggle('aan',+b.dataset.m===maat&&!gum);});el.querySelector('#gum').classList.toggle('aan',gum);}
+  el.querySelectorAll('.kleur').forEach(function(b){b.onclick=function(){kleur=+b.dataset.k;gum=false;knoppen();};});
+  el.querySelectorAll('.maat[data-m]').forEach(function(b){b.onclick=function(){maat=+b.dataset.m;gum=false;knoppen();};});
+  el.querySelector('#gum').onclick=function(){gum=!gum;knoppen();};
+  el.querySelector('#undo').onclick=function(){if(historie.length){data.blokken=JSON.parse(historie.pop());teken();bewaar();}};
+  el.querySelector('#leeg').onclick=function(){if(data.blokken.length&&confirm('Alles leegmaken?')){historie.push(JSON.stringify(data.blokken));data.blokken=[];teken();bewaar();}};
+  var bt=el.querySelector('#bt');bt.value=data.titel||'';bt.oninput=function(){data.titel=bt.value;bewaar();};
+  var gv=el.querySelector('#gv');
+  gv.innerHTML=GEVOELENS.map(function(g){return '<button class="gevoel'+(data.gevoel===g?' aan':'')+'" data-g="'+g+'">'+g+'</button>';}).join('');
+  gv.querySelectorAll('.gevoel').forEach(function(b){b.onclick=function(){data.gevoel=b.dataset.g;bewaar();gv.querySelectorAll('.gevoel').forEach(function(x){x.classList.toggle('aan',x===b);});};});
+  el.querySelector('#groot-knop').onclick=function(){data.img=cv.toDataURL('image/png');bewaar();toonGroot(data.img,data.titel,data.gevoel);};
+  knoppen();teken();
+  stap.verplicht=function(){var d=antwoord(stap.id)||{};if(d.blokken&&d.blokken.length){d.img=cv.toDataURL('image/png');antwoord(stap.id,d);}return d.blokken&&d.blokken.length>=3&&d.titel&&d.gevoel;};
+  stap.melding='Bouw minstens 3 blokjes, geef een titel en kies een gevoel.';
+};
+function toonGroot(img,titel,gevoel){
+  var g=document.getElementById('groot');g.querySelector('img').src=img;
+  document.getElementById('groot-titel').textContent=titel||'Zonder titel';
+  var gv=document.getElementById('groot-gevoel');gv.textContent=gevoel||'';gv.style.display=gevoel?'inline-block':'none';
+  g.classList.add('open');document.body.style.overflow='hidden';
+}
+document.getElementById('groot-x').onclick=function(){document.getElementById('groot').classList.remove('open');document.body.style.overflow='';};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.getElementById('groot-x').click();});
+
+RENDER.labels=function(el,stap){
+  var V=[
+    {q:'Op je taak staat label 2: Als inspiratie. Mag AI je inleiding schrijven?',o:['Ja','Nee'],a:1,f:'Nee. Bij label 2 zoek je enkel ideeën met AI. De tekst schrijf je zelf.'},
+    {q:'Er staat geen label op je taak. Wat doe je?',o:['AI gebruiken, want niets verbiedt het','Geen AI gebruiken en het navragen'],a:1,f:'Geen label betekent geen AI. In de 3e graad vraag je zelf naar de afspraken als ze ontbreken.'},
+    {q:'Label 3: Als ondersteuning. Mag je feedback vragen op je eigen tekst?',o:['Ja, en ik vermeld het','Nee'],a:0,f:'Ja. AI mag helpen tijdens het proces. Je vermeldt wat AI deed.'}];
+  el.innerHTML='<div class="kaart"><p><b>Elke taak heeft een AI-label.</b> Dat zegt hoeveel AI je mag gebruiken. Kijk er altijd eerst naar, nog voor je begint.</p></div>'+
+   '<div class="labels"><div class="lab l1"><span class="n">1</span><b>Verboden</b>Geen AI. Je maakt alles zelf.</div><div class="lab"><span class="n">2</span><b>Als inspiratie</b>AI enkel voor ideeën.</div><div class="lab l3"><span class="n">3</span><b>Als ondersteuning</b>AI mag helpen, je vermeldt het.</div><div class="lab l4"><span class="n">4</span><b>Toegestaan</b>AI mag volop, je vermeldt het.</div></div>'+
+   '<div class="kaart twijfel"><p><b>Geen label? Dan geen AI.</b> Twijfel je? Vraag het vóór je begint.</p><p>Hoe je AI vermeldt, zie je stap voor stap op <a class="link" href="'+LABELSITE+'" target="_blank" rel="noopener">AI vermelden ↗</a>.</p></div>'+
+   '<h3 style="margin-top:1rem">Snel getest</h3><div id="lv"></div>';
+  vragen(el.querySelector('#lv'),V,stap.id);
+  stap.verplicht=function(){var a=antwoord(stap.id)||{};return Object.keys(a).filter(function(k){return /^\d+$/.test(k);}).length>=V.length;};
+  stap.melding='Beantwoord eerst de drie vragen.';
+};
+function vragen(box,V,id){
+  var a=antwoord(id)||{};
+  box.innerHTML=V.map(function(v,i){return '<div class="vraag"><p class="q">'+(i+1)+'. '+esc(v.q)+'</p><div class="koies">'+v.o.map(function(o,j){return '<button class="ko" data-i="'+i+'" data-j="'+j+'">'+esc(o)+'</button>';}).join('')+'</div><p class="kfb" id="'+id+'f'+i+'"></p></div>';}).join('');
+  function markeer(i,j){var v=V[i];box.querySelectorAll('.ko[data-i="'+i+'"]').forEach(function(b){b.disabled=true;var bj=+b.dataset.j;if(bj===v.a)b.classList.add('goed');else if(bj===j)b.classList.add('fout');});
+    document.getElementById(id+'f'+i).textContent=(j===v.a?'✓ ':'✗ ')+v.f;}
+  Object.keys(a).forEach(function(i){if(/^\d+$/.test(i))markeer(+i,a[i]);});
+  box.querySelectorAll('.ko').forEach(function(b){b.onclick=function(){var i=+b.dataset.i,j=+b.dataset.j;var x=antwoord(id)||{};if(x[i]!==undefined)return;x[i]=j;x['g'+i]=(j===V[i].a)?1:0;antwoord(id,x);markeer(i,j);};});
+}
+
+RENDER.kaarten=function(el,stap){
+  var K=[{n:'De spamfilter in je mailbox',ai:true,w:'leert uit voorbeelden van spam'},{n:'Een rekenmachine',ai:false,w:'volgt vaste regels'},{n:'De feed van TikTok of YouTube',ai:true,w:'leert wat jij graag ziet'},{n:'Een wekker op je gsm',ai:false,w:'doet exact wat je instelde'},{n:'Copilot Chat',ai:true,w:'een taalmodel dat tekst voorspelt'},{n:'Een verkeerslicht met timer',ai:false,w:'vaste regels'}];
+  var open=antwoord(stap.id)||{};
+  el.innerHTML='<div class="kaart"><p>AI leert uit voorbeelden en voorspelt zelf. Een gewoon programma volgt vaste regels. <b>Denk eerst zelf na, klik dan.</b></p></div><div class="grid" id="kg"></div>';
+  var g=el.querySelector('#kg');
+  K.forEach(function(k,i){var b=document.createElement('button');b.className='flip';function zet(){b.className='flip '+(k.ai?'ai':'regels');b.innerHTML=(k.ai?'AI':'Geen AI')+' · '+esc(k.n)+'<small>'+esc(k.w)+'</small>';}
+    b.innerHTML=esc(k.n)+'<small>AI of vaste regels?</small>';if(open[i])zet();b.onclick=function(){open[i]=1;antwoord(stap.id,open);zet();};g.appendChild(b);});
+  stap.verplicht=function(){return Object.keys(antwoord(stap.id)||{}).length>=K.length;};stap.melding='Open eerst alle kaarten.';
+};
+
+RENDER.uitleg=function(el){
+  el.innerHTML='<div class="kaart"><h3>Een taalmodel raadt het volgende woord</h3><p>Het heeft miljarden zinnen gelezen. Op basis daarvan voorspelt het telkens het meest waarschijnlijke volgende woord.</p>'+
+   '<div class="vraag" style="border:3px solid var(--groen);margin-top:.7rem"><p class="q">Vul zelf aan: "De Eerste Wereldoorlog begon in …"</p><div class="koies"><button class="ko" id="v1">Toon wat een taalmodel kiest</button></div><p class="kfb" id="v1f"></p></div>'+
+   '<p><b>Het begrijpt dus niet wat het zegt.</b> Het klinkt altijd zeker, ook als het fout is.</p></div>'+
+   '<div class="grid"><div class="kaart groen"><h3>✓ Waar het goed in is</h3><p>Uitleg geven, ideeën bedenken, teksten structureren, feedback geven.</p></div><div class="kaart niet"><h3>✗ Waar het fout loopt</h3><p>Verzonnen feiten en bronnen, vooroordelen uit de data, recent nieuws.</p></div></div>';
+  el.querySelector('#v1').onclick=function(){this.disabled=true;this.classList.add('goed');document.getElementById('v1f').textContent='"1914" (heel waarschijnlijk). Maar bij een vraag waar weinig over geschreven is, raadt het ook iets dat goed klinkt: dat is een hallucinatie.';};
+};
+
+RENDER.hallu=function(el,stap){
+  var V=[
+    {q:'"De James Webb-telescoop maakte als eerste beelden van een planeet buiten ons zonnestelsel."',o:['Klopt','Hallucinatie'],a:1,f:'Hallucinatie. Google Bard (nu Gemini) beweerde dit ooit, maar het klopt niet. Een voorbeeld van onderzoeker Rani Van Schoors (KU Leuven).'},
+    {q:'"De Eerste Wereldoorlog duurde van 1914 tot 1918."',o:['Klopt','Hallucinatie'],a:0,f:'Klopt. Niet alles is fout: controleren werkt in twee richtingen.'},
+    {q:'"Volgens artikel 12 van het schoolreglement mag je AI gebruiken bij elk examen."',o:['Klopt','Hallucinatie'],a:1,f:'Hallucinatie: een verzonnen artikel. Het label op je taak beslist, en bij een toets mag AI niet tenzij je leerkracht het zegt.'},
+    {q:'"Albert Einstein kreeg in 1921 de Nobelprijs voor Natuurkunde."',o:['Klopt','Hallucinatie'],a:0,f:'Klopt. Toch: zou je het zonder controle in je taak zetten?'}];
+  el.innerHTML='<div class="kaart"><p>Een <b>hallucinatie</b> is iets wat AI verzint, maar heel overtuigend brengt. Vier uitspraken van een chatbot. Wat klopt?</p></div><div id="hv"></div>';
+  vragen(el.querySelector('#hv'),V,stap.id);
+  stap.verplicht=function(){return Object.keys(antwoord(stap.id)||{}).filter(function(k){return /^\d+$/.test(k);}).length>=V.length;};stap.melding='Beantwoord eerst de vier uitspraken.';
+};
+
+RENDER.bias=function(el,stap){
+  var a=antwoord(stap.id)||{};
+  el.innerHTML='<div class="kaart"><p>Vraag een beeldgenerator om <b>"een CEO"</b> en je krijgt bijna altijd een man in pak. Vraag <b>"een verpleegkundige"</b> en je krijgt bijna altijd een vrouw.</p><p>AI verzint dat niet: het herhaalt de vooroordelen uit de data waarmee het leerde. Dat heet <b>bias</b>.</p></div>'+
+   '<div class="kaart twijfel"><h3>Jouw beurt</h3><p>Welke andere opdracht zou een eenzijdig beeld kunnen geven? Denk aan een beroep, een land of een hobby.</p><input type="text" id="bi" maxlength="120" placeholder="bv. een programmeur, een gezin in Afrika …"></div>';
+  var i=el.querySelector('#bi');i.value=a.t||'';i.oninput=function(){antwoord(stap.id,{t:i.value});};
+};
+
+RENDER.toren=function(el,stap){
+  var SIT=['Mijn huiswerk wiskunde nakijken','Uitleg over mijn gezondheid','Het nieuws van vandaag','Een studiekeuze maken','Een liefdesbrief schrijven'];
+  var w=antwoord(stap.id)||{v:[0,0,0,0,0]};
+  el.innerHTML='<div class="kaart"><p>Hoeveel vertrouw jij AI in deze situaties? <b>Bouw per situatie een toren:</b> hoe hoger, hoe meer vertrouwen. Maximum 6 blokjes.</p></div>'+
+   '<div class="kaart"><div class="torens" id="tw"></div></div>'+
+   '<div class="kaart"><h3>Waarom is je hoogste toren zo hoog?</h3><input type="text" id="tz" maxlength="140"></div>'+
+   '<div class="knoprij"><button class="hoofd" id="tg">Toon groot (voor het bord)</button></div>';
+  var tw=el.querySelector('#tw');
+  function teken(){tw.innerHTML=SIT.map(function(s,i){var bl='';for(var k=0;k<w.v[i];k++)bl+='<span class="blok"></span>';
+    return '<div class="toren"><div class="stapel">'+bl+'</div><div class="pm"><button data-i="'+i+'" data-d="-1" aria-label="Minder">−</button><button data-i="'+i+'" data-d="1" aria-label="Meer">+</button></div><div class="lbl">'+esc(s)+'</div></div>';}).join('');
+    tw.querySelectorAll('button').forEach(function(b){b.onclick=function(){var i=+b.dataset.i;w.v[i]=Math.max(0,Math.min(6,w.v[i]+(+b.dataset.d)));antwoord(stap.id,w);teken();};});}
+  teken();
+  var tz=el.querySelector('#tz');tz.value=w.z||'';tz.oninput=function(){w.z=tz.value;antwoord(stap.id,w);};
+  el.querySelector('#tg').onclick=function(){w.img=torenBeeld(SIT,w.v);antwoord(stap.id,w);toonGroot(w.img,'De toren van vertrouwen','');};
+  stap.verplicht=function(){var x=antwoord(stap.id)||{v:[]};if(x.v&&x.v.some(function(n){return n>0;})){x.img=torenBeeld(SIT,x.v);antwoord(stap.id,x);return true;}return false;};
+  stap.melding='Bouw minstens één toren.';
+};
+function torenBeeld(SIT,v){
+  var c=document.createElement('canvas');c.width=900;c.height=460;var x=c.getContext('2d');
+  x.fillStyle='#F4F6FF';x.fillRect(0,0,900,460);
+  SIT.forEach(function(s,i){var cx=90+i*180;for(var k=0;k<v[i];k++){x.fillStyle=k%2?'#A6F04A':'#95D600';var y=360-k*44;x.fillRect(cx-55,y,110,38);x.fillRect(cx-40,y-8,22,9);x.fillRect(cx+18,y-8,22,9);}
+    x.fillStyle='#06038D';x.font='600 16px Poppins, sans-serif';x.textAlign='center';
+    var wrd=s.split(' '),l1='',l2='';wrd.forEach(function(w2){(l1.length+w2.length<16&&!l2)?l1+=(l1?' ':'')+w2:l2+=(l2?' ':'')+w2;});
+    x.fillText(l1,cx,420);x.fillText(l2,cx,442);});
+  return c.toDataURL('image/png');
+}
+
+RENDER.quiz=function(el,stap){
+  var V=[
+    {q:'AI noemt een bron met auteur en jaartal. Wat doe je?',o:['Overnemen, het ziet er betrouwbaar uit','Zelf de originele bron zoeken en lezen','Aan de AI vragen of het klopt'],a:1,f:'Zoek en lees de originele bron. Een AI kan ook bronnen verzinnen, en bevestigt vaak zichzelf.'},
+    {q:'Twee betrouwbare bronnen zeggen iets anders dan de AI. Wie volg je?',o:['De AI','De bronnen, en ik pas mijn tekst aan'],a:1,f:'De bronnen. Je verwijst ook naar die bronnen, niet naar de AI.'},
+    {q:'Je mag AI gebruiken (label 4). Moet je dan nog controleren?',o:['Ja, ik blijf verantwoordelijk','Nee, AI is toegestaan'],a:0,f:'Ja. Wie AI gebruikt, blijft verantwoordelijk voor wat hij afgeeft.'}];
+  el.innerHTML='<div class="kaart"><p>Drie vragen. In de 3e graad controleer je AI <b>systematisch</b>: originele bron, twee betrouwbare bronnen, je cursus.</p></div><div id="qv"></div>';
+  vragen(el.querySelector('#qv'),V,stap.id);
+  stap.verplicht=function(){return Object.keys(antwoord(stap.id)||{}).filter(function(k){return /^\d+$/.test(k);}).length>=V.length;};stap.melding='Beantwoord eerst de drie vragen.';
+};
+
+RENDER.reflectie=function(el,stap){
+  var a=antwoord(stap.id)||{},VR=stap.vragen;
+  el.innerHTML=(stap.intro?(stap.intro.charAt(0)==='<'?stap.intro:'<div class="kaart"><p>'+stap.intro+'</p></div>'):'')+'<div class="kaart">'+VR.map(function(v,i){return '<h3'+(i?' style="margin-top:.9rem"':'')+'>'+esc(v.q)+'</h3><textarea id="'+v.k+'" maxlength="2000"'+(v.min>100?' style="min-height:170px"':'')+'></textarea>';}).join('')+'</div>'+
+   (stap.geenOnthoud?'':'<div class="kaart groen"><p><b>Onthoud:</b> kijk eerst naar het label, gebruik Copilot met je schoolaccount, zet nooit namen of foto\'s in een AI-tool, en controleer wat AI zegt.</p></div>');
+  VR.forEach(function(v){var t=el.querySelector('#'+v.k);t.value=a[v.k]||'';t.oninput=function(){var x=antwoord(stap.id)||{};x[v.k]=t.value;antwoord(stap.id,x);};});
+  stap.verplicht=function(){var x=antwoord(stap.id)||{};return VR.every(function(v){return (x[v.k]||'').trim().length>=(v.min||10);});};
+  stap.melding=VR.some(function(v){return v.min>100;})?'Schrijf eerst je visie (minstens een volledige paragraaf) en beantwoord de tweede vraag.':'Beantwoord eerst de vragen.';
+};
+RENDER.info=function(el,stap){el.innerHTML=stap.html;};
+RENDER.paginafn=function(el,stap){
+  var w=document.createElement('div');w.className='mc-content site-stap';w.id=stap.cid;el.appendChild(w);
+  try{window[stap.fn]();}catch(e){console.error(e);}
+  stap.verplicht=function(){var s=window.__siteS&&window.__siteS();if(stap.fn==='renderStartTest'&&s&&!s.starttest.taken){stap.melding='Maak eerst de startest en klik op "Bevestig antwoorden".';return false;}return true;};
+};
+RENDER.bord=function(el,stap){
+  el.innerHTML='<div class="kaart bord"><p class="kern">'+stap.kern+'</p>'+(stap.punten.length?'<ul>'+stap.punten.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>':'')+'</div>'+stap.extra+
+   (S.rol==='ll'&&stap.lk&&stap.lk.vragen.length?'<div class="kaart twijfel"><h3>Denk mee</h3><p>'+esc(stap.lk.vragen[0])+'</p></div>':'');
+};
+RENDER.site=function(el,stap){
+  var w=document.createElement('div');w.className='mc-content site-stap';el.appendChild(w);
+  try{ window[stap.fn](w); }catch(e){ console.error(e); w.innerHTML='<p class="cp">Deze stap kon niet geladen worden. Staat leerlingen.js naast deze pagina?</p>'; }
+  w.querySelectorAll('.nw,.s-badge,.opt-badge').forEach(function(x){x.remove();});
+  w.querySelectorAll('.yt-wrap').forEach(function(v){
+    var fr=v.querySelector('iframe'),tt=fr?fr.title:'';
+    if(fr){fr.dataset.src=fr.getAttribute('src')||'';fr.removeAttribute('src');}
+    var d=document.createElement('details');d.className='video-optie';
+    d.innerHTML='<summary>▶ Bekijk de video (optioneel)'+(tt?': '+esc(tt):'')+'</summary>';
+    v.parentNode.insertBefore(d,v);d.appendChild(v);
+    d.addEventListener('toggle',function(){if(d.open&&fr&&!fr.getAttribute('src'))fr.setAttribute('src',fr.dataset.src);});
+  });
+  stap.verplicht=function(){
+    if(w.querySelector('.qc')&&!w.querySelector('.q-score.pass')){stap.melding='Maak eerst de kennischeck, en slaag.';return false;}
+    var tas=[].slice.call(w.querySelectorAll('textarea[id^="ref"]'));
+    if(tas.some(function(x){return x.value.trim().length<20;})){stap.melding='Vul eerst je reflectie in (minstens een paar zinnen).';return false;}
+    return true;
+  };
+  stap.bijVerlaten=function(){
+    var v=[];
+    w.querySelectorAll('textarea, input[type=text]').forEach(function(x){
+      if(!x.value.trim())return;var q='',p=x.previousElementSibling;
+      while(p&&!q){if(/^(P|H3|LABEL)$/.test(p.tagName)&&!/^Werk je liever op papier/.test(p.textContent.trim()))q=p.textContent.trim();p=p.previousElementSibling;}
+      v.push({q:(q||x.placeholder||'').slice(0,220),a:x.value.trim()});});
+    var st=[];w.querySelectorAll('.stelling-card').forEach(function(c){var s=c.querySelector('div'),a=c.querySelector('.stl-btn.active');if(a)st.push({s:s?s.textContent.trim():'',a:a.textContent.trim()});});
+    var h=w.querySelector('h2');antwoord(stap.id,{titel:h?h.textContent.trim():'',v:v,st:st});
+  };
+};
+RENDER.stelling=function(el,stap){
+  var a=antwoord(stap.id)||{};
+  el.innerHTML=(stap.intro?'<div class="kaart"><p>'+stap.intro+'</p></div>':'')+stap.stellingen.map(function(s,i){
+    return '<div class="vraag"><p class="q">Stelling: \u201c'+esc(s.s)+'\u201d</p><div class="koies">'+['Eens','Twijfel','Oneens'].map(function(o){return '<button class="ko'+(a[i]===o?' goed':'')+'" data-i="'+i+'" data-o="'+o+'">'+o+'</button>';}).join('')+'</div><p class="kfb" style="margin-top:.6rem"><b>Hulpvragen:</b> '+esc(s.hulp)+'</p></div>';}).join('')+
+   '<div class="kaart twijfel"><h3>Waarom?</h3><input type="text" id="sw" maxlength="200" placeholder="Eén argument voor je keuze"></div>';
+  el.querySelectorAll('.ko').forEach(function(b){b.onclick=function(){var x=antwoord(stap.id)||{};x[b.dataset.i]=b.dataset.o;antwoord(stap.id,x);el.querySelectorAll('.ko[data-i="'+b.dataset.i+'"]').forEach(function(o){o.classList.toggle('goed',o===b);});};});
+  var sw=el.querySelector('#sw');sw.value=a.w||'';sw.oninput=function(){var x=antwoord(stap.id)||{};x.w=sw.value;antwoord(stap.id,x);};
+  stap.verplicht=function(){var x=antwoord(stap.id)||{};return stap.stellingen.every(function(s,i){return !!x[i];});};
+  stap.melding='Kies eerst je standpunt bij elke stelling.';
+};
+RENDER.mk=function(el,stap){
+  el.innerHTML='<div class="kaart"><p>'+stap.intro+'</p></div><div id="mk"></div>';
+  vragen(el.querySelector('#mk'),stap.V,stap.id);
+  stap.verplicht=function(){return Object.keys(antwoord(stap.id)||{}).filter(function(k){return /^\d+$/.test(k);}).length>=stap.V.length;};
+  stap.melding='Beantwoord eerst alle vragen.';
+};
+RENDER.gevolgen=function(el,stap){
+  var a=antwoord(stap.id)||{};
+  function veld(k,ph){return '<input type="text" data-k="'+k+'" maxlength="140" placeholder="'+ph+'" style="margin-bottom:.45rem">';}
+  el.innerHTML='<div class="kaart"><p>Eén verandering zet veel meer in gang dan je eerst denkt. Een gevolg heeft weer gevolgen, en die ook weer. <b>Eerst denk jij, pas daarna AI.</b></p></div>'+
+   '<div class="kaart"><h3>1. Kies een verandering</h3><div class="koies" id="gs">'+GV_START.map(function(s,i){return '<button class="ko'+(a.v===i?' goed':'')+'" data-v="'+i+'" style="text-align:left">'+esc(s)+'</button>';}).join('')+'</div></div>'+
+   '<div class="grid">'+['a','b'].map(function(x){return '<div class="kaart"><h3>Gevolg '+x.toUpperCase()+'</h3><p class="klein">1ste lijn</p>'+veld(x+'1','Een gevolg dat je meteen ziet …')+'<p class="klein">2de lijn</p>'+veld(x+'2','Wat gebeurt er daardoor?')+'<p class="klein">3de lijn</p>'+veld(x+'3','En wat is daar weer het gevolg van?')+'</div>';}).join('')+'</div>'+
+   '<div class="kaart twijfel"><h3>2. Nieuws uit 2040</h3><p>Schrijf een krantenkop over het gevolg dat jou het meest verrast.</p>'+veld('kop','bv. "Laatste vertaalbureau van Brugge sluit de deuren"')+'</div>'+
+   '<div class="kaart groen"><h3>3. Pas daarna: vergelijk met AI</h3><p>Vraag aan Copilot (met je schoolaccount) welke gevolgen jij vergat. Welke ideeën van AI zijn sterk, welke onrealistisch? Wat zag jij dat AI niet zag?</p></div>';
+  el.querySelectorAll('#gs .ko').forEach(function(b){b.onclick=function(){var x=antwoord(stap.id)||{};x.v=+b.dataset.v;antwoord(stap.id,x);el.querySelectorAll('#gs .ko').forEach(function(o){o.classList.toggle('goed',o===b);});};});
+  el.querySelectorAll('input[data-k]').forEach(function(i){i.value=a[i.dataset.k]||'';i.oninput=function(){var x=antwoord(stap.id)||{};x[i.dataset.k]=i.value;antwoord(stap.id,x);};});
+  stap.verplicht=function(){var x=antwoord(stap.id)||{};return x.v!==undefined&&(x.a1||'').trim()&&(x.a2||'').trim()&&(x.kop||'').trim();};
+  stap.melding='Kies een verandering, vul minstens gevolg A tot de 2de lijn in, en schrijf een krantenkop.';
+};
+RENDER.rapport=function(el){
+  var m=S.mods[S.mi];
+  if(S.rol==='lk'){
+    var laatste=S.mi>=S.mods.length-1;
+    el.innerHTML='<div class="kaart groen"><h3>Einde van '+esc(m.titel)+'</h3><p>Volgden je leerlingen mee op hun laptop (Ik ben leerling, dezelfde module)? Dan maken ze nu hun rapport en dienen het in, in de uploadzone van Smartschool.</p></div>'+
+     '<div class="knoprij"><button class="hoofd" id="vm">'+(laatste?'Terug naar mijn lessen':'Volgende module: '+esc(S.mods[S.mi+1].titel))+'</button></div>';
+    el.querySelector('#vm').onclick=function(){var d=lData();if(d.klaar.indexOf(m.id)<0)d.klaar.push(m.id);d.pos[m.id]=0;lBewaar(d);
+      if(!laatste){S.mi++;S.si=0;bewaarPos();toonDia();}else{overzicht();top();}};
+    return;
+  }
+  var d=lData();if(d.klaar.indexOf(m.id)<0){d.klaar.push(m.id);lBewaar(d);}
+  el.innerHTML='<div class="kaart groen"><h3>Goed gedaan!</h3><p>Je rondde <b>'+esc(m.titel)+'</b> af.</p></div>'+
+   '<div class="kaart"><h3>Maak je rapport</h3><ol><li>Vul je naam in.</li><li>Klik op <b>Bewaar als PDF</b> en kies "Opslaan als PDF".</li><li>Vraagt je leerkracht het? Dien de PDF in, in de <b>uploadzone</b> van Smartschool. Anders bewaar je ze voor jezelf.</li></ol>'+
+   '<input type="text" id="nm" maxlength="60" placeholder="Voornaam en naam"><div class="knoprij"><button class="hoofd" id="pdf">Bewaar als PDF</button></div></div>'+
+   '<div class="knoprij"><button class="tweede" id="ov" style="border-color:#fff;color:#fff">Naar mijn modules</button></div>';
+  var nm=el.querySelector('#nm');nm.value=lees('srp_naam','');nm.oninput=function(){schrijf('srp_naam',nm.value);};
+  el.querySelector('#pdf').onclick=function(){if(!nm.value.trim()){alert('Vul eerst je naam in.');return;}maakRapport(m,nm.value.trim());window.print();};
+  el.querySelector('#ov').onclick=function(){S.si=0;bewaarPos();overzicht();};
+};
+RENDER.titel=function(el){
+  var m=S.mods[S.mi],nr=MODULES.indexOf(m)+1;
+  el.innerHTML='<div class="titeldia"><span class="badge">3e graad · '+(m.id==='M7'?'Aanrader':'Module '+nr)+'</span><h1>'+esc(m.titel)+'</h1><p class="sub">'+esc(KORT[m.id]||'')+'</p>'+
+   '<div class="kaart"><h3>Na deze les kan je:</h3><ul>'+(DOELEN[m.id]||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'+
+   '<p class="klein">Leerlingen kunnen meevolgen op hun laptop: open de cursus · Ik ben leerling · '+esc(m.titel)+'.</p></div>';
+};
+RENDER.vermelden=function(el){
+  try{localStorage.setItem('sr_ai_vermelden_graad','3');}catch(e){}
+  el.innerHTML='<div class="kaart"><p>Je overloopt dit <b>één keer</b>. Daarna weet je bij elke taak hoe je AI vermeldt. Kies het label en zie meteen wat je moet doen.</p></div>'+
+   '<div class="vermeld-kader"><iframe src="'+LABELSITE+'" title="AI vermelden, stap voor stap" loading="lazy"></iframe></div>'+
+   '<div class="knoprij"><a class="hoofd" style="text-decoration:none;display:inline-block" href="AI-verantwoording-3e-graad.docx" download>Download de transparantieverklaring (Word)</a><a class="tweede" style="text-decoration:none;display:inline-block" href="'+LABELSITE+'" target="_blank" rel="noopener">Open in een nieuw tabblad ↗</a></div>';
+};
+function maakRapport(m,naam){
+  var A=lData().a,st=stappenVan(m.id),h='<h2 style="color:#06038D">Leerlingrapport · '+esc(m.titel)+'</h2><p><b>'+esc(naam)+'</b> · 3e graad · '+new Date().toLocaleDateString('nl-BE')+'</p>';
+  try{var ss=window.__siteS&&window.__siteS(),qs=ss&&ss['mod'+m.id.slice(1)]&&ss['mod'+m.id.slice(1)].quizScore;if(qs!==undefined)h+='<div class="kaart"><h3>Kennischeck</h3><p>Score: <b>'+qs+'%</b></p></div>';}catch(e){}
+  st.forEach(function(s){var a=A[s.id];if(a===undefined)return;
+    if(s.type==='bouw') h+='<div class="kaart"><h3>'+esc(s.titel)+': '+esc(a.titel||'')+'</h3><p>Gevoel: '+esc(a.gevoel||'')+'</p>'+(a.img?'<img src="'+a.img+'" alt="">':'')+'</div>';
+    else if(s.type==='toren') h+='<div class="kaart"><h3>'+esc(s.titel)+'</h3>'+(a.img?'<img src="'+a.img+'" alt="">':'')+'<p>Waarom: '+esc(a.z||'')+'</p></div>';
+    else if(s.type==='reflectie') h+='<div class="kaart"><h3>'+esc(s.titel)+'</h3>'+s.vragen.map(function(v){return '<p><b>'+esc(v.q)+'</b><br>'+esc(a[v.k]||'')+'</p>';}).join('')+'</div>';
+    else if(s.type==='site'){ if((a.v&&a.v.length)||(a.st&&a.st.length)) h+='<div class="kaart"><h3>'+esc(a.titel||'')+'</h3>'+(a.st||[]).map(function(x){return '<p>'+esc(x.s)+' <b>'+esc(x.a)+'</b></p>';}).join('')+(a.v||[]).map(function(x){return '<p><b>'+esc(x.q)+'</b><br>'+esc(x.a)+'</p>';}).join('')+'</div>'; }
+    else if(s.type==='bouw3d') h+='<div class="kaart"><h3>'+esc(s.titel)+': '+esc(a.titel||'')+'</h3><p>Gevoel: '+esc(a.gevoel||'')+'</p>'+(a.img?'<img src="'+a.img+'" alt="">':'')+'</div>';
+    else if(s.type==='stelling') h+='<div class="kaart"><h3>'+esc(s.titel)+'</h3>'+s.stellingen.map(function(x,i){return '<p>\u201c'+esc(x.s)+'\u201d: <b>'+esc(a[i]||'')+'</b></p>';}).join('')+(a.w?'<p>Waarom: '+esc(a.w)+'</p>':'')+'</div>';
+    else if(s.type==='gevolgen') h+='<div class="kaart"><h3>'+esc(s.titel)+'</h3><p><b>'+esc(GV_START[a.v]||'')+'</b></p><p>A: '+esc(a.a1||'')+' → '+esc(a.a2||'')+' → '+esc(a.a3||'')+'</p><p>B: '+esc(a.b1||'')+' → '+esc(a.b2||'')+' → '+esc(a.b3||'')+'</p><p>Krantenkop: '+esc(a.kop||'')+'</p></div>';
+    else if(s.type==='bias') h+='<div class="kaart"><h3>Bias</h3><p>'+esc(a.t||'')+'</p></div>';
+    else if(s.type==='labels'||s.type==='hallu'||s.type==='quiz'||s.type==='mk'){var n=Object.keys(a).filter(function(k){return /^\d+$/.test(k);}).length,g=Object.keys(a).filter(function(k){return /^g/.test(k)&&a[k]===1;}).length;h+='<div class="kaart"><h3>'+esc(s.titel)+'</h3><p>'+g+' van de '+n+' juist bij de eerste poging.</p></div>';}
+  });
+  document.getElementById('rapport').innerHTML=h;
+}
+
+/* ============ 3D-BOUWPLAAT ============ */
+var KLEUR3D=['#06038D','#95D600','#CCFF99','#FFFFFF','#D9D9D9','#3A37B5','#A6F04A'];
+function txtTex(tekst,bg,fg){var c=document.createElement('canvas');c.width=c.height=128;var x=c.getContext('2d');x.fillStyle=bg;x.fillRect(0,0,128,128);x.fillStyle=fg;x.font='800 '+(tekst.length>2?44:84)+'px Poppins, Arial, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(tekst,64,70);var t=new THREE.CanvasTexture(c);return t;}
+function mat(k){return new THREE.MeshLambertMaterial({color:k});}
+function vorm(pts){var s=new THREE.Shape();s.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)s.lineTo(pts[i][0],pts[i][1]);return s;}
+var VOORWERPEN={
+  steen11:{naam:'Blokje 1×1',w:1,d:1,h:1.2,kleur:true,maak:function(k){return steen(1,1,k);}},
+  steen21:{naam:'Blokje 2×1',w:2,d:1,h:1.2,kleur:true,maak:function(k){return steen(2,1,k);}},
+  steen22:{naam:'Blokje 2×2',w:2,d:2,h:1.2,kleur:true,maak:function(k){return steen(2,2,k);}},
+  plaat31:{naam:'Plaat 3×1',w:3,d:1,h:.4,kleur:true,maak:function(k){return steen(3,1,k,.4);}},
+  poppetje:{naam:'Poppetje',w:1,d:1,h:2.2,maak:function(){var g=new THREE.Group();var b=new THREE.Mesh(new THREE.CylinderGeometry(.32,.38,1.2,16),mat('#06038D'));b.position.y=.6;g.add(b);var h=new THREE.Mesh(new THREE.SphereGeometry(.34,20,16),mat('#FFFFFF'));h.position.y=1.55;g.add(h);var e1=new THREE.Mesh(new THREE.SphereGeometry(.05,8,8),mat('#06038D'));e1.position.set(-.12,1.6,.31);g.add(e1);var e2=e1.clone();e2.position.x=.12;g.add(e2);return g;}},
+  robot:{naam:'Robot',w:1,d:1,h:2.3,maak:function(){var g=new THREE.Group();var b=new THREE.Mesh(new THREE.BoxGeometry(.8,1,.6),mat('#D9D9D9'));b.position.y=.5;g.add(b);var h=new THREE.Mesh(new THREE.BoxGeometry(.7,.55,.55),mat('#FFFFFF'));h.position.y=1.35;g.add(h);[-.15,.15].forEach(function(x){var o=new THREE.Mesh(new THREE.SphereGeometry(.08,10,10),mat('#95D600'));o.position.set(x,1.4,.28);g.add(o);});var a=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.35,8),mat('#06038D'));a.position.y=1.8;g.add(a);var t=new THREE.Mesh(new THREE.SphereGeometry(.09,10,10),mat('#95D600'));t.position.y=2;g.add(t);return g;}},
+  hart:{naam:'Hart',w:1,d:1,h:1.2,maak:function(){var s=new THREE.Shape();s.moveTo(0,-.45);s.bezierCurveTo(-.15,-.3,-.5,-.1,-.5,.15);s.bezierCurveTo(-.5,.4,-.2,.5,0,.28);s.bezierCurveTo(.2,.5,.5,.4,.5,.15);s.bezierCurveTo(.5,-.1,.15,-.3,0,-.45);var m=new THREE.Mesh(new THREE.ExtrudeGeometry(s,{depth:.25,bevelEnabled:true,bevelSize:.04,bevelThickness:.04,bevelSegments:2}),mat('#95D600'));m.position.set(0,.6,-.12);var g=new THREE.Group();g.add(m);return g;}},
+  bliksem:{naam:'Bliksem',w:1,d:1,h:1.4,maak:function(){var m=new THREE.Mesh(new THREE.ExtrudeGeometry(vorm([[.1,.65],[-.3,0],[0,0],[-.15,-.65],[.3,.05],[0,.05],[.25,.65]]),{depth:.2,bevelEnabled:false}),mat('#95D600'));m.position.set(0,.7,-.1);var g=new THREE.Group();g.add(m);return g;}},
+  vraag:{naam:'Bordje ?',w:1,d:1,h:1.6,bord:'?'},
+  uitroep:{naam:'Bordje !',w:1,d:1,h:1.6,bord:'!'},
+  vinkje:{naam:'Bordje ✓',w:1,d:1,h:1.6,bord:'✓'},
+  kruis:{naam:'Bordje ✗',w:1,d:1,h:1.6,bord:'✗'},
+  ai:{naam:'Bordje AI',w:1,d:1,h:1.6,bord:'AI'},
+  huis:{naam:'Huis',w:2,d:2,h:2.4,maak:function(){var g=new THREE.Group();var b=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.3,1.8),mat('#FFFFFF'));b.position.y=.65;g.add(b);var d=new THREE.Mesh(new THREE.ConeGeometry(1.45,1,4),mat('#06038D'));d.position.y=1.8;d.rotation.y=Math.PI/4;g.add(d);var deur=new THREE.Mesh(new THREE.BoxGeometry(.4,.7,.05),mat('#95D600'));deur.position.set(0,.35,.91);g.add(deur);return g;}},
+  school:{naam:'School',w:3,d:2,h:2.6,maak:function(){var g=new THREE.Group();var b=new THREE.Mesh(new THREE.BoxGeometry(2.8,1.6,1.8),mat('#D9D9D9'));b.position.y=.8;g.add(b);for(var i=-1;i<=1;i++){var r=new THREE.Mesh(new THREE.BoxGeometry(.45,.4,.05),mat('#06038D'));r.position.set(i*.8,1.05,.91);g.add(r);}var p=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,1,8),mat('#06038D'));p.position.set(1.1,2.1,0);g.add(p);var v=new THREE.Mesh(new THREE.BoxGeometry(.45,.28,.03),mat('#95D600'));v.position.set(1.33,2.45,0);g.add(v);return g;}},
+  fabriek:{naam:'Fabriek',w:2,d:2,h:3,maak:function(){var g=new THREE.Group();var b=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.2,1.8),mat('#3A37B5'));b.position.y=.6;g.add(b);var s=new THREE.Mesh(new THREE.CylinderGeometry(.22,.26,1.8,14),mat('#D9D9D9'));s.position.set(.5,2,.5);g.add(s);var r=new THREE.Mesh(new THREE.SphereGeometry(.3,12,10),mat('#FFFFFF'));r.position.set(.55,3.05,.5);g.add(r);return g;}},
+  boom:{naam:'Boom',w:1,d:1,h:2.2,maak:function(){var g=new THREE.Group();var s=new THREE.Mesh(new THREE.CylinderGeometry(.12,.15,.8,10),mat('#3A37B5'));s.position.y=.4;g.add(s);var k=new THREE.Mesh(new THREE.SphereGeometry(.55,16,12),mat('#95D600'));k.position.y=1.3;g.add(k);return g;}},
+  auto:{naam:'Zelfrijdende auto',w:2,d:1,h:1.1,maak:function(){var g=new THREE.Group();var b=new THREE.Mesh(new THREE.BoxGeometry(1.8,.45,.85),mat('#95D600'));b.position.y=.42;g.add(b);var c=new THREE.Mesh(new THREE.BoxGeometry(.9,.35,.75),mat('#FFFFFF'));c.position.set(-.1,.82,0);g.add(c);[[-.55,.42],[.55,.42],[-.55,-.42],[.55,-.42]].forEach(function(p){var w=new THREE.Mesh(new THREE.CylinderGeometry(.18,.18,.12,14),mat('#06038D'));w.rotation.x=Math.PI/2;w.position.set(p[0],.2,p[1]);g.add(w);});return g;}},
+  windmolen:{naam:'Windmolen',w:1,d:1,h:3.2,maak:function(){var g=new THREE.Group();var p=new THREE.Mesh(new THREE.CylinderGeometry(.07,.12,2.4,10),mat('#FFFFFF'));p.position.y=1.2;g.add(p);for(var i=0;i<3;i++){var w=new THREE.Mesh(new THREE.BoxGeometry(.12,.9,.04),mat('#D9D9D9'));w.geometry.translate(0,.45,0);w.position.set(0,2.4,.12);w.rotation.z=i*2*Math.PI/3;g.add(w);}return g;}},
+  scherm:{naam:'Scherm / telefoon',w:1,d:1,h:1.6,maak:function(){var g=new THREE.Group();var m=new THREE.Mesh(new THREE.BoxGeometry(.7,1.2,.1),[mat('#06038D'),mat('#06038D'),mat('#06038D'),mat('#06038D'),new THREE.MeshLambertMaterial({map:txtTex('AI','#95D600','#06038D')}),mat('#06038D')]);m.position.y=.75;g.add(m);return g;}}
+};
+function steen(w,d,k,h){h=h||1.2;var g=new THREE.Group();var m=mat(k);var b=new THREE.Mesh(new THREE.BoxGeometry(w-.04,h,d-.04),m);b.position.y=h/2;g.add(b);
+  for(var i=0;i<w;i++)for(var j=0;j<d;j++){var s=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,.18,16),m);s.position.set(i-(w-1)/2,h+.09,j-(d-1)/2);g.add(s);}
+  var r=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(w-.04,h,d-.04)),new THREE.LineBasicMaterial({color:(k==='#FFFFFF'||k==='#CCFF99'||k==='#D9D9D9')?'#06038D':'#000000',transparent:true,opacity:.25}));r.position.y=h/2;g.add(r);return g;}
+function bordje(t){var g=new THREE.Group();var p=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,.9,8),mat('#D9D9D9'));p.position.y=.45;g.add(p);
+  var kl=t==='✗'?['#06038D','#FFFFFF']:(t==='!'?['#FFFFFF','#06038D']:['#95D600','#06038D']);
+  var tex=txtTex(t,kl[0],kl[1]);var b=new THREE.Mesh(new THREE.BoxGeometry(.8,.7,.08),[mat(kl[0]),mat(kl[0]),mat(kl[0]),mat(kl[0]),new THREE.MeshLambertMaterial({map:tex}),new THREE.MeshLambertMaterial({map:tex})]);b.position.y=1.2;g.add(b);return g;}
+
+RENDER.bouw3d=function(el,stap){
+  var data=antwoord(stap.id)||{items:[],titel:'',gevoel:''};
+  if(typeof THREE==='undefined'){el.innerHTML='<div class="kaart twijfel"><p>Het 3D-bouwen laadt niet (geen internet?). Teken je bouwwerk op papier, geef het een titel en kies een gevoel.</p></div>';}
+  var N=stap.plaat||12, sel=stap.voorwerpen[0], kleur=0, rot=0, gum=false;
+  var h='<div class="kaart"><h3>'+esc(stap.vraag)+'</h3><p>'+esc(stap.uitleg)+'</p></div>';
+  if(typeof THREE!=='undefined'){
+    h+='<div class="kaart"><div class="palet" id="vw"></div><div class="palet" style="margin-top:.5rem" id="kl"></div>'+
+      '<div class="palet" style="margin-top:.5rem"><button class="maat" id="rt">⟳ Draai stuk</button><button class="maat" id="gm">Gom</button><button class="maat" id="un">↶ Terug</button><button class="maat" id="lg">Leegmaken</button><span class="klein" style="margin-left:auto">Zicht:</span><button class="maat" id="zl">◀</button><button class="maat" id="zr">▶</button><button class="maat" id="zi">+</button><button class="maat" id="zo">−</button></div>'+
+      '<div id="drie" style="position:relative;margin-top:.7rem;border-radius:20px;overflow:hidden;border:2px solid #D9D9D9;touch-action:none;aspect-ratio:4/3;background:#EEF1FF"></div>'+
+      '<p class="klein">Klik op de plaat of op een stuk om te bouwen. Sleep om rond te kijken. Met de gom klik je een stuk weg.</p></div>';
+  }
+  h+='<div class="kaart"><h3>Geef je bouwwerk een titel</h3><input type="text" id="bt" maxlength="60" placeholder="'+esc(stap.voorbeeld||'')+'"><h3 style="margin-top:.9rem">Welk gevoel past erbij?</h3><div class="gevoelens" id="gv"></div>'+
+    (typeof THREE!=='undefined'?'<div class="knoprij"><button class="hoofd" id="groot-knop">Toon groot (voor het bord)</button></div>':'')+'</div>';
+  if(S.rol==='lk')h='<div class="kaart twijfel"><p><b>Leerlingen bouwen op hun laptop:</b> open de cursus · Ik ben leerling · '+esc((S.mods[S.mi]||{}).titel||'')+' · '+esc(stap.titel)+'. Jij kan hier zelf iets voorbouwen. Laat daarna enkele leerlingen hun bouwwerk tonen.</p></div>'+h;
+  el.innerHTML=h;
+  var bt=el.querySelector('#bt');bt.value=data.titel||'';bt.oninput=function(){data.titel=bt.value;bewaar();};
+  var gv=el.querySelector('#gv');
+  gv.innerHTML=GEVOELENS.map(function(g){return '<button class="gevoel'+(data.gevoel===g?' aan':'')+'" data-g="'+g+'">'+g+'</button>';}).join('');
+  gv.querySelectorAll('.gevoel').forEach(function(b){b.onclick=function(){data.gevoel=b.dataset.g;bewaar();gv.querySelectorAll('.gevoel').forEach(function(x){x.classList.toggle('aan',x===b);});};});
+  function bewaar(){antwoord(stap.id,data);}
+  stap.melding='Bouw minstens 3 stukken, geef een titel en kies een gevoel.';
+  if(typeof THREE==='undefined'){stap.verplicht=function(){var d=antwoord(stap.id)||{};return d.titel&&d.gevoel;};return;}
+
+  var vw=el.querySelector('#vw'),kl=el.querySelector('#kl');
+  vw.innerHTML='<span class="klein"><b>Stuk</b></span>'+stap.voorwerpen.map(function(k){return '<button class="maat" data-v="'+k+'">'+VOORWERPEN[k].naam+'</button>';}).join('');
+  kl.innerHTML='<span class="klein"><b>Kleur blokjes</b></span>'+KLEUR3D.map(function(k,i){return '<button class="kleur" data-k="'+i+'" style="background:'+k+'" aria-label="Kleur '+(i+1)+'"></button>';}).join('');
+  var box=el.querySelector('#drie');
+  var renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+  renderer.setClearColor('#EEF1FF');box.appendChild(renderer.domElement);renderer.domElement.style.display='block';renderer.domElement.style.width='100%';renderer.domElement.style.height='100%';
+  var scene=new THREE.Scene();
+  scene.add(new THREE.HemisphereLight('#FFFFFF','#B8BCE0',.85));var dl=new THREE.DirectionalLight('#FFFFFF',.55);dl.position.set(6,12,8);scene.add(dl);
+  var plaat=new THREE.Group();var pm=new THREE.Mesh(new THREE.BoxGeometry(N,.3,N),mat('#CCFF99'));pm.position.y=-.15;plaat.add(pm);
+  for(var i=0;i<N;i++)for(var j=0;j<N;j++){var s=new THREE.Mesh(new THREE.CylinderGeometry(.26,.26,.14,12),mat('#B9EE7A'));s.position.set(i-N/2+.5,.07,j-N/2+.5);plaat.add(s);}
+  scene.add(plaat);
+  var cam=new THREE.PerspectiveCamera(40,4/3,.1,200);var th=.75,ph=.95,rad=N*1.65;
+  function zet(){cam.position.set(rad*Math.sin(ph)*Math.sin(th),rad*Math.cos(ph),rad*Math.sin(ph)*Math.cos(th));cam.lookAt(0,1,0);teken();}
+  var spook=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:'#06038D',transparent:true,opacity:.18,depthWrite:false}));spook.visible=false;scene.add(spook);
+  var groep=new THREE.Group();scene.add(groep);
+  function voet(it){var v=VOORWERPEN[it.k],r=it.r%2;return {w:r?v.d:v.w,d:r?v.w:v.d};}
+  function hoogte(i0,j0,w,d,uit){var y=0;data.items.forEach(function(it){if(it===uit)return;var f=voet(it);if(i0<it.i+f.w&&i0+w>it.i&&j0<it.j+f.d&&j0+d>it.j)y=Math.max(y,it.y+VOORWERPEN[it.k].h);});return y;}
+  function bouwScene(){while(groep.children.length)groep.remove(groep.children[0]);
+    data.items.forEach(function(it,idx){var v=VOORWERPEN[it.k];if(!v)return;var o=v.bord?bordje(v.bord):(v.kleur?v.maak(KLEUR3D[it.c||0]):v.maak());var f=voet(it);
+      o.position.set(it.i+f.w/2-N/2,it.y,it.j+f.d/2-N/2);o.rotation.y=it.r*Math.PI/2;o.traverse(function(m){m.userData.idx=idx;});groep.add(o);});teken();}
+  function teken(){renderer.render(scene,cam);}
+  function maat(){var w=box.clientWidth,hh=box.clientHeight||w*.75;renderer.setSize(w,hh,false);cam.aspect=w/hh;cam.updateProjectionMatrix();teken();}
+  var ray=new THREE.Raycaster(),mv=new THREE.Vector2();
+  function treffer(e){var r=renderer.domElement.getBoundingClientRect();mv.x=((e.clientX-r.left)/r.width)*2-1;mv.y=-((e.clientY-r.top)/r.height)*2+1;ray.setFromCamera(mv,cam);
+    var t=ray.intersectObjects(groep.children.concat([pm]),true);return t[0]||null;}
+  function plek(hit){var v=VOORWERPEN[sel],r=rot%2,w=r?v.d:v.w,d=r?v.w:v.d;var p=hit.point.clone();
+    if(hit.object!==pm&&hit.face){var nrm=hit.face.normal.clone().transformDirection(hit.object.matrixWorld);p.add(nrm.multiplyScalar(.3));}
+    var ci=Math.floor(p.x+N/2),cj=Math.floor(p.z+N/2);var i0=Math.max(0,Math.min(N-w,ci-Math.floor((w-1)/2))),j0=Math.max(0,Math.min(N-d,cj-Math.floor((d-1)/2)));
+    return {i:i0,j:j0,w:w,d:d,y:hoogte(i0,j0,w,d),h:v.h};}
+  var neer=null,sleep=false;
+  renderer.domElement.addEventListener('pointerdown',function(e){neer={x:e.clientX,y:e.clientY,th:th,ph:ph};sleep=false;renderer.domElement.setPointerCapture(e.pointerId);});
+  renderer.domElement.addEventListener('pointermove',function(e){
+    if(neer){var dx=e.clientX-neer.x,dy=e.clientY-neer.y;if(Math.abs(dx)+Math.abs(dy)>6)sleep=true;if(sleep){th=neer.th-dx*.01;ph=Math.max(.25,Math.min(1.45,neer.ph-dy*.01));spook.visible=false;zet();}return;}
+    var hit=treffer(e);if(!hit||gum){spook.visible=false;teken();return;}var p=plek(hit);
+    spook.scale.set(p.w,p.h,p.d);spook.position.set(p.i+p.w/2-N/2,p.y+p.h/2,p.j+p.d/2-N/2);spook.visible=true;teken();});
+  renderer.domElement.addEventListener('pointerleave',function(){spook.visible=false;teken();});
+  var historie=[];
+  renderer.domElement.addEventListener('pointerup',function(e){var was=sleep;neer=null;if(was)return;var hit=treffer(e);if(!hit)return;
+    if(gum){if(hit.object===pm)return;var idx=hit.object.userData.idx;if(idx===undefined)return;historie.push(JSON.stringify(data.items));data.items.splice(idx,1);}
+    else{var p=plek(hit);if(p.y>12)return;historie.push(JSON.stringify(data.items));data.items.push({k:sel,i:p.i,j:p.j,r:rot,c:kleur,y:p.y});}
+    spook.visible=false;bouwScene();bewaar();});
+  renderer.domElement.addEventListener('wheel',function(e){e.preventDefault();rad=Math.max(N*.8,Math.min(N*3,rad+(e.deltaY>0?1:-1)));zet();},{passive:false});
+  function knoppen(){vw.querySelectorAll('.maat').forEach(function(b){b.classList.toggle('aan',b.dataset.v===sel&&!gum);});kl.querySelectorAll('.kleur').forEach(function(b){b.classList.toggle('aan',+b.dataset.k===kleur);});el.querySelector('#gm').classList.toggle('aan',gum);kl.style.opacity=VOORWERPEN[sel].kleur?1:.4;}
+  vw.querySelectorAll('.maat').forEach(function(b){b.onclick=function(){sel=b.dataset.v;gum=false;knoppen();};});
+  kl.querySelectorAll('.kleur').forEach(function(b){b.onclick=function(){kleur=+b.dataset.k;gum=false;knoppen();};});
+  el.querySelector('#rt').onclick=function(){rot=(rot+1)%4;};
+  el.querySelector('#gm').onclick=function(){gum=!gum;knoppen();};
+  el.querySelector('#un').onclick=function(){if(historie.length){data.items=JSON.parse(historie.pop());bouwScene();bewaar();}};
+  el.querySelector('#lg').onclick=function(){if(data.items.length&&confirm('Alles leegmaken?')){historie.push(JSON.stringify(data.items));data.items=[];bouwScene();bewaar();}};
+  el.querySelector('#zl').onclick=function(){th-=.4;zet();};el.querySelector('#zr').onclick=function(){th+=.4;zet();};
+  el.querySelector('#zi').onclick=function(){rad=Math.max(N*.8,rad-2);zet();};el.querySelector('#zo').onclick=function(){rad=Math.min(N*3,rad+2);zet();};
+  function foto(){spook.visible=false;teken();return renderer.domElement.toDataURL('image/png');}
+  el.querySelector('#groot-knop').onclick=function(){data.img=foto();bewaar();toonGroot(data.img,data.titel,data.gevoel);};
+  if(Live.aan&&Live.rol==='ll'){var kr=el.querySelector('#groot-knop').parentNode;kr.insertAdjacentHTML('beforeend','<button class="hoofd" id="lb-indien">Dien in bij mijn leerkracht</button>');liveIndienen(stap,foto,data);}
+  if(window.ResizeObserver){new ResizeObserver(maat).observe(box);}window.addEventListener('resize',maat);
+  knoppen();maat();zet();bouwScene();
+  stap.verplicht=function(){if(data.items.length){data.img=foto();bewaar();}return data.items.length>=3&&data.titel&&data.gevoel;};
+  stap.bijVerlaten=function(){if(data.items.length){data.img=foto();bewaar();}};
+};
+
+if(location.hash==='#leerkracht')leerkrachtStart();else if(location.hash==='#klas'){leerlingCode();}else start();
 })();
 </script>
 </body>
